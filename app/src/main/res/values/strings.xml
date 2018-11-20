@@ -10,4 +10,6 @@
     <string name="name">Name</string>
     <string name="contact">Contact Number</string>
     <string name="sign_up">Sign Up</string>
+    <string name="key_hash">pzwNhLFHrtqoRhj6ePkGIfi9x7c=</string>
+    <string name="dont_have"></string>
 </resources>

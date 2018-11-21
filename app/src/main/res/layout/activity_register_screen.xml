@@ -104,7 +104,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="@color/white"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textWebPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -162,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="#fff"
+                android:inputType="number"
                 android:hint="@string/contact" />
 
             <View
@@ -172,14 +176,58 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="#fff"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.4"
+                android:text="@string/gender"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:orientation="horizontal">
+
+
+                <RadioButton
+                    android:id="@+id/male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:id="@+id/female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </LinearLayout>
+
+        </LinearLayout>
+
         <Button
+            android:id="@+id/btn_Signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:background="@color/toolbar_color"
             android:text="@string/sign_up"
-            android:id="@+id/btn_Signup"
             android:textColor="@color/white" />
 
         <TextView

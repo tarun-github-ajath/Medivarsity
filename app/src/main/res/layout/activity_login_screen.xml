@@ -28,7 +28,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="#fff"
-                android:hint="@string/email_address" />
+                android:hint="@string/email_address"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -52,7 +54,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="#fff"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textWebPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <View
                 android:layout_width="match_parent"
@@ -84,6 +89,7 @@
 
 
         <com.facebook.login.widget.LoginButton
+            android:id="@+id/fb_login"
             style="@style/FacebookLoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -101,14 +107,14 @@
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="20dp"
                 android:text="Sign Up"
-                android:id="@+id/sign_up"
-                android:textStyle="bold"
-                android:textSize="17dp" />
+                android:textSize="17dp"
+                android:textStyle="bold" />
 
 
         </RelativeLayout>

@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="FacebookLoginButton">
         <!--<item name="android:textSize">@dimen/smallTxtSize</item>
         <item name="android:background">@drawable/facebook_signin_btn</item>-->
@@ -15,4 +16,8 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:text">Facebook</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -5,11 +5,22 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_social">Sign in With Social Account</string>
     <string name="signup_social">Sign un With Social Account</string>
-    <string name="facebook_app_id">269964603702474</string>
+   <!-- <string name="facebook_app_id">269964603702474</string>-->
     <string name="register">Register</string>
     <string name="name">Name</string>
     <string name="contact">Contact Number</string>
     <string name="sign_up">Sign Up</string>
     <string name="key_hash">pzwNhLFHrtqoRhj6ePkGIfi9x7c=</string>
     <string name="dont_have"></string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">1920805507975170</string>
+    <string name="fb_login_protocol_scheme">fb1920805507975170</string>
+    <string name="gender">Gender</string>
+
 </resources>

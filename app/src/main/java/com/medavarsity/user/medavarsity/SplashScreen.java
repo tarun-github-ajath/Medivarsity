@@ -22,7 +22,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         splashTimer();
-        generateKeyHash();
+        // generateKeyHash();
     }
 
     private void splashTimer() {
@@ -35,6 +35,8 @@ public class SplashScreen extends AppCompatActivity {
             }
         }, SPLASH_TIME_OUT);
     }
+
+    /*Once key hashes are generated no need to generate repeated times*/
 
     private void generateKeyHash() {
         try {

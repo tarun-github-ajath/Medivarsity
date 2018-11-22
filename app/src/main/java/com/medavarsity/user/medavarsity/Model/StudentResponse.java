@@ -52,9 +52,7 @@ public class StudentResponse implements Serializable {
     @SerializedName("email")
     String email;
     @SerializedName("contact_no")
-    String  contact_no;
+    String contact_no;
     @SerializedName("status")
     int status;
-
-
 }

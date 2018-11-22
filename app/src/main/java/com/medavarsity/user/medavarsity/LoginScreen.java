@@ -1,6 +1,7 @@
 package com.medavarsity.user.medavarsity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -20,9 +21,13 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.Login;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
@@ -33,11 +38,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginScreen extends AppCompatActivity {
     CallbackManager callbackManager;
@@ -47,12 +55,15 @@ public class LoginScreen extends AppCompatActivity {
     LoginButton loginButton;
     ApiInterface apiInterface;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
         initializeIds();
         callbackManager = CallbackManager.Factory.create();
+        sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
 
         textView_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,18 +77,17 @@ public class LoginScreen extends AppCompatActivity {
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  Intent intent = new Intent(LoginScreen.this, DashBoard.class);
-                startActivity(intent);
-                finish();*/
                 doLogin();
             }
         });
 
-        loginButton.setReadPermissions("email");
-
+        List<String> permissionNeeds = Arrays.asList("user_photos", "email",
+                "user_birthday", "public_profile");
+        loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                System.out.println(loginResult);
                 getUserDetails(loginResult);
             }
 
@@ -89,8 +99,10 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
 
+                System.out.println(error.toString());
             }
         });
+
 
     }
 
@@ -98,10 +110,23 @@ public class LoginScreen extends AppCompatActivity {
         GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
-                Intent intent = new Intent(LoginScreen.this,
-                        DashBoard.class);
-                intent.putExtra("userProfile", object.toString());
-                startActivity(intent);
+
+                String loginresultResponse = object.toString();
+                try {
+                    JSONObject jsonObject = new JSONObject(loginresultResponse);
+                    StudentResponse studentResponse = new StudentResponse();
+                    studentResponse.setEmail(jsonObject.getString("email"));
+                    studentResponse.setName(jsonObject.getString("name"));
+
+                    Intent intent = new Intent(LoginScreen.this,
+                            DashBoard.class);
+                    intent.putExtra("student_info", studentResponse);
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(loginresultResponse);
             }
         });
 
@@ -120,13 +145,24 @@ public class LoginScreen extends AppCompatActivity {
         if (email.equalsIgnoreCase("") || pass.equalsIgnoreCase("")) {
             Toast.makeText(this, "Please fill all details", Toast.LENGTH_SHORT).show();
         } else {
-            Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.getStudentInfo(email, pass, "0", "", "Android", "dhfhjdf");
+            Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
+                    getStudentInfo(email, pass, "0", "", "Android", "dhfhjdf");
             loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
                 @Override
                 public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
 
                     System.out.println(response.body());
-                    navigateDashboard(response.body().getStudentResponse());
+
+                    String message = response.body().getMessage();
+                    if (response.body().getStatus() == 1) {
+                        emptyVariables();
+                        navigateDashboard(response.body().getStudentResponse());
+                        saveInPref(response.body().getStudentResponse());
+                    } else {
+                        Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
 
                 @Override
@@ -134,7 +170,6 @@ public class LoginScreen extends AppCompatActivity {
 
                 }
             });
-
         }
     }
 
@@ -150,8 +185,14 @@ public class LoginScreen extends AppCompatActivity {
     private void navigateDashboard(StudentResponse studentResponse) {
 
         Intent intent = new Intent(LoginScreen.this, DashBoard.class);
+        intent.putExtra("student_info", studentResponse);
         startActivity(intent);
         finish();
+    }
+
+    private void emptyVariables() {
+        editText_useremail.setText("");
+        editText_userpassword.setText("");
     }
 
     @Override
@@ -160,4 +201,11 @@ public class LoginScreen extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void saveInPref(StudentResponse studentResponse) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(studentResponse);
+        prefsEditor.putString(ConstantVariabls.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.commit();
+    }
 }

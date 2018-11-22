@@ -1,5 +1,6 @@
 package com.medavarsity.user.medavarsity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
@@ -34,7 +36,7 @@ public class RegisterScreen extends AppCompatActivity {
     Spinner spinner_collegeSelection, spinner_yearSelection;
     RadioButton male_radio, female_radio;
     ApiInterface apiInterface;
-
+    TextView signIn;
     String selected_college = "";
     String selected_year = "";
     String selected_gender = "";
@@ -138,7 +140,15 @@ public class RegisterScreen extends AppCompatActivity {
         male_radio = (RadioButton) findViewById(R.id.male);
         female_radio = (RadioButton) findViewById(R.id.female);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
+        signIn = (TextView) findViewById(R.id.already_signin);
+        signIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList();
         collge_name.enqueue(new Callback<CollegeResponse>() {
             @Override
@@ -174,11 +184,8 @@ public class RegisterScreen extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
-
         yearsadapter = new ArrayAdapter<String>(RegisterScreen.this, R.layout.college_list_item, R.id.collegesName, years);
         spinner_yearSelection.setAdapter(yearsadapter);
     }

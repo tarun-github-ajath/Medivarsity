@@ -1,6 +1,7 @@
 package com.medavarsity.user.medavarsity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,7 +17,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,7 +27,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -35,7 +34,6 @@ import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
-import com.medavarsity.user.medavarsity.Model.CreateStudent;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
@@ -47,7 +45,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,13 +66,15 @@ public class RegisterScreen extends AppCompatActivity {
     ArrayList<CollegeModel> collegeModelArrayList;
     CollegeAdapter collegeAdapter;
     String[] years = new String[]{"Select Year", "1990", "2001", "2003", "2004", "2005", "2006", "2009"};
-    LoginButton faceboo_register;
+    LoginButton facebook_register;
     CallbackManager callbackManager;
     ProgressDialog progressBar;
     Button btn_custom_fb_login;
     LoginManager loginManager;
     List<String> permissionNeeds = Arrays.asList(/*"user_photos",*/ "email",
             /*"user_birthday",*/ "public_profile");
+
+    Button fb_custom;
 
     @Override
 
@@ -85,6 +84,7 @@ public class RegisterScreen extends AppCompatActivity {
         initializeIds();
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
+
         spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -163,9 +163,17 @@ public class RegisterScreen extends AppCompatActivity {
             }
         });
 
-        faceboo_register.setReadPermissions(permissionNeeds);
 
-        faceboo_register.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        fb_custom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                facebook_register.performClick();
+            }
+        });
+        facebook_register.setReadPermissions(permissionNeeds);
+
+
+        facebook_register.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 System.out.println(loginResult);
@@ -180,9 +188,14 @@ public class RegisterScreen extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
 
+                if (error.getMessage().contains("CONNECTION_FAILURE:")) {
+                    Toast.makeText(RegisterScreen.this, "Please check your internet connections", Toast.LENGTH_SHORT).show();
+                }
                 System.out.println(error.toString());
             }
         });
+
+
     }
 
     private void getUserDetails(LoginResult loginResult) {
@@ -285,9 +298,11 @@ public class RegisterScreen extends AppCompatActivity {
         female_radio = (RadioButton) findViewById(R.id.female);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         signIn = (TextView) findViewById(R.id.already_signin);
-          faceboo_register = (LoginButton) findViewById(R.id.fb_reg_login);
+        facebook_register = (LoginButton) findViewById(R.id.fb_reg_login);
         user_image = (ImageView) findViewById(R.id.user_image);
-      //  btn_custom_fb_login = (Button) findViewById(R.id.fb_login_custom);
+        fb_custom = (Button) findViewById(R.id.fb);
+
+        //  btn_custom_fb_login = (Button) findViewById(R.id.fb_login_custom);
 
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,17 +382,7 @@ public class RegisterScreen extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK
                 && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            bitmap = BitmapFactory.decodeFile(picturePath);
+            user_image.setImageURI(selectedImage);
         }
     }
 
@@ -391,8 +396,6 @@ public class RegisterScreen extends AppCompatActivity {
                     .placeholder(R.drawable.default_image)
                     .error(R.drawable.default_image)
                     .into(user_image);
-
-            //Picasso.with(RegisterScreen.this).load("https://graph.facebook.com/" + studentResponse.getStudent_id() + "/picture?type=large").into(user_image);
         }
 
     }
@@ -400,12 +403,9 @@ public class RegisterScreen extends AppCompatActivity {
     int PICK_IMAGE = 2;
 
     private void imagePicker() {
-
-
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
-
 }

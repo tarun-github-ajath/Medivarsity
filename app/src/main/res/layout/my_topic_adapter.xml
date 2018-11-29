@@ -18,12 +18,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
-       <!-- <de.hdodenhof.circleimageview.CircleImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="left"
             android:padding="@dimen/size_10dp"
-            android:background="@drawable/ic_user"/>-->
+            android:background="@drawable/ic_user"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -44,9 +44,9 @@
 
 
             <ImageView
+                android:id="@+id/user_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:id="@+id/user_image"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -129,108 +129,109 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-
-                <Spinner
-                    android:id="@+id/college_selection"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <Spinner
-                    android:id="@+id/year_selection"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:background="#fff"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/register_contact"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:background="#fff"
-                    android:hint="@string/contact"
-                    android:inputType="number" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#000" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:background="#fff"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-
-                <TextView
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.4"
-                    android:text="@string/gender"
-                    android:textColor="@color/black"
-                    android:textSize="16dp" />
-
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.6"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
 
-                    <RadioButton
-                        android:id="@+id/male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="Male" />
+                    <Spinner
+                        android:id="@+id/college_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                    <RadioButton
-                        android:id="@+id/female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Female" />
                 </LinearLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <Spinner
+                        android:id="@+id/year_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#fff"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/register_contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:background="#fff"
+                        android:maxLength="10"
+                        android:hint="@string/contact"
+                        android:inputType="number" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#000" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#fff"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+
+                    <TextView
+
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.4"
+                        android:text="@string/gender"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.6"
+                        android:orientation="horizontal">
+
+
+                        <RadioButton
+                            android:id="@+id/male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="Male" />
+
+                        <RadioButton
+                            android:id="@+id/female"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Female" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
             <Button
                 android:id="@+id/btn_Signup"
@@ -251,21 +252,53 @@
                 android:text="@string/signup_social"
                 android:textSize="16dp" />
 
+            <FrameLayout
+                android:id="@+id/FrameLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/size_10dp">
 
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/fb_reg_login"
-                style="@style/FacebookLoginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        <!--    <Button
-                android:layout_width="wrap_content"
-                android:id="@+id/fb_login_custom"
-                android:layout_height="wrap_content" />
--->
+                <!-- <com.facebook.login.widget.LoginButton
+                     android:id="@+id/login_button"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:visibility="gone" />-->
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/fb_reg_login"
+                    style="@style/FacebookLoginButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/fb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="#416BC1"
+                    android:onClick="onClick"
+                    android:padding="@dimen/size_10dp"
+                    android:text="Register with facebook"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp" />
+            </FrameLayout>
+
+            <!--  <com.facebook.login.widget.LoginButton
+                  android:id="@+id/fb_reg_login"
+                  style="@style/FacebookLoginButton"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" />-->
+            <!--    <Button
+                    android:layout_width="wrap_content"
+                    android:id="@+id/fb_login_custom"
+                    android:layout_height="wrap_content" />
+    -->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView

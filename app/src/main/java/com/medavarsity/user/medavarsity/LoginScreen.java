@@ -1,10 +1,14 @@
 package com.medavarsity.user.medavarsity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -27,6 +31,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
@@ -65,6 +70,12 @@ public class LoginScreen extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
 
+        isStoragePermissionGranted();
+        if (Build.VERSION.SDK_INT == 26) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         textView_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,12 +88,18 @@ public class LoginScreen extends AppCompatActivity {
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doLogin();
+                if (CommonMethods.isNetworkAvailable(LoginScreen.this))
+                {
+                    doLogin();
+                }else{
+                    Toast.makeText(LoginScreen.this, "Please check Internet connection", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
-        List<String> permissionNeeds = Arrays.asList("user_photos", "email",
-                "user_birthday", "public_profile");
+        List<String> permissionNeeds = Arrays.asList(/*"user_photos",*/ "email"
+                /*"user_birthday"*/, "public_profile");
         loginButton.setReadPermissions(permissionNeeds);
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -112,6 +129,7 @@ public class LoginScreen extends AppCompatActivity {
             public void onCompleted(JSONObject object, GraphResponse response) {
 
                 String loginresultResponse = object.toString();
+                System.out.println("facebook object" + " " +loginresultResponse);
                 try {
                     JSONObject jsonObject = new JSONObject(loginresultResponse);
                     StudentResponse studentResponse = new StudentResponse();
@@ -168,6 +186,7 @@ public class LoginScreen extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
 
+                    System.out.println(t.getMessage());
                 }
             });
         }
@@ -185,7 +204,7 @@ public class LoginScreen extends AppCompatActivity {
     private void navigateDashboard(StudentResponse studentResponse) {
 
         Intent intent = new Intent(LoginScreen.this, DashBoard.class);
-        intent.putExtra("student_info", studentResponse);
+        //intent.putExtra("student_info", studentResponse);
         startActivity(intent);
         finish();
     }
@@ -207,5 +226,32 @@ public class LoginScreen extends AppCompatActivity {
         String json = gson.toJson(studentResponse);
         prefsEditor.putString(ConstantVariabls.LOGIN_STUDENT_OBJECT, json);
         prefsEditor.commit();
+    }
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v("Permissions Android", "Permission is granted");
+                return true;
+            } else {
+
+                Log.v("Permissions Android", "Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("Permissions Android", "Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v("Permission Android", "Permission: " + permissions[0] + "was " + grantResults[0]);
+            //resume tasks needing this permission
+        }
     }
 }

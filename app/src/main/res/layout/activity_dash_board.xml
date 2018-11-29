@@ -4,62 +4,145 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DashBoard"
+    android:id="@+id/drawer_layout"
     tools:openDrawer="start">
 
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context="com.example.customnavigationdrawer.MainActivity">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <!-- android:theme="@style/AppTheme.AppBarOverlay"-->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary">
-                <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textview_toolbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=" "
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:textColor="#fff"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/search_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:textColor="@color/white"
+                        android:visibility="gone"
+                        android:background="#3683c9"
+                        android:padding="@dimen/size_10dp"
+                        android:drawablePadding="@dimen/size_5dp"
+                        android:layout_margin="@dimen/size_10dp"
+                        android:drawableLeft="@drawable/search_icon"
+                        android:textColorHint="@color/white"
+                        android:textSize="@dimen/size_16dp"
+                        android:text=""
+                        android:inputType="text"
+                        android:hint="Search"/>
+
+                </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container"/>
 
-        <include layout="@layout/content_main" />
+        <!--<include layout="@layout/content_main" />-->
 
     </android.support.design.widget.CoordinatorLayout>
 
     <RelativeLayout
+        android:id="@+id/rldrawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layout_marginRight="56dp">
+        android:layout_gravity="start">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_profile"
             android:layout_width="match_parent"
-            android:layout_height="144dp"
-            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:background="@color/colorPrimary">
 
-            <!--Here you can give your custom layouts if required-->
+              <!--  <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user"
+                    android:layout_marginTop="30dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#2938ab"/>-->
 
-        </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"
+                        android:text="@string/user_name"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="@dimen/size_10dp"
+                        android:text="@string/name_of_institute"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
 
         <ListView
             android:id="@+id/lv_drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/rl_profile"
-            android:background="#ffff"
+            android:background="@color/colorPrimary"
             android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
+            android:layout_gravity="start"
+            android:divider="@color/EEE"
+            android:dividerHeight="1dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/version_name"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/size_20dp"
+            android:id="@+id/version_name"/>
     </RelativeLayout>
+
+
 
 </android.support.v4.widget.DrawerLayout>

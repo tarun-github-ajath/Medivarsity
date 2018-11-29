@@ -2,7 +2,9 @@ package com.medavarsity.user.medavarsity.Model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterStudentResponse {
+import java.io.Serializable;
+
+public class RegisterStudentResponse implements Serializable {
 
     @SerializedName("Error")
     boolean error;
@@ -29,6 +31,51 @@ public class RegisterStudentResponse {
     @SerializedName("Message")
     String message;
 
+    /*@SerializedName("Payload")
+    int payload;*/
+
+    public Payload getPayload() {
+        return payload;
+    }
+
+    public void setPayload(Payload payload) {
+        this.payload = payload;
+    }
+
     @SerializedName("Payload")
-    int payload;
+    Payload payload;
+
+}
+
+class Payload implements Serializable {
+    @SerializedName("student_id")
+    public int studentId;
+    @SerializedName("contact_no")
+    public String contactNo;
+    @SerializedName("otp")
+    public String otp;
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getContactNo() {
+        return contactNo;
+    }
+
+    public void setContactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
 }

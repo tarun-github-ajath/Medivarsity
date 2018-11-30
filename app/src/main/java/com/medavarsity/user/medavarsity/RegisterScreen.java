@@ -69,6 +69,7 @@ public class RegisterScreen extends AppCompatActivity {
     LoginButton facebook_register;
     CallbackManager callbackManager;
     ProgressDialog progressBar;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     Button btn_custom_fb_login;
     LoginManager loginManager;
     List<String> permissionNeeds = Arrays.asList(/*"user_photos",*/ "email",
@@ -251,6 +252,8 @@ public class RegisterScreen extends AppCompatActivity {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("Select college")) {
             Toast.makeText(this, "Please select valid values", Toast.LENGTH_SHORT).show();
+        } else if (email.matches(emailPattern)) {
+            Toast.makeText(this, "Please enter valid email address!", Toast.LENGTH_SHORT).show();
         } else {
             progressBar.setMessage("Please wait...");
             progressBar.show();

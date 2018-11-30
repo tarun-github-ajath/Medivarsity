@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="vertical">
 
                 <EditText
@@ -66,6 +66,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:background="#fff"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:hint="@string/email_address" />
 
                 <View
@@ -81,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:background="#fff"
                 android:orientation="vertical">
 
@@ -91,6 +93,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:background="#fff"
+                    android:maxLength="100"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:hint="@string/name" />
 
                 <View
@@ -106,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="15dp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
@@ -118,6 +123,7 @@
                     android:background="@color/white"
                     android:hint="@string/password"
                     android:inputType="textWebPassword"
+                    android:maxLength="6"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -129,109 +135,111 @@
 
             </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <Spinner
+                    android:id="@+id/college_selection"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent" />
 
 
-                    <Spinner
-                        android:id="@+id/college_selection"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
 
-                </LinearLayout>
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/year_selection"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent" />
 
-                    <Spinner
-                        android:id="@+id/year_selection"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#fff"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/register_contact"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:background="#fff"
-                        android:maxLength="10"
-                        android:hint="@string/contact"
-                        android:inputType="number" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#000" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <EditText
+                    android:id="@+id/register_contact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="5dp"
                     android:background="#fff"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:hint="@string/contact"
+                    android:inputType="number"
+                    android:maxLength="10" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#000" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
 
-                    <TextView
+                <TextView
 
-                        android:layout_width="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.4"
+                    android:text="@string/gender"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.6"
+                    android:orientation="horizontal">
+
+
+                    <RadioButton
+                        android:id="@+id/male"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="0.4"
-                        android:text="@string/gender"
-                        android:textColor="@color/black"
-                        android:textSize="16dp" />
+                        android:layout_marginRight="10dp"
+                        android:text="Male" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <RadioButton
+                        android:id="@+id/female"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.6"
-                        android:orientation="horizontal">
-
-
-                        <RadioButton
-                            android:id="@+id/male"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="Male" />
-
-                        <RadioButton
-                            android:id="@+id/female"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Female" />
-                    </LinearLayout>
-
+                        android:text="Female" />
                 </LinearLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_Signup"
@@ -239,6 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+
                 android:background="@color/toolbar_color"
                 android:text="@string/sign_up"
                 android:textColor="@color/white" />

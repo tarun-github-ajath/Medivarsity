@@ -47,6 +47,7 @@ import retrofit2.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class LoginScreen extends AppCompatActivity {
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        checkAlreadyLogin();
+        //checkAlreadyLogin();
 
         textView_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +158,8 @@ public class LoginScreen extends AppCompatActivity {
                 String loginresultResponse = object.toString();
                 System.out.println("facebook object" + " " + loginresultResponse);
                 try {
+                    String android_id = Settings.Secure.getString(LoginScreen.this.getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
                     JSONObject jsonObject = new JSONObject(loginresultResponse);
                     StudentResponse studentResponse = new StudentResponse();
                     studentResponse.setFacebook_id(jsonObject.has("id") ? jsonObject.getString("id") : "");
@@ -167,12 +170,15 @@ public class LoginScreen extends AppCompatActivity {
                     String imageUrl = dataObj.has("url") ? dataObj.getString("url") : "";
 
                     studentResponse.setImage_url(imageUrl);
-                    Intent intent = new Intent(LoginScreen.this,
+                   /* Intent intent = new Intent(LoginScreen.this,
                             DashBoard.class);
                     intent.putExtra("student_info", studentResponse);
-                    startActivity(intent);
+                    startActivity(intent);*/
 
-                    saveInPref(studentResponse);
+                    /*login type for social 1*/
+                    loginCall("socialuser", "socialpass", "1", studentResponse.getFacebook_id(), "0", android_id);
+
+                    /*saveInPref(studentResponse);*/
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -200,33 +206,7 @@ public class LoginScreen extends AppCompatActivity {
         } else {
             // device_type:== android :0 and for ios: 1;
             //andoid _id is device id
-
-            Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
-                    getStudentInfo(email, pass, "0", "", "0", android_id);
-            loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
-                @Override
-                public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
-
-                    System.out.println(response.body());
-
-                    String message = response.body().getMessage();
-                    if (response.body().getStatus() == 1) {
-                        emptyVariables();
-                        navigateDashboard(response.body().getStudentResponse());
-                        saveInPref(response.body().getStudentResponse());
-                    } else {
-                        Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-
-                @Override
-                public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
-
-                    System.out.println(t.getMessage());
-                }
-            });
+            loginCall(email, pass, "0", "", "0", android_id);
         }
     }
 
@@ -328,6 +308,42 @@ public class LoginScreen extends AppCompatActivity {
                         , READ_EXTERNAL_STORAGE,
                         WRITE_EXTERNAL_STORAGE
                 }, PermissionCode);
+
+    }
+
+
+    private void loginCall(String email, String pass, String logintype, String social_id, String device_type, String device_id) {
+
+        try {
+            Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
+                    getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
+            loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
+                @Override
+                public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
+
+                    System.out.println(response.body());
+
+                    String message = response.body().getMessage();
+                    if (response.body().getStatus() == 1) {
+                        emptyVariables();
+                        navigateDashboard(response.body().getStudentResponse());
+                        saveInPref(response.body().getStudentResponse());
+                    } else {
+                        Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
+
+                    System.out.println(t.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

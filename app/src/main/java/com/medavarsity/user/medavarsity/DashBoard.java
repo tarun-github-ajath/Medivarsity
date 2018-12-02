@@ -20,18 +20,26 @@ import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.DrawerItemCustomAdapter;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.DataModel;
+import com.medavarsity.user.medavarsity.Model.HomeModel;
+import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
+import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
+import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.fragments.AboutUsFragment;
 import com.medavarsity.user.medavarsity.fragments.FaqFragments;
 import com.medavarsity.user.medavarsity.fragments.HomeScreen;
 import com.medavarsity.user.medavarsity.fragments.MyProfileFragments;
 import com.medavarsity.user.medavarsity.fragments.MyTopicsFragments;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DashBoard extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
     Intent intent;
-    StudentResponse studentResponse;
+    LoginStudentResponse studentResponse;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private Toolbar toolbar;
@@ -40,18 +48,19 @@ public class DashBoard extends AppCompatActivity {
     private TextView tvUserName;
     private String name;
 
+    ApiInterface apiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
         sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(ConstantVariabls.IS_FIRST_TIME, true);
         editor.commit();
 
-        getExtras();
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeScreen()).commit();
         setupToolbar();
@@ -59,19 +68,13 @@ public class DashBoard extends AppCompatActivity {
 
     }
 
-    private void getExtras() {
-        intent = getIntent();
-        studentResponse = (StudentResponse) intent.getSerializableExtra("student_info");
-        Log.e("studentResponse", ">>>>" + studentResponse);
-        readFromPref();
-    }
 
     /*read student info from shared pref*/
     private void readFromPref() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
-        studentResponse = gson.fromJson(json, StudentResponse.class);
-        name = studentResponse.getName();
+        studentResponse = gson.fromJson(json, LoginStudentResponse.class);
+        name = studentResponse.getStudentResponse().getName();
 
     }
 
@@ -156,5 +159,8 @@ public class DashBoard extends AppCompatActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
         mDrawerToggle.syncState();
     }
+
+
+
 
 }

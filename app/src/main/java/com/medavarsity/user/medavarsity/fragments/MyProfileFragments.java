@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.MySubjectCheckViewAdapter;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.R;
 
@@ -85,16 +86,16 @@ public class MyProfileFragments extends Fragment {
 
     }
 
-    StudentResponse studentResponse;
+    LoginStudentResponse studentResponse;
 
     public void getExtras() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
-        studentResponse = gson.fromJson(json, StudentResponse.class);
+        studentResponse = gson.fromJson(json, LoginStudentResponse.class);
 
         // MyPreferences.getActiveInstance(getActivity()).getUserId();
-        etName.setText(studentResponse.getName());
-        etEmail.setText(studentResponse.getEmail());
-        etContact.setText(studentResponse.getContact_no());
+        etName.setText(studentResponse.getStudentResponse().getName());
+        etEmail.setText(studentResponse.getStudentResponse().getEmail());
+        etContact.setText(studentResponse.getStudentResponse().getContact_no());
     }
 }

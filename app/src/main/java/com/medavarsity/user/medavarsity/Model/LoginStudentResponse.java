@@ -39,15 +39,6 @@ public class LoginStudentResponse implements Serializable {
     @SerializedName("Message")
     String message;
 
-
-    /*  public ArrayList<StudentResponse> getStudentResponses() {
-          return studentResponses;
-      }
-
-      public void setStudentResponses(ArrayList<StudentResponse> studentResponses) {
-          this.studentResponses = studentResponses;
-      }
-  */
     public String getAuth_token() {
         return auth_token;
     }
@@ -55,11 +46,6 @@ public class LoginStudentResponse implements Serializable {
     public void setAuth_token(String auth_token) {
         this.auth_token = auth_token;
     }
-
-/*
-    @SerializedName("Payload")
-    ArrayList<StudentResponse>studentResponses;
-*/
 
     public StudentResponse getStudentResponse() {
         return studentResponse;

@@ -32,6 +32,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
@@ -43,6 +44,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,6 +79,8 @@ public class RegisterScreen extends AppCompatActivity {
 
     Button fb_custom;
 
+    Intent intent;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,7 @@ public class RegisterScreen extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
 
+        intent = getIntent();
         spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -100,12 +105,7 @@ public class RegisterScreen extends AppCompatActivity {
         });
         progressBar = new ProgressDialog(RegisterScreen.this);
 
-      /*  btn_custom_fb_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginManager.logInWithReadPermissions(RegisterScreen.this, permissionNeeds);
-            }
-        });*/
+        getExtras();
         user_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +208,8 @@ public class RegisterScreen extends AppCompatActivity {
                 System.out.println("facebook object" + " " + loginresultResponse);
                 try {
                     JSONObject jsonObject = new JSONObject(loginresultResponse);
-                    StudentResponse studentResponse = new StudentResponse();
+                    /*StudentResponse studentResponse*/
+                    studentResponse = new StudentResponse();
                     studentResponse.setFacebook_id(jsonObject.has("id") ? jsonObject.getString("id") : "");
                     studentResponse.setEmail(jsonObject.has("email") ? jsonObject.getString("email") : "");
                     studentResponse.setName(jsonObject.has("name") ? jsonObject.getString("name") : "");
@@ -218,10 +219,7 @@ public class RegisterScreen extends AppCompatActivity {
 
                     studentResponse.setImage_url(imageUrl);
                     fillData(studentResponse);
-                   /* Intent intent = new Intent(RegisterScreen.this,
-                            DashBoard.class);
-                    intent.putExtra("student_info", studentResponse);*/
-                    // startActivity(intent);
+                    LoginManager.getInstance().logOut(); // logout facebook user
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -252,13 +250,26 @@ public class RegisterScreen extends AppCompatActivity {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("Select college")) {
             Toast.makeText(this, "Please select valid values", Toast.LENGTH_SHORT).show();
-        } else if (email.matches(emailPattern)) {
+        } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Please enter valid email address!", Toast.LENGTH_SHORT).show();
+        } else if (password.length() < 6) {
+            Toast.makeText(this, "Password should not be less than six digit!", Toast.LENGTH_SHORT).show();
+        } else if (number.length() < 10) {
+            Toast.makeText(this, "Please enter valid contact number!", Toast.LENGTH_SHORT).show();
         } else {
             progressBar.setMessage("Please wait...");
             progressBar.show();
+            String social_id = "";
+            String reg_type = "0";
+            String image_url = "";
+            if (!studentResponse.getFacebook_id().equalsIgnoreCase("")) {
+                social_id = studentResponse.getFacebook_id();
+                reg_type = "1";
+                image_url = studentResponse.getImage_url();
+            }
+
             Call<RegisterStudentResponse> createStudentCall = apiInterface.registerStudent(username, email, number,
-                    password, selected_college, selected_year);
+                    password, selected_college, selected_year, social_id, reg_type, image_url);
             createStudentCall.enqueue(new Callback<RegisterStudentResponse>() {
                 @Override
                 public void onResponse(Call<RegisterStudentResponse> call, Response<RegisterStudentResponse> response) {
@@ -272,11 +283,8 @@ public class RegisterScreen extends AppCompatActivity {
                         navigateLogin();
                     } else {
                         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_SHORT).show();
-                        // progressBar.hide();
-
                     }
                     progressBar.hide();
-
 
                 }
 
@@ -312,7 +320,7 @@ public class RegisterScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
         Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList();
@@ -390,16 +398,20 @@ public class RegisterScreen extends AppCompatActivity {
     }
 
     private void fillData(StudentResponse studentResponse) {
-        editText_username.setText(studentResponse.getName());
-        editText_contactnum.setText(studentResponse.getContact_no());
-        editText_useremail.setText(studentResponse.getEmail());
 
-        if (!studentResponse.getImage_url().equalsIgnoreCase("")) {
-            Picasso.with(RegisterScreen.this).load(studentResponse.getImage_url()).fit()/*.centerCrop()*/
-                    .placeholder(R.drawable.default_image)
-                    .error(R.drawable.default_image)
-                    .into(user_image);
+        if (studentResponse != null) {
+            editText_username.setText(studentResponse.getName());
+            editText_contactnum.setText(studentResponse.getContact_no());
+            editText_useremail.setText(studentResponse.getEmail());
+
+            if (!studentResponse.getImage_url().equalsIgnoreCase("")) {
+                Picasso.with(RegisterScreen.this).load(studentResponse.getImage_url()).fit()/*.centerCrop()*/
+                        .placeholder(R.drawable.default_image)
+                        .error(R.drawable.default_image)
+                        .into(user_image);
+            }
         }
+
 
     }
 
@@ -411,4 +423,13 @@ public class RegisterScreen extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
     }
+
+    StudentResponse studentResponse;
+
+    private void getExtras() {
+
+        studentResponse = (StudentResponse) intent.getSerializableExtra(ConstantVariabls.NON_VALID_FB_STUDENT);
+        fillData(studentResponse);
+    }
+
 }

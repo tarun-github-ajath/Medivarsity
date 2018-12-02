@@ -223,7 +223,7 @@ public class LoginScreen extends AppCompatActivity {
         Intent intent = new Intent(LoginScreen.this, DashBoard.class);
         intent.putExtra("student_info", studentResponse);
         startActivity(intent);
-        finish();
+        //  finish();
     }
 
     private void emptyVariables() {
@@ -273,7 +273,7 @@ public class LoginScreen extends AppCompatActivity {
         if (is_firsttime) {
             Intent intent = new Intent(LoginScreen.this, DashBoard.class);
             startActivity(intent);
-            this.finish();
+          //  this.finish();
         }
     }
 

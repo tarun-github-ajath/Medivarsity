@@ -3,6 +3,7 @@ package com.medavarsity.user.medavarsity.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -81,8 +82,20 @@ public class HomeScreen extends Fragment {
                 if (!b) {
                     YPlayer = youTubePlayer;
                     YPlayer.setFullscreen(false);
+                    // YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                     YPlayer.cueVideo("2zNSgSzhBfM");
-                    YPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+                    YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                   /* YPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+                    YPlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
+                        @Override
+                        public void onFullscreen(boolean b) {
+
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Config.YOUTUBE_VIDEO_CODE));
+                            intent.putExtra("VIDEO_ID", Config.YOUTUBE_VIDEO_CODE);
+                            intent.putExtra("force_fullscreen", true);
+                            startActivity(intent);
+                        }
+                    });*/
                 }
             }
 
@@ -91,6 +104,8 @@ public class HomeScreen extends Fragment {
 
             }
         });
+
+
         return root;
     }
 

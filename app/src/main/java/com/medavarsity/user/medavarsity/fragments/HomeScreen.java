@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +49,7 @@ public class HomeScreen extends Fragment {
 
     ApiInterface apiInterface;
     SharedPreferences sharedPreferences;
-
+    RecyclerView dailyUpdateRecycle;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -119,7 +121,11 @@ public class HomeScreen extends Fragment {
 
     private void initialize() {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        dailyUpdateRecycle = (RecyclerView) getActivity().findViewById(R.id.daily_update_recycl);
         sharedPreferences = this.getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        dailyUpdateRecycle.setLayoutManager(layoutManager);
+
 
     }
 

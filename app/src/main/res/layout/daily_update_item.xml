@@ -5,10 +5,19 @@
     android:layout_margin="5dp"
     android:orientation="vertical">
 
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_view"
+
+    <LinearLayout
         android:layout_width="150dp"
-        android:layout_height="150dp" />
+        android:layout_height="150dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/daily_youtube_fragment"
+            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/subject_name"

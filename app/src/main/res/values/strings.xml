@@ -49,4 +49,7 @@
     <string name="out_fits">Outfits recommendations</string>
     <string name="lorem_faq">Lorem ipsum dolor sit amet,consectetur adipiscing elit sed do
         eiusmod tempor Incididunt ut labore et dolore manga aliqua.Ut enim ad minim veniam. </string>
+
+    <string name="daily_update">Daily Update</string>
+    <string name="subscribe">Subscribe</string>
 </resources>

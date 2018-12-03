@@ -23,14 +23,21 @@ import android.widget.TextView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.gson.Gson;
+import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
+import com.medavarsity.user.medavarsity.Model.PayloadHome;
+import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,6 +57,7 @@ public class HomeScreen extends Fragment {
     ApiInterface apiInterface;
     SharedPreferences sharedPreferences;
     RecyclerView dailyUpdateRecycle;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -59,10 +67,12 @@ public class HomeScreen extends Fragment {
         }
     }
 
+    View root;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_home, container, false);
+        root = inflater.inflate(R.layout.activity_home, container, false);
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
         tvTitle.setVisibility(View.INVISIBLE);
@@ -87,7 +97,7 @@ public class HomeScreen extends Fragment {
                     // YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                     YPlayer.cueVideo("2zNSgSzhBfM");
                     YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                   /* YPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
+                    YPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
                     YPlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
                         @Override
                         public void onFullscreen(boolean b) {
@@ -97,7 +107,7 @@ public class HomeScreen extends Fragment {
                             intent.putExtra("force_fullscreen", true);
                             startActivity(intent);
                         }
-                    });*/
+                    });
                 }
             }
 
@@ -121,7 +131,7 @@ public class HomeScreen extends Fragment {
 
     private void initialize() {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        dailyUpdateRecycle = (RecyclerView) getActivity().findViewById(R.id.daily_update_recycl);
+        dailyUpdateRecycle = (RecyclerView) root.findViewById(R.id.daily_update_recycl);
         sharedPreferences = this.getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         dailyUpdateRecycle.setLayoutManager(layoutManager);
@@ -153,6 +163,12 @@ public class HomeScreen extends Fragment {
                 public void onResponse(Call<HomeModel> call, Response<HomeModel> response) {
 
                     System.out.println(response);
+                    PayloadHome payloadHome = response.body().getPayloadHome();
+                    List<dailyUpdates> dailyUpdates = new ArrayList<>();
+                    dailyUpdates = payloadHome.getDailyUpdates();
+
+                    setDailyUpdate(dailyUpdates);
+
                 }
 
                 @Override
@@ -169,6 +185,26 @@ public class HomeScreen extends Fragment {
         intent.putExtra("force_fullscreen", true);
         startActivity(intent);
     }
+
+    private void setDailyUpdate(List<dailyUpdates> dailyUpdate) {
+
+//        DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(getActivity(), getActivity().getApplicationContext(), dailyUpdate, Config.DEVELOPER_KEY);
+      //  dailyUpdateRecycle.setAdapter(dailyUpdateAdapter);
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+      //  getYoutubePlayProvider();
+    }
+
+
+  /*  public YouTubePlayer.Provider getYoutubePlayProvider() {
+      //  return (YouTubePlayerView) root.findViewById(R.id.youtube_fragment);
+    }*/
 }
 
 

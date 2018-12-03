@@ -94,6 +94,9 @@ public class DashBoard extends AppCompatActivity {
         switch (position) {
             case 0:
                 fragment = new HomeScreen();
+                /*intent = new Intent(DashBoard.this, DashBoard.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                this.startActivity(intent);*/
                 break;
             case 1:
                 fragment = new MyTopicsFragments();

@@ -220,7 +220,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private void navigateDashboard(LoginStudentResponse studentResponse) {
 
-        Intent intent = new Intent(LoginScreen.this, DashBoard.class);
+        Intent intent = new Intent(LoginScreen.this,/* DashBoard.class*/YoutubeActivity.class);
         intent.putExtra("student_info", studentResponse);
         startActivity(intent);
         //  finish();
@@ -273,7 +273,7 @@ public class LoginScreen extends AppCompatActivity {
         if (is_firsttime) {
             Intent intent = new Intent(LoginScreen.this, DashBoard.class);
             startActivity(intent);
-          //  this.finish();
+            //  this.finish();
         }
     }
 
@@ -335,6 +335,7 @@ public class LoginScreen extends AppCompatActivity {
                             }
                             emptyVariables();
                             navigateDashboard(loginStudentResponse);
+                            LoginManager.getInstance().logOut();
                             saveInPref(loginStudentResponse);
                         } else {
                             Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
@@ -386,8 +387,9 @@ public class LoginScreen extends AppCompatActivity {
                             Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
                             intent.putExtra("from", ConstantVariabls.LoginFB);
                             intent.putExtra(ConstantVariabls.NON_VALID_FB_STUDENT, studentResponse);
-                            startActivity(intent);
                             LoginManager.getInstance().logOut();
+                            startActivity(intent);
+
                         }
 
 

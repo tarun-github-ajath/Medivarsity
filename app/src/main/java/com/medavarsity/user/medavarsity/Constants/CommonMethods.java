@@ -28,4 +28,15 @@ public class CommonMethods {
 
     }
 
+
+    public static String extractVideoId(String url) {
+        // String s = "test string (67)";
+
+        String s = url;
+        s = s.substring(s.indexOf("=") + 1);
+        //  s = s.substring(0, s.indexOf(")"));
+
+        System.out.println(s);
+        return s;
+    }
 }

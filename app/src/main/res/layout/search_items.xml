@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relative_search_yotube"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <com.google.android.youtube.player.YouTubeThumbnailView
+            android:id="@+id/search_player"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/search_relativeLayout_over_youtube_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/btnYoutube_search_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/youtube_play" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/title_searched_video"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="left|center"
+        android:layout_margin="@dimen/size_20dp"
+        android:layout_toRightOf="@+id/relative_search_yotube"
+        android:text=""
+
+        android:textColor="@color/black" />
+
+
+</RelativeLayout>

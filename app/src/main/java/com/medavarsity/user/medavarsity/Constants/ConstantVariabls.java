@@ -9,4 +9,6 @@ public class ConstantVariabls {
 
     public static final String NON_VALID_FB_STUDENT = "non_validfb";
     public static final String LoginFB = "login_fb";
+
+    public static final String Home_Model="HomeModel";
 }

@@ -13,20 +13,29 @@
         android:background="@color/colorPrimary">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@color/search_color"
+            android:padding="5dp">
 
-            <EditText
+
+            <ImageView
+                android:id="@+id/search_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:src="@drawable/baseline_search_white_18dp" />
+
+            <TextView
                 android:id="@+id/search_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_marginBottom="5dp"
-                android:background="#fff"
-                android:maxLines="1"
-                android:padding="@dimen/size_10dp"
-                android:singleLine="true"
-                android:text="" />
+                android:layout_toRightOf="@+id/search_icon"
+                android:text="Search"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -38,8 +47,8 @@
             android:layout_height="200dp"
             android:layout_marginBottom="30dp" />-->
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/relative_yotube"
+        android:layout_width="match_parent"
         android:layout_height="200dp">
 
         <com.google.android.youtube.player.YouTubeThumbnailView
@@ -97,8 +106,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:scaleType="fitXY"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:scaleType="fitXY" />
 
 </LinearLayout>

@@ -52,6 +52,8 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
     ImageView playBtn;
     RelativeLayout relativeLayoutOverYouTubeThumbnailView;
 
+    RelativeLayout searchLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         playBtn = (ImageView) findViewById(R.id.btnYoutube_player);
         relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) findViewById(R.id.relative_yotube);
 
+        searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
         dailyUpdateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycl);
         dailyUpdateRecycle.setHasFixedSize(true);
         sharedPreferences = this.getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
@@ -111,6 +114,15 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
             public void onClick(View v) {
 
                 Intent intent = YouTubeStandalonePlayer.createVideoIntent(YoutubeActivity.this, Config.DEVELOPER_KEY, Config.YOUTUBE_VIDEO_CODE);
+                startActivity(intent);
+            }
+        });
+
+
+        searchLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(YoutubeActivity.this, SearchScreen.class);
                 startActivity(intent);
             }
         });
@@ -172,6 +184,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
                     List<dailyUpdates> dailyUpdates = new ArrayList<>();
                     dailyUpdates = payloadHome.getDailyUpdates();
 
+                    saveInPref(payloadHome);
                     setDailyUpdate(dailyUpdates);
 
                 }
@@ -195,8 +208,14 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
 
         DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
         dailyUpdateRecycle.setAdapter(dailyUpdateAdapter);
-
     }
 
 
+    private void saveInPref(PayloadHome homeModels) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(homeModels);
+        prefsEditor.putString(ConstantVariabls.Home_Model, json);
+        prefsEditor.commit();
+    }
 }

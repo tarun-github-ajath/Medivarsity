@@ -6,7 +6,7 @@
     <color name="white">#fff</color>
     <color name="toolbar_color">#2938ab</color>
     <color name="black">#000</color>
-
+    <color name="search_color">#757ec2</color>
     <color name="EEE">#eeeeee</color>
     <color name="FFC90E">#ffc90e</color>
 </resources>

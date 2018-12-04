@@ -78,6 +78,7 @@ public class MyProfileFragments extends Fragment {
         list.add("Pathology");
         list.add("Orthopadic");
         list.add("Skin");
+
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapter = new MySubjectCheckViewAdapter(getActivity(), list);
         recyclerView.setAdapter(adapter);

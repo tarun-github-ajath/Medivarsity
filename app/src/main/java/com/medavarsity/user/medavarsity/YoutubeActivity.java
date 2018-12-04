@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
@@ -22,6 +24,7 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
+import com.medavarsity.user.medavarsity.Adapters.HomeAdapter;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
@@ -45,7 +48,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
     YouTubePlayerView youTubePlayerView;
 
     SharedPreferences sharedPreferences;
-    RecyclerView dailyUpdateRecycle;
+    RecyclerView subject_recycle, updateRecycle;
     Intent intent;
     ApiInterface apiInterface;
     YouTubeThumbnailView youTubeThumbnailView;
@@ -53,6 +56,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
     RelativeLayout relativeLayoutOverYouTubeThumbnailView;
 
     RelativeLayout searchLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +71,25 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) findViewById(R.id.relative_yotube);
 
         searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
-        dailyUpdateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycl);
-        dailyUpdateRecycle.setHasFixedSize(true);
+        subject_recycle = (RecyclerView) findViewById(R.id._recycl);
+        updateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycleView);
+
         sharedPreferences = this.getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        dailyUpdateRecycle.setLayoutManager(layoutManager);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        subject_recycle.setLayoutManager(layoutManager);
+        subject_recycle.setHasFixedSize(true);
+
+        subject_recycle.getLayoutManager().setMeasurementCacheEnabled(false);
+
+        RecyclerView.LayoutManager updateLayoutmanager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+       updateRecycle.setLayoutManager(updateLayoutmanager);
+       updateRecycle.setHasFixedSize(true);
+
+        updateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
 
 
-        dailyUpdateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
+        createDynamicList();
         getExtras();
         getDashboardData(studentResponse.getAuth_token());
 
@@ -185,7 +200,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
                     dailyUpdates = payloadHome.getDailyUpdates();
 
                     saveInPref(payloadHome);
-                    setDailyUpdate(dailyUpdates);
+                    setDailyUpdate(/*dailyUpdates*/payloadHome);
 
                 }
 
@@ -204,10 +219,34 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         startActivity(intent);
     }
 
-    private void setDailyUpdate(List<dailyUpdates> dailyUpdate) {
+    RecyclerView dailyRecycle;
 
-        DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
-        dailyUpdateRecycle.setAdapter(dailyUpdateAdapter);
+    private void createDynamicList() {
+        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.home_parent);
+        dailyRecycle = new RecyclerView(YoutubeActivity.this);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(10, 0, 10, 10);
+        dailyRecycle.setLayoutParams(layoutParams);
+        viewGroup.addView(dailyRecycle);
+
+    }
+
+    private void setDailyUpdate(/*List<dailyUpdates> dailyUpdate*/ PayloadHome payloadHomes) {
+
+        /*DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
+        subject_recycle.setAdapter(dailyUpdateAdapter);*/
+
+        DailyUpdateAdapter updateAdapter = new DailyUpdateAdapter(this, payloadHomes.getDailyUpdates(), payloadHomes.getSubjects(), Config.DEVELOPER_KEY, "daily");
+        updateRecycle.setAdapter(updateAdapter);
+
+        HomeAdapter homeAdapter = new HomeAdapter(YoutubeActivity.this, payloadHomes,"subject");
+        subject_recycle.setAdapter(homeAdapter);
+
+        /*DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
+        dailyRecycle.setAdapter(dailyUpdateAdapter);*/
+
+
     }
 
 

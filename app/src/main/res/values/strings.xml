@@ -26,6 +26,7 @@
         d60aeb5afb86db38436626988d118939</string>
     <string name="already_Account">Already have an account?</string>
 
+    <string name="no_data">No data found</string>
 
     <string name="login">Login</string>
     <string name="type_verification">Please type the verification code to</string>

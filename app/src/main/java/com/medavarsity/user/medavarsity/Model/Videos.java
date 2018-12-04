@@ -13,6 +13,17 @@ public class Videos implements Serializable {
     @Expose
     int subject_id;
 
+    public String getVideo_title() {
+        return video_title;
+    }
+
+    public void setVideo_title(String video_title) {
+        this.video_title = video_title;
+    }
+
+    @SerializedName("video_title")
+    String video_title;
+
     public int getId() {
         return id;
     }

@@ -28,6 +28,7 @@ import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
+import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.R;
 
@@ -46,11 +47,17 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
     String developerKey;
     FragmentActivity fragmentActivity;
 
-    public DailyUpdateAdapter(/*FragmentActivity fragmentActivity,*/ Context context, List<dailyUpdates> dailyUpdateModelArrayList, String developerKey) {
+    List<Subjects> subjectsList;
+    String from;
+
+    public DailyUpdateAdapter(/*FragmentActivity fragmentActivity,*/ Context context, List<dailyUpdates> dailyUpdateModelArrayList, List<Subjects> subjectsList,
+                                                                     String developerKey, String from) {
         this.fragmentActivity = fragmentActivity;
         this.context = context;
         this.dailyUpdateModelArrayList = dailyUpdateModelArrayList;
         this.developerKey = developerKey;
+        this.subjectsList = subjectsList;
+        this.from = from;
     }
 
 
@@ -65,8 +72,85 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
 
-        viewHolder.subjectTextView.setText(dailyUpdateModelArrayList.get(position).getTitle());
-        viewHolder.ratingBar.setRating(4);
+        if (from.equalsIgnoreCase("daily")) {
+            viewHolder.subjectTextView.setText(dailyUpdateModelArrayList.get(position).getTitle());
+
+            viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
+                @Override
+                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                    String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
+
+                    youTubeThumbnailLoader.setVideo(video_id);
+                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+                        @Override
+                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                            youTubeThumbnailLoader.release();
+                            youTubeThumbnailView.setVisibility(View.VISIBLE);
+                            viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+
+                }
+            });
+
+            viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
+                    context.startActivity(intent);
+                }
+            });
+
+        } else {
+            viewHolder.subjectTextView.setText(subjectsList.get(position).getSubjectname());
+
+            viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
+                @Override
+                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
+                    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
+
+                    youTubeThumbnailLoader.setVideo(video_id);
+                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+                        @Override
+                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+                            youTubeThumbnailLoader.release();
+                            youTubeThumbnailView.setVisibility(View.VISIBLE);
+                            viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+
+                }
+            });
+
+            viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
 
        /* viewHolder.youTubePlayerFragment.initialize(Config.DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
             @Override
@@ -125,41 +209,6 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
             }
         };*/
 
-        viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
-
-                youTubeThumbnailLoader.setVideo(video_id);
-                youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                    @Override
-                    public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                        youTubeThumbnailLoader.release();
-                        youTubeThumbnailView.setVisibility(View.VISIBLE);
-                        viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        });
-
-        viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -168,8 +217,8 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        RatingBar ratingBar;
-        TextView subjectTextView, hrtextView;
+        // RatingBar ratingBar;
+        TextView subjectTextView/*, hrtextView*/;
 //        YouTubePlayerSupportFragment youTubePlayerFragment;
 
         //        YouTubePlayerView youTubePlayerView;
@@ -188,9 +237,7 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
             relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) itemView.findViewById(R.id.relative_yotube);
             youtube_thumbnail = (YouTubeThumbnailView) itemView.findViewById(R.id.youtube_thumbnail);
             playButton = (ImageView) itemView.findViewById(R.id.btnYoutube_player);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratings);
             subjectTextView = (TextView) itemView.findViewById(R.id.subject_name);
-            hrtextView = (TextView) itemView.findViewById(R.id.hr_rate);
         }
     }
 }

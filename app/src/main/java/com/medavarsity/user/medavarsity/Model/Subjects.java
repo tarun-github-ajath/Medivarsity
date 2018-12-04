@@ -19,11 +19,11 @@ public class Subjects implements Serializable {
         this.subjectname = subjectname;
     }
 
-    public String getSubscription() {
+    public int getSubscription() {
         return subscription;
     }
 
-    public void setSubscription(String subscription) {
+    public void setSubscription(int subscription) {
         this.subscription = subscription;
     }
 
@@ -37,7 +37,7 @@ public class Subjects implements Serializable {
 
     @SerializedName("subscription")
     @Expose
-    String subscription;
+    int subscription;
 
     @SerializedName("videos")
     @Expose

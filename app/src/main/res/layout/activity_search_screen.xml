@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SearchScreen">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <android.support.v7.widget.Toolbar
@@ -37,12 +36,38 @@
                 android:layout_toRightOf="@+id/navigation_icon"
                 android:maxLines="1"
                 android:padding="10dp"
-                android:textColor="@color/white"
                 android:singleLine="true"
-                android:text="Search here..." />
+                android:hint="Search here..."
+                android:textColor="@color/white" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+
+        <TextView
+            android:id="@+id/no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/no_data"
+            android:visibility="visible"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/search_recycl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:scaleType="fitXY" />
+
+    </RelativeLayout>
 
 </LinearLayout>

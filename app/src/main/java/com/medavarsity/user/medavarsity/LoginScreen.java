@@ -254,11 +254,11 @@ public class LoginScreen extends AppCompatActivity {
 
                 boolean CameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean SendSMSPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                boolean GetAccountsPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                boolean readExternal = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                boolean writeExtrenl = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+             //   boolean GetAccountsPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                boolean readExternal = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                boolean writeExtrenl = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
-                if (/*CameraPermission &&*/ SendSMSPermission && GetAccountsPermission && readExternal && writeExtrenl) {
+                if (/*CameraPermission &&*/ SendSMSPermission /*&& GetAccountsPermission*/ && readExternal && writeExtrenl) {
 
                 } else {
                     Toast.makeText(this, "Permissions denied!", Toast.LENGTH_SHORT).show();
@@ -282,14 +282,14 @@ public class LoginScreen extends AppCompatActivity {
 
         int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
         int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), SEND_SMS);
-        int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), GET_ACCOUNTS);
+        /*int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), GET_ACCOUNTS);*/
         int ForthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
         int fifth = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
 
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
-                ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
+                //ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 ForthPermissionResult == PackageManager.PERMISSION_GRANTED
                 && fifth == PackageManager.PERMISSION_GRANTED;
     }
@@ -300,8 +300,8 @@ public class LoginScreen extends AppCompatActivity {
         ActivityCompat.requestPermissions(LoginScreen.this, new String[]
                 {
                         CAMERA,
-                        SEND_SMS,
-                        GET_ACCOUNTS
+                        SEND_SMS/*,
+                        GET_ACCOUNTS*/
                         , READ_EXTERNAL_STORAGE,
                         WRITE_EXTERNAL_STORAGE
                 }, PermissionCode);

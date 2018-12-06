@@ -15,6 +15,16 @@ public class CommonMethods {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+
+   /* public static boolean isWIfiNetwork(Context context) {
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected()) {
+            // Do whatever
+        }
+    }*/
+
     public static void hideKeyboard(Activity activity) {
 
 
@@ -39,7 +49,6 @@ public class CommonMethods {
         System.out.println(s);
         return s;
     }
-
 
 
 }

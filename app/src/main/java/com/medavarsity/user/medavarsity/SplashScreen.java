@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +18,8 @@ import java.security.NoSuchAlgorithmException;
 public class SplashScreen extends AppCompatActivity {
 
     private static int SPLASH_TIME_OUT = 3000;
+    TextView splash_text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +27,9 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         splashTimer();
         // generateKeyHash();
+        splash_text = (TextView) findViewById(R.id.splash_text);
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Nunito-Regular.ttf");
+        splash_text.setTypeface(custom_font);
     }
 
     private void splashTimer() {

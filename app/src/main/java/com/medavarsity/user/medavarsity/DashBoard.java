@@ -62,7 +62,7 @@ public class DashBoard extends AppCompatActivity {
 
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeScreen()).commit();
+      //  getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeScreen()).commit();
         setupToolbar();
         setupDrawerToggle();
 
@@ -93,7 +93,7 @@ public class DashBoard extends AppCompatActivity {
 
         switch (position) {
             case 0:
-                fragment = new HomeScreen();
+                //fragment = new HomeScreen();
                 /*intent = new Intent(DashBoard.this, DashBoard.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);*/

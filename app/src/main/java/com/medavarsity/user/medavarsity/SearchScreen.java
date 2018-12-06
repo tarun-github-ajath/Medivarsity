@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RatingBar;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,10 +27,8 @@ import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
-import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
-import com.medavarsity.user.medavarsity.Adapters.MySubjectCheckViewAdapter;
 import com.medavarsity.user.medavarsity.Adapters.SearchedModel;
-import com.medavarsity.user.medavarsity.Adapters.SubjectAdapter;
+import com.medavarsity.user.medavarsity.Adapters.SubjectsAdapter;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
@@ -40,7 +38,12 @@ import com.medavarsity.user.medavarsity.Model.Videos;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class SearchScreen extends AppCompatActivity {
 
@@ -48,8 +51,8 @@ public class SearchScreen extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     EditText search_text;
     List<SearchedModel> filteredData;
-
     TextView no_data;
+    List<Videos> _v_list = new ArrayList<>();
     RecyclerView recyclerView;
 
     @Override
@@ -105,6 +108,7 @@ public class SearchScreen extends AppCompatActivity {
     PayloadHome payloadHome;
     ArrayList<SearchedModel> searchedModelArrayList = new ArrayList<>();
 
+    ArrayList<Videos> temp_lists = new ArrayList<>();
     SearchListAdapter searchListAdapter;
 
     private void readFromPref() {
@@ -114,33 +118,9 @@ public class SearchScreen extends AppCompatActivity {
         if (searchedModelArrayList.size() > 0) {
             searchedModelArrayList.clear();
         }
-        searchedModelArrayList = makeMergedList(payloadHome.getSubjects());
-        searchListAdapter = new SearchListAdapter(SearchScreen.this, searchedModelArrayList);
+        searchedModelArrayList = makeMergedList(payloadHome);
+        searchListAdapter = new SearchListAdapter(SearchScreen.this, searchedModelArrayList, null);
     }
-
-   /* public class CustomComparator implements Comparator<Subjects> {
-        @Override
-        public int compare(Subjects o1, Subjects o2) {
-            String searched = search_text.getText().toString().trim();
-
-            if (searched.equalsIgnoreCase(o1.getSubjectname()) || searched.equalsIgnoreCase(o2.getSubjectname())*//*|| searched.equals(o2.getVideos()) || searched.equals(o1.getComments()) ||
-                  searched.equals(o2.getComments()) || searched.equals(o1.getNote()) || searched.equals(o2.getNote())*//*) {
-                return 1;
-            }*//* else if (searched.contains(o1.getTaskdesc()) || searched.contains(o2.getTaskdesc())
-     *//**//*|| searched.contains(o1.getComments()) || searched.contains(o2.getComments())
-                    || searched.contains(o1.getNote()) || searched.contains(o2.getNote())*//**//*
-                  )
-          {
-              return 0;
-          } else {
-              return -1;
-          }*//* else {
-                return 0;
-            }
-
-        }
-    }
-*/
 
     class SearchListAdapter extends RecyclerView.Adapter<MyViewHolder> implements Filterable {
 
@@ -149,107 +129,50 @@ public class SearchScreen extends AppCompatActivity {
         LayoutInflater layoutInflater;
         private ItemFilter mFilter = new ItemFilter();
 
+        List<Subjects> filteredSubjects;
 
-        public SearchListAdapter(Context context, List<SearchedModel> subjectsList) {
+        public SearchListAdapter(Context context, List<SearchedModel> subjectsList, List<Subjects> filteredSubjects) {
             this.context = context;
             this.subjectsList = subjectsList;
             filteredData = subjectsList;
+            this.filteredSubjects = filteredSubjects;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout./*daily_update_item*/search_items, viewGroup, false);
+            View view = layoutInflater.inflate(R.layout./*daily_update_item*/text_recycle, viewGroup, false);
             return new MyViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int position) {
 
-          /*  myViewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-                @Override
-                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).get);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            myViewHolder.recyclerView.setLayoutManager(layoutManager);
+            myViewHolder.recyclerView.setHasFixedSize(true);
 
-                    youTubeThumbnailLoader.setVideo(video_id);
-                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                        @Override
-                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                            youTubeThumbnailLoader.release();
-                            youTubeThumbnailView.setVisibility(View.VISIBLE);
-                            myViewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                        }
 
-                        @Override
-                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+            myViewHolder.recyclerView.getLayoutManager().setMeasurementCacheEnabled(false);
+            myViewHolder.recyclerView.setNestedScrollingEnabled(false);
 
-                        }
-                    });
-                }
 
-                @Override
-                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-                }
-            });
-*/
-           /* myViewHolder.playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                    context.startActivity(intent);
-                }
-            });*/
-
-            myViewHolder.subjectTextView.setText(filteredData.get(position).getSubjectname());
-
-            myViewHolder.youtube_thumbnail.initialize(Config.DEVELOPER_KEY, new YouTubeThumbnailView.OnInitializedListener() {
-                @Override
-                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                    String video_id = CommonMethods.extractVideoId(filteredData.get(position).getSubject_video_url());
-
-                    youTubeThumbnailLoader.setVideo(video_id);
-                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                        @Override
-                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                            youTubeThumbnailLoader.release();
-                            youTubeThumbnailView.setVisibility(View.VISIBLE);
-                            myViewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-                }
-            });
-            myViewHolder.playButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String video_id = CommonMethods.extractVideoId(filteredData.get(position).getSubject_video_url());
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                    context.startActivity(intent);
-                }
-            });
-
+            if (filteredSubjects.get(position).getVideos() != null && filteredSubjects.get(position).getVideos().size() > 0) {
+                myViewHolder.subject_name.setText(filteredSubjects.get(position).getSubjectname());
+                myViewHolder.linearLayout.setVisibility(View.VISIBLE);
+                SubjectsAdapter subjectsAdapter = new SubjectsAdapter(context, filteredSubjects.get(position).getVideos(), Config.DEVELOPER_KEY);
+                myViewHolder.recyclerView.setAdapter(subjectsAdapter);
+            }
         }
 
         @Override
         public int getItemCount() {
-            //return /*searchedModelArrayList.size();*/
-            if (filteredData == null) {
+            if (filteredSubjects == null) {
                 return 0;
-            } else
-                return filteredData.size();
-
+            } else {
+                return filteredSubjects.size();
+            }
         }
 
         @Override
@@ -259,18 +182,20 @@ public class SearchScreen extends AppCompatActivity {
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView subjectTextView, hrtextView;
-        RelativeLayout relativeLayoutOverYouTubeThumbnailView;
-        ImageView playButton;
-        YouTubeThumbnailView youtube_thumbnail;
+
+        LinearLayout linearLayout;
+        RecyclerView recyclerView;
+        TextView subject_name, subscription;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) itemView.findViewById(R.id.relative_search_yotube);
-            youtube_thumbnail = (YouTubeThumbnailView) itemView.findViewById(R.id.search_player);
-            playButton = (ImageView) itemView.findViewById(R.id.btnYoutube_search_player);
-            subjectTextView = (TextView) itemView.findViewById(R.id.title_searched_video);
-            /*hrtextView = (TextView) itemView.findViewById(R.id.hr_rate);*/
+
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.layout_recycl);
+
+
+            recyclerView = (RecyclerView) itemView.findViewById(R.id.test_recycl);
+            subject_name = (TextView) itemView.findViewById(R.id.dailyUpdate);
+            subscription = (TextView) itemView.findViewById(R.id.subscribe);
         }
     }
 
@@ -291,68 +216,16 @@ public class SearchScreen extends AppCompatActivity {
             for (int j = 0; j < count; j++) {
                 obj = new SearchedModel();
                 obj = searchedModelArrayList.get(j);
-                if (obj.getSubjectname().toLowerCase().contains(filterString)
-                        || obj.getVideo_title().toLowerCase().contains(filterString)
-                        || obj.getSubject_video_url().toLowerCase().contains(filterString)
+
+                if (obj.getSubjectname().toLowerCase().contains(filterString.toLowerCase())
+                        || obj.getVideo_title().toLowerCase().contains(filterString.toLowerCase())
+                    /* || obj.getSubject_video_url().toLowerCase().contains(filterString.toLowerCase())*/
                         ) {
                     searchedModels.add(obj);
                 }
             }
             results.values = searchedModels;
             results.count = searchedModels.size();
-
-
-/*
-            filterString = constraint.toString().toLowerCase().trim();
-            FilterResults results = new FilterResults();
-            int count = workOrderModels.size();
-            final List<WorkOrderModel> nlist = new ArrayList<>(count);
-            if (isTechnicianSelected) {
-                WorkOrderModel obj = null;
-                filterString = constraint.toString().trim();
-                if (filterString.equalsIgnoreCase("All")) {
-                    results.values = workOrderModels;
-                } else {
-                    for (int i = 0; i < workOrderModels.size(); i++) {
-                        obj = new WorkOrderModel();
-                        obj = workOrderModels.get(i);
-                        String fname = obj.getFirstName();
-                        String lname = obj.getLastName();
-                        String tech_name = fname + " " + lname;
-                        if (tech_name.equalsIgnoreCase(filterString)) {
-                            nlist.add(obj);
-                        }
-                    }
-
-                    results.values = nlist;
-                    results.count = nlist.size();
-                }
-                isTechnicianSelected = false;
-            } else {
-                WorkOrderModel obj = null;
-                for (int i = 0; i < count; i++) {
-                    obj = new WorkOrderModel();
-                    obj = workOrderModels.get(i);
-
-                    if (obj.getFirstName().toLowerCase().contains(filterString) ||
-                            obj.getLastName().toLowerCase().contains(filterString) ||
-                            obj.getService_address().toLowerCase().contains(filterString) ||
-                            obj.getQuote_number().toLowerCase().contains(filterString)
-                            || obj.getCompany().toLowerCase().contains(filterString) ||
-                            obj.getTechnician_fname().toLowerCase().contains(filterString)
-                            || obj.getTechnician_lname().toLowerCase().contains(filterString) ||
-                            obj.getCustomer().toLowerCase().contains(filterString) ||
-                            obj.getCreated_technician().toLowerCase().contains(filterString)
-                            ) {
-                        nlist.add(obj);
-                    }
-                }
-
-                results.values = nlist;
-                results.count = nlist.size();
-            }
-*/
-
 
             return results;
 
@@ -371,64 +244,131 @@ public class SearchScreen extends AppCompatActivity {
 
                 no_data.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                searchListAdapter = new SearchListAdapter(SearchScreen.this, filteredData);
+                ArrayList<Subjects> subjectsArrayList = differentiateSubjects(filteredData);
+                System.out.println(subjectsArrayList);
+                removeDuplicacy(subjectsArrayList);
+
+          /*      Set<Subjects> unique = new LinkedHashSet<Subjects>(subjectsArrayList);
+                if (subjectsArrayList.size() > 0) {
+                    subjectsArrayList.clear();
+                }
+                subjectsArrayList = new ArrayList<Subjects>(unique);
+*/
+                System.out.println(subjectsArrayList);
+                SearchListAdapter searchListAdapter = new SearchListAdapter(SearchScreen.this, filteredData, subjectsArrayList);
+                recyclerView.setAdapter(searchListAdapter);
+              /*  searchListAdapter = new SearchListAdapter(SearchScreen.this, filteredData);
                 recyclerView.setAdapter(searchListAdapter);
                 try {
                     searchListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             }
-        /*    filteredData = (ArrayList<WorkOrderModel>) results.values;
-
-            if (filteredData.size() == 0) {
-                no_text.setVisibility(View.VISIBLE);
-                quote_list.setVisibility(View.INVISIBLE);
-                quote_list.invalidate();
-            } else {
-                no_text.setVisibility(View.INVISIBLE);
-                quote_list.setVisibility(View.VISIBLE);
-                try {
-                    notifyDataSetChanged();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }*/
         }
     }
 
 
-    private ArrayList<SearchedModel> makeMergedList(List<Subjects> subjects) {
+    private ArrayList<Subjects> differentiateSubjects(List<SearchedModel> filtered) {
+        ArrayList<Subjects> subjects = new ArrayList<>();
+        Subjects sub_object = null;
+        for (int i = 0; i < filtered.size(); i++) {
+            int subjectId = filtered.get(i).getSubject_id();
+            List<Videos> v_list = new ArrayList<>();
+            for (int j = 0; j < filtered.size(); j++) {
+
+
+                if (filtered.get(j).getSubject_id() == subjectId) {
+                    sub_object = new Subjects();
+                    sub_object.setSubjectname(filtered.get(j).getSubjectname());
+                    Videos videos = new Videos();
+                    videos.setId(filtered.get(j).getVideo_id());
+                    videos.setVideo_url(filtered.get(j).getSubject_video_url());
+                    videos.setVideo_title(filtered.get(j).getVideo_title());
+                    videos.setVideo_image_url(filtered.get(j).getSubject_video_url());
+                    videos.setSubject_id(filtered.get(j).getSubject_id());
+                    v_list.add(videos);
+
+
+                }
+                //filtered.remove()
+            }
+
+            sub_object.setVideos(v_list);
+
+            subjects.add(sub_object);
+        }
+        return subjects;
+    }
+
+
+    private ArrayList<SearchedModel> makeMergedList(PayloadHome payloadHome) {
 
 
         ArrayList<SearchedModel> searchedModelArrayList = new ArrayList<>();
-        if (subjects != null && subjects.size() > 0) {
-            for (int i = 0; i < subjects.size(); i++) {
-                List<Videos> videos = subjects.get(i).getVideos();
-                SearchedModel searchedModel = new SearchedModel();
+        SearchedModel dailyModel = null;
+        SearchedModel searchedModel = null;
 
-                searchedModel.setSubjectname(subjects.get(i).getSubjectname());
-                searchedModel.setSubject_subscription(subjects.get(i).getSubscription());
+        if (payloadHome.getDailyUpdates() != null && payloadHome.getDailyUpdates().size() > 0) {
+            for (int j = 0; j < payloadHome.getDailyUpdates().size(); j++) {
+                dailyModel = new SearchedModel();
+                dailyModel.setSubjectname("Daily Updates");
+                dailyModel.setVideo_title(payloadHome.getDailyUpdates().get(j).getTitle());
+                dailyModel.setSubject_video_url(payloadHome.getDailyUpdates().get(j).getUrl());
+
+                dailyModel.setSubject_id(11);
+                searchedModelArrayList.add(dailyModel);
+            }
+        }
+
+
+        if (payloadHome.getSubjects() != null && payloadHome.getSubjects().size() > 0) {
+            for (int i = 0; i < payloadHome.getSubjects().size(); i++) {
+                List<Videos> videos = payloadHome.getSubjects().get(i).getVideos();
+                searchedModel = new SearchedModel();
+
+                searchedModel.setSubjectname(payloadHome.getSubjects().get(i).getSubjectname());
+                searchedModel.setSubject_subscription(payloadHome.getSubjects().get(i).getSubscription());
                 if (videos != null && videos.size() > 0) {
                     for (int j = 0; j < videos.size(); j++) {
 
                         searchedModel.setSubject_id(videos.get(j).getSubject_id());
                         searchedModel.setVideo_id(videos.get(j).getId());
                         searchedModel.setVideo_title(videos.get(j).getVideo_title());
-                        searchedModel.setSubject_video_id(videos.get(j).getSubject_id());
+                        /*searchedModel.setSubject_video_id(videos.get(j).getId());*/
                         searchedModel.setSubject_video_image_url(videos.get(j).getVideo_image_url());
                         searchedModel.setSubject_video_url(videos.get(j).getVideo_url());
                         searchedModel.setVideo_type(videos.get(j).getVideo_type());
+
+                        searchedModelArrayList.add(searchedModel);
                     }
+                } else {
+                    searchedModelArrayList.add(searchedModel);
                 }
-
-                searchedModelArrayList.add(searchedModel);
-
-
             }
         }
-
         return searchedModelArrayList;
 
+    }
+
+
+    private List<Subjects> removeDuplicacy(List<Subjects> subjects) {
+        List<Subjects> subjectsList = new ArrayList<>();
+      /*  Set<Subjects> s = new TreeSet<Subjects>(nefw Comparator<Subjects>() {
+
+            @Override
+            public int compare(Subjects o1, Subjects o2) {
+                *//*  if (o1.getVideos() == o2.getVideos()) {*//*
+                return 0;
+//                }
+                // ... compare the two object according to your requirements
+            }
+        });
+        s.addAll(subjects);
+        subjects = new ArrayList<>(s);*/
+        Set<Subjects>subjects1=new HashSet<>(subjects);
+        subjects.clear();
+        subjects.addAll(subjects1);
+        return subjects;
     }
 }

@@ -3,11 +3,10 @@ package com.medavarsity.user.medavarsity.Adapters;
 public class SearchedModel {
 
 
-    String subjectname;
+    String subjectname="";
     int subject_id;
-    String subject_video_url;
+    String subject_video_url="";
 
-    String from_video;
     
 
     public int getSubject_video_id() {
@@ -19,7 +18,7 @@ public class SearchedModel {
     }
 
     int subject_video_id;
-    String subject_video_image_url;
+    String subject_video_image_url="";
     int video_id;
     int subject_subscription;
 
@@ -31,7 +30,7 @@ public class SearchedModel {
         this.video_title = video_title;
     }
 
-    String video_title;
+    String video_title="";
 
     public String getSubjectname() {
         return subjectname;

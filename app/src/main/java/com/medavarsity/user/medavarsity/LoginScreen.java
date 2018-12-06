@@ -310,7 +310,6 @@ public class LoginScreen extends AppCompatActivity {
 
 
     private void loginCall(String email, String pass, String logintype, String social_id, String device_type, String device_id, final StudentResponse studentResponse) {
-
         if (social_id.equalsIgnoreCase("") && logintype.equalsIgnoreCase("0")) {
             try {
                 Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.

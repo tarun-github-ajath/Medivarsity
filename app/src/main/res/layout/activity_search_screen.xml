@@ -34,40 +34,53 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_toRightOf="@+id/navigation_icon"
+                android:hint="Search here..."
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:hint="Search here..."
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textColorHint="#FFF" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <RelativeLayout
+
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp">
+        android:layout_height="match_parent">
 
+        <LinearLayout
 
-        <TextView
-            android:id="@+id/no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/no_data"
-            android:visibility="visible"
-            android:textColor="@color/white"
-            android:textSize="18dp" />
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_recycl"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:scaleType="fitXY" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
+
+                <TextView
+                    android:id="@+id/no_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/no_data"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:visibility="visible" />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/search_recycl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="fitXY" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

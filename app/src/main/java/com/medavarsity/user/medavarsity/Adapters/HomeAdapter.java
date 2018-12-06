@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.medavarsity.user.medavarsity.Constants.Config;
@@ -43,15 +45,25 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
 
         if (payloadHome.getSubjects() != null && payloadHome.getSubjects().size() > 0) {
-            homeViewHolder.subject_name.setText(payloadHome.getSubjects().get(position).getSubjectname());
+            /*homeViewHolder.subject_name.setText(payloadHome.getSubjects().get(position).getSubjectname());*/
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             homeViewHolder.recyclerView.setLayoutManager(layoutManager);
             homeViewHolder.recyclerView.setHasFixedSize(true);
 
+
             homeViewHolder.recyclerView.getLayoutManager().setMeasurementCacheEnabled(false);
-            DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(context, payloadHome.getDailyUpdates(), payloadHome.getSubjects(), Config.DEVELOPER_KEY, from);
-            homeViewHolder.recyclerView.setAdapter(dailyUpdateAdapter);
+            homeViewHolder.recyclerView.setNestedScrollingEnabled(false);
+
+            if (payloadHome.getSubjects().get(position).getVideos() != null && payloadHome.getSubjects().get(position).getVideos().size() > 0) {
+                homeViewHolder.subject_name.setText(payloadHome.getSubjects().get(position).getSubjectname());
+                homeViewHolder.parent_layout.setVisibility(View.VISIBLE);
+                SubjectsAdapter subjectsAdapter = new SubjectsAdapter(context, payloadHome.getSubjects().get(position).getVideos(), Config.DEVELOPER_KEY);
+                homeViewHolder.recyclerView.setAdapter(subjectsAdapter);
+            } else {
+                homeViewHolder.parent_layout.setVisibility(View.GONE);
+            }
+
         }
 
 
@@ -66,11 +78,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         RecyclerView recyclerView;
         TextView subject_name, subscription;
 
+        LinearLayout parent_layout;
         public HomeViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            parent_layout=(LinearLayout)itemView.findViewById(R.id.layout_recycl);
             recyclerView = (RecyclerView) itemView.findViewById(R.id.test_recycl);
-
             subject_name = (TextView) itemView.findViewById(R.id.dailyUpdate);
             subscription = (TextView) itemView.findViewById(R.id.subscribe);
 

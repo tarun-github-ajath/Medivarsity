@@ -46,7 +46,6 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
 
 
     YouTubePlayerView youTubePlayerView;
-
     SharedPreferences sharedPreferences;
     RecyclerView subject_recycle, updateRecycle;
     Intent intent;
@@ -54,7 +53,6 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
     YouTubeThumbnailView youTubeThumbnailView;
     ImageView playBtn;
     RelativeLayout relativeLayoutOverYouTubeThumbnailView;
-
     RelativeLayout searchLayout;
 
 
@@ -79,12 +77,12 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         subject_recycle.setLayoutManager(layoutManager);
         subject_recycle.setHasFixedSize(true);
-
+        subject_recycle.setNestedScrollingEnabled(false);
         subject_recycle.getLayoutManager().setMeasurementCacheEnabled(false);
 
         RecyclerView.LayoutManager updateLayoutmanager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-       updateRecycle.setLayoutManager(updateLayoutmanager);
-       updateRecycle.setHasFixedSize(true);
+        updateRecycle.setLayoutManager(updateLayoutmanager);
+        updateRecycle.setHasFixedSize(true);
 
         updateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
 
@@ -112,8 +110,6 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         youTubeThumbnailView.initialize(Config.DEVELOPER_KEY, new YouTubeThumbnailView.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                /*String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());*/
-
                 youTubeThumbnailLoader.setVideo(Config.YOUTUBE_VIDEO_CODE);
                 youTubeThumbnailLoader.setOnThumbnailLoadedListener(onThumbnailLoadedListener);
             }
@@ -233,19 +229,11 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
     }
 
     private void setDailyUpdate(/*List<dailyUpdates> dailyUpdate*/ PayloadHome payloadHomes) {
-
-        /*DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
-        subject_recycle.setAdapter(dailyUpdateAdapter);*/
-
         DailyUpdateAdapter updateAdapter = new DailyUpdateAdapter(this, payloadHomes.getDailyUpdates(), payloadHomes.getSubjects(), Config.DEVELOPER_KEY, "daily");
         updateRecycle.setAdapter(updateAdapter);
 
-        HomeAdapter homeAdapter = new HomeAdapter(YoutubeActivity.this, payloadHomes,"subject");
+        HomeAdapter homeAdapter = new HomeAdapter(YoutubeActivity.this, payloadHomes, "subject");
         subject_recycle.setAdapter(homeAdapter);
-
-        /*DailyUpdateAdapter dailyUpdateAdapter = new DailyUpdateAdapter(this, dailyUpdate, Config.DEVELOPER_KEY);
-        dailyRecycle.setAdapter(dailyUpdateAdapter);*/
-
 
     }
 

@@ -1,56 +1,41 @@
 package com.medavarsity.user.medavarsity.Adapters;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.R;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.ViewHolder> {
 
-
-    YouTubePlayer YPlayer;
     Context context;
-
     LayoutInflater mInflater;
-
     List<dailyUpdates> dailyUpdateModelArrayList;
     String developerKey;
     FragmentActivity fragmentActivity;
-
     List<Subjects> subjectsList;
     String from;
 
-    public DailyUpdateAdapter(/*FragmentActivity fragmentActivity,*/ Context context, List<dailyUpdates> dailyUpdateModelArrayList, List<Subjects> subjectsList,
+    public DailyUpdateAdapter(Context context, List<dailyUpdates> dailyUpdateModelArrayList, List<Subjects> subjectsList,
                                                                      String developerKey, String from) {
         this.fragmentActivity = fragmentActivity;
         this.context = context;
@@ -117,9 +102,9 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
             viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
                 @Override
                 public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
+                //    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
 
-                    youTubeThumbnailLoader.setVideo(video_id);
+                  //  youTubeThumbnailLoader.setVideo(video_id);
                     youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
                         @Override
                         public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {

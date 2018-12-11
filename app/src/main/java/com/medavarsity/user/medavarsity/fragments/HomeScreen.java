@@ -73,11 +73,11 @@ public class HomeScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.activity_home, container, false);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+       /* toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
         tvTitle.setVisibility(View.INVISIBLE);
         searchOption = (EditText) toolbar.findViewById(R.id.search_option);
-        searchOption.setVisibility(View.VISIBLE);
+        searchOption.setVisibility(View.VISIBLE);*/
 
         initialize();
         getExtras();

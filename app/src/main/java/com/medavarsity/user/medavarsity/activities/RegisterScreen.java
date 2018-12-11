@@ -1,13 +1,9 @@
-package com.medavarsity.user.medavarsity;
+package com.medavarsity.user.medavarsity.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +27,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
+import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
@@ -39,23 +35,25 @@ import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
+import com.medavarsity.user.medavarsity.R;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterScreen extends AppCompatActivity {
 
-    ImageView user_image;
+    // ImageView user_image;
+    CircleImageView user_image, camera_icon;
     EditText editText_useremail, editText_userpassword, editText_username, editText_contactnum;
     Button btn_SignUp;
     Spinner spinner_collegeSelection, spinner_yearSelection;
@@ -106,7 +104,14 @@ public class RegisterScreen extends AppCompatActivity {
         progressBar = new ProgressDialog(RegisterScreen.this);
 
         getExtras();
-        user_image.setOnClickListener(new View.OnClickListener() {
+       /* user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagePicker();
+            }
+        });*/
+
+        camera_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imagePicker();
@@ -310,7 +315,9 @@ public class RegisterScreen extends AppCompatActivity {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         signIn = (TextView) findViewById(R.id.already_signin);
         facebook_register = (LoginButton) findViewById(R.id.fb_reg_login);
-        user_image = (ImageView) findViewById(R.id.user_image);
+        // user_image = (ImageView) findViewById(R.id.user_image);
+        user_image = (CircleImageView) findViewById(R.id.profile_image);
+        camera_icon = (CircleImageView) findViewById(R.id.iv_camera);
         fb_custom = (Button) findViewById(R.id.fb);
 
         //  btn_custom_fb_login = (Button) findViewById(R.id.fb_login_custom);

@@ -1,6 +1,5 @@
-package com.medavarsity.user.medavarsity;
+package com.medavarsity.user.medavarsity.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,31 +18,22 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.google.android.youtube.player.YouTubeThumbnailLoader;
-import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.SearchedModel;
 import com.medavarsity.user.medavarsity.Adapters.SubjectsAdapter;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.Videos;
+import com.medavarsity.user.medavarsity.R;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class SearchScreen extends AppCompatActivity {
 
@@ -74,12 +64,11 @@ public class SearchScreen extends AppCompatActivity {
         navigation_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SearchScreen.this, YoutubeActivity.class);
+                Intent intent = new Intent(SearchScreen.this, /*YoutubeActivity*/DashBoard.class);
                 startActivity(intent);
                 finish();
             }
         });
-
         readFromPref();
 
         search_text.addTextChangedListener(new TextWatcher() {
@@ -108,7 +97,6 @@ public class SearchScreen extends AppCompatActivity {
     PayloadHome payloadHome;
     ArrayList<SearchedModel> searchedModelArrayList = new ArrayList<>();
 
-    ArrayList<Videos> temp_lists = new ArrayList<>();
     SearchListAdapter searchListAdapter;
 
     private void readFromPref() {
@@ -205,27 +193,32 @@ public class SearchScreen extends AppCompatActivity {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults results;
+            if (!constraint.toString().equalsIgnoreCase("")) {
+                filterString = constraint.toString().toLowerCase().trim();
+                results = new FilterResults();
 
-            filterString = constraint.toString().toLowerCase().trim();
-            FilterResults results = new FilterResults();
+                int count = searchedModelArrayList.size();
+                final List<SearchedModel> searchedModels = new ArrayList<>();
+                SearchedModel obj = null;
 
-            int count = searchedModelArrayList.size();
-            final List<SearchedModel> searchedModels = new ArrayList<>();
-            SearchedModel obj = null;
+                for (int j = 0; j < count; j++) {
+                    obj = new SearchedModel();
+                    obj = searchedModelArrayList.get(j);
 
-            for (int j = 0; j < count; j++) {
-                obj = new SearchedModel();
-                obj = searchedModelArrayList.get(j);
-
-                if (obj.getSubjectname().toLowerCase().contains(filterString.toLowerCase())
-                        || obj.getVideo_title().toLowerCase().contains(filterString.toLowerCase())
-                    /* || obj.getSubject_video_url().toLowerCase().contains(filterString.toLowerCase())*/
-                        ) {
-                    searchedModels.add(obj);
+                    if (obj.getSubjectname().toLowerCase().contains(filterString.toLowerCase())
+                            || obj.getVideo_title().toLowerCase().contains(filterString.toLowerCase())
+                        /* || obj.getSubject_video_url().toLowerCase().contains(filterString.toLowerCase())*/
+                            ) {
+                        searchedModels.add(obj);
+                    }
                 }
+                results.values = searchedModels;
+                results.count = searchedModels.size();
+            } else {
+                results = new FilterResults();
             }
-            results.values = searchedModels;
-            results.count = searchedModels.size();
+
 
             return results;
 
@@ -236,7 +229,7 @@ public class SearchScreen extends AppCompatActivity {
 
             filteredData = (List<SearchedModel>) results.values;
 
-            if (filteredData.size() == 0) {
+            if (filteredData == null || filteredData.size() == 0) {
                 no_data.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
                 recyclerView.invalidate();
@@ -246,7 +239,7 @@ public class SearchScreen extends AppCompatActivity {
                 recyclerView.setVisibility(View.VISIBLE);
                 ArrayList<Subjects> subjectsArrayList = differentiateSubjects(filteredData);
                 System.out.println(subjectsArrayList);
-                removeDuplicacy(subjectsArrayList);
+                // removeDuplicacy(subjectsArrayList);
 
           /*      Set<Subjects> unique = new LinkedHashSet<Subjects>(subjectsArrayList);
                 if (subjectsArrayList.size() > 0) {
@@ -254,7 +247,7 @@ public class SearchScreen extends AppCompatActivity {
                 }
                 subjectsArrayList = new ArrayList<Subjects>(unique);
 */
-                System.out.println(subjectsArrayList);
+
                 SearchListAdapter searchListAdapter = new SearchListAdapter(SearchScreen.this, filteredData, subjectsArrayList);
                 recyclerView.setAdapter(searchListAdapter);
               /*  searchListAdapter = new SearchListAdapter(SearchScreen.this, filteredData);
@@ -296,7 +289,13 @@ public class SearchScreen extends AppCompatActivity {
 
             sub_object.setVideos(v_list);
 
-            subjects.add(sub_object);
+            if (subjects != null) {
+                if (!checkExist(subjects, sub_object)) {
+                    subjects.add(sub_object);
+                }
+            }
+            System.out.println(sub_object);
+
         }
         return subjects;
     }
@@ -351,7 +350,6 @@ public class SearchScreen extends AppCompatActivity {
 
     }
 
-
     private List<Subjects> removeDuplicacy(List<Subjects> subjects) {
         List<Subjects> subjectsList = new ArrayList<>();
       /*  Set<Subjects> s = new TreeSet<Subjects>(nefw Comparator<Subjects>() {
@@ -366,9 +364,26 @@ public class SearchScreen extends AppCompatActivity {
         });
         s.addAll(subjects);
         subjects = new ArrayList<>(s);*/
-        Set<Subjects>subjects1=new HashSet<>(subjects);
+        Set<Subjects> subjects1 = new HashSet<>(subjects);
         subjects.clear();
         subjects.addAll(subjects1);
         return subjects;
+    }
+
+
+    private boolean checkExist(ArrayList<Subjects> subjects, Subjects single_obj) {
+        boolean isExist = false;
+        for (int i = 0; i < subjects.size(); i++) {
+            List<Videos> videosList = subjects.get(i).getVideos();
+
+            /*for (int j = 0; j < videosList.size(); j++) {*/
+            if (videosList.get(0).getSubject_id() == single_obj.getVideos().get(0).getSubject_id()) {
+                isExist = true;
+                break;
+            }
+//            }
+
+        }
+        return isExist;
     }
 }

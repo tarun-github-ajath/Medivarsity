@@ -11,6 +11,17 @@ public class Subjects implements Serializable {
     @Expose
     String subjectname;
 
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    @SerializedName("subjectid")
+    int subjectId;
+
     public String getSubjectname() {
         return subjectname;
     }

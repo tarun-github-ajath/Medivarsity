@@ -48,12 +48,12 @@ public class MyProfileFragments extends Fragment {
                              Bundle savedInstanceState) {
         sharedPreferences = getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.activity_my_profile, container, false);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
-        tvTitle.setText("My Profile");
-        tvTitle.setVisibility(View.VISIBLE);
-        searchOption = (EditText) toolbar.findViewById(R.id.search_option);
-        searchOption.setVisibility(View.INVISIBLE);
+      //  toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+      //  tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
+        //tvTitle.setText("My Profile");
+        //tvTitle.setVisibility(View.VISIBLE);
+        //searchOption = (EditText) toolbar.findViewById(R.id.search_option);
+        //searchOption.setVisibility(View.INVISIBLE);
         etName = (EditText) root.findViewById(R.id.f_name);
         etEmail = (EditText) root.findViewById(R.id.et_email);
         etContact = (EditText) root.findViewById(R.id.et_phone);

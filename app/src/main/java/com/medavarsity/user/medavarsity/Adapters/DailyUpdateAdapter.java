@@ -14,11 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
+import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;

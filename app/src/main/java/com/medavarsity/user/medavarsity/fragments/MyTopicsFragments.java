@@ -14,20 +14,27 @@ import com.medavarsity.user.medavarsity.R;
 
 public class MyTopicsFragments extends Fragment {
     Toolbar toolbar;
-    TextView tvTitle;
-    EditText searchOption;
+    TextView toolbar_text;
+    LinearLayout searchBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.frag_my_topics, container, false);
 
-        toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        searchBar = (LinearLayout) toolbar.findViewById(R.id.search_bar);
+        searchBar.setVisibility(View.GONE);
+        toolbar_text = (TextView) toolbar.findViewById(R.id.textview_toolbar);
+        toolbar_text.setVisibility(View.VISIBLE);
+        toolbar_text.setText("My Topics");
+      /*  toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
         tvTitle=(TextView)toolbar.findViewById(R.id.textview_toolbar);
         tvTitle.setText("My Topics");
         tvTitle.setVisibility(View.VISIBLE);
         searchOption=(EditText) toolbar.findViewById(R.id.search_option);
-        searchOption.setVisibility(View.INVISIBLE);
+        searchOption.setVisibility(View.INVISIBLE);*/
 
 
         return root;

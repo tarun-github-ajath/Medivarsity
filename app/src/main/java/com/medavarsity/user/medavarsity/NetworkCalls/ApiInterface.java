@@ -36,6 +36,6 @@ public interface ApiInterface {
     @POST("Home")
     Call<HomeModel> getHomeData(@Field("authtoken") String authtoken);
 
-
-
+   /* @FormUrlEncoded
+    @POST("Topicdetails")*/
 }

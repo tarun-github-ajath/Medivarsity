@@ -10,16 +10,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
-            android:name=".SplashScreen"
+            android:name=".activities.SplashScreen"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -30,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginScreen"
+            android:name=".activities.LoginScreen"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
@@ -60,25 +61,40 @@
             android:exported="true" />
 
         <activity
-            android:name=".RegisterScreen"
+            android:name=".activities.RegisterScreen"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".DashBoard"
+            android:name=".activities.DashBoard"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".YoutubeActivity"
+            android:name=".activities.YoutubeActivity"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".SearchScreen"
+            android:name=".activities.SearchScreen"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activities.TopicDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FaQView"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MyTopicsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.AboutUsView"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

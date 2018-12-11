@@ -17,11 +17,9 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
+import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.Videos;
-import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.R;
 
 import java.util.List;
@@ -56,12 +54,20 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
 
         viewHolder.subjectTextView.setText(subjectsVideos.get(position).getVideo_title());
 
+
+       /* viewHolder.subjectTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TopicDetails.class);
+                context.startActivity(intent);
+            }
+        });*/
         viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                   String video_id = CommonMethods.extractVideoId(subjectsVideos.get(position).getVideo_url());
+                String video_id = CommonMethods.extractVideoId(subjectsVideos.get(position).getVideo_url());
 
-                 youTubeThumbnailLoader.setVideo(video_id);
+                youTubeThumbnailLoader.setVideo(video_id);
                 youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
                     @Override
                     public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {

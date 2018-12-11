@@ -1,8 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/navigate_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingTop="@dimen/size_10dp"
+                android:paddingBottom="@dimen/size_10dp"
+                android:src="@drawable/back_icon" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:text="My Profile"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_18dp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>-->
+
+    <include layout="@layout/common_toolbar" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/size_10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="@dimen/size_10dp"
-                android:layout_marginRight="@dimen/size_10dp"
-                android:layout_marginTop="60dp">
+                android:layout_marginRight="@dimen/size_10dp">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,8 +88,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rl_image"
                 android:layout_margin="@dimen/size_20dp"
-                android:padding="@dimen/size_10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/size_10dp">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -82,11 +128,12 @@
                         android:layout_weight="1"
                         android:text="Female" />
                 </RadioGroup>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/size_5dp"
-                    android:background="#606060"/>
+                    android:background="#606060" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -114,8 +161,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_marginTop="@dimen/size_5dp"
+                        android:gravity="center"
                         android:text="+91"
                         android:textColor="@color/black"
                         android:textSize="@dimen/size_20dp" />
@@ -136,20 +183,20 @@
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
-               <!-- <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_10dp"
-                    android:textColorHint="@color/black">
+                <!-- <android.support.design.widget.TextInputLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/size_10dp"
+                     android:textColorHint="@color/black">
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Address"
-                        android:inputType="text"
-                        android:text=""
-                        android:textColor="@color/black" />
-                </android.support.design.widget.TextInputLayout>-->
+                     <EditText
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:hint="Address"
+                         android:inputType="text"
+                         android:text=""
+                         android:textColor="@color/black" />
+                 </android.support.design.widget.TextInputLayout>-->
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -158,12 +205,12 @@
                     android:textColorHint="@color/black">
 
                     <EditText
+                        android:id="@+id/et_college"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Collage"
                         android:inputType="text"
                         android:text=""
-                        android:id="@+id/et_college"
                         android:textColor="@color/black" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -174,12 +221,12 @@
                     android:textColorHint="@color/black">
 
                     <EditText
+                        android:id="@+id/et_year"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Year"
                         android:inputType="text"
                         android:text=""
-                        android:id="@+id/et_year"
                         android:textColor="@color/black" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -204,10 +251,10 @@
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/subject_check_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_10dp"
-                    android:id="@+id/subject_check_recycler"/>
+                    android:layout_marginTop="@dimen/size_10dp" />
 
 
                 <Button
@@ -215,11 +262,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/size_20dp"
-                    android:padding="10dp"
                     android:background="@color/toolbar_color"
+                    android:padding="10dp"
                     android:text="Logout"
                     android:textColor="@color/white" />
 
             </LinearLayout>
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

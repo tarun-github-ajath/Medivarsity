@@ -23,12 +23,12 @@ public class AboutUsFragment extends Fragment {
         View root = inflater.inflate(R.layout.activity_about_us, container, false);
 
 
-        toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
+       /* toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar);
         tvTitle=(TextView)toolbar.findViewById(R.id.textview_toolbar);
         tvTitle.setText("About Us");
         tvTitle.setVisibility(View.VISIBLE);
         searchOption=(EditText) toolbar.findViewById(R.id.search_option);
-        searchOption.setVisibility(View.INVISIBLE);
+        searchOption.setVisibility(View.INVISIBLE);*/
 
         return root;
 

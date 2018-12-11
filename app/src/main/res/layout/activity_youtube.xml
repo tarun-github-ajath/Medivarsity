@@ -5,9 +5,11 @@
     android:id="@+id/home_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="55dp"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -39,7 +41,7 @@
                 android:textSize="16sp" />
         </RelativeLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>-->
 
     <!--
         <com.google.android.youtube.player.YouTubePlayerView
@@ -115,7 +117,7 @@
             </RelativeLayout>
 
 
-            <RelativeLayout
+           <!-- <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
 
@@ -123,6 +125,18 @@
                     android:id="@+id/daily_update_recycleView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="fitXY" />
+            </RelativeLayout>-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/daily_update_recycleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:scaleType="fitXY" />
             </RelativeLayout>

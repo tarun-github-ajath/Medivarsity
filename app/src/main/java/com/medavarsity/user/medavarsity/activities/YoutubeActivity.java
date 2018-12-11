@@ -1,10 +1,8 @@
-package com.medavarsity.user.medavarsity;
+package com.medavarsity.user.medavarsity.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +15,6 @@ import android.widget.RelativeLayout;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
@@ -25,7 +22,6 @@ import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
 import com.medavarsity.user.medavarsity.Adapters.HomeAdapter;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
@@ -34,6 +30,7 @@ import com.medavarsity.user.medavarsity.Model.PayloadHome;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
+import com.medavarsity.user.medavarsity.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +65,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         playBtn = (ImageView) findViewById(R.id.btnYoutube_player);
         relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) findViewById(R.id.relative_yotube);
 
-        searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
+        //searchLayout = (RelativeLayout) findViewById(R.id.search_layout);
         subject_recycle = (RecyclerView) findViewById(R.id._recycl);
         updateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycleView);
 
@@ -130,13 +127,13 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         });
 
 
-        searchLayout.setOnClickListener(new View.OnClickListener() {
+      /*  searchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(YoutubeActivity.this, SearchScreen.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
 

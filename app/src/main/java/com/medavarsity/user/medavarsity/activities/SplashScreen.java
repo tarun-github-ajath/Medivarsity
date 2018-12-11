@@ -1,6 +1,6 @@
-package com.medavarsity.user.medavarsity;
+    package com.medavarsity.user.medavarsity.activities;
 
-import android.content.Intent;
+import   android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.medavarsity.user.medavarsity.R;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         splashTimer();
-        // generateKeyHash();
+       generateKeyHash();
         splash_text = (TextView) findViewById(R.id.splash_text);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Nunito-Regular.ttf");
         splash_text.setTypeface(custom_font);

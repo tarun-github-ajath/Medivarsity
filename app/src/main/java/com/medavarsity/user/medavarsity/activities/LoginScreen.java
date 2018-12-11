@@ -1,12 +1,10 @@
-package com.medavarsity.user.medavarsity;
+package com.medavarsity.user.medavarsity.activities;
 
-import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -14,8 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,21 +23,17 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.medavarsity.user.medavarsity.Constants.CommonMethods;
+import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
-import com.medavarsity.user.medavarsity.Model.FacebookResponse;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
-import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
+import com.medavarsity.user.medavarsity.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +45,6 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
-import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -68,15 +59,18 @@ public class LoginScreen extends AppCompatActivity {
     LoginButton loginButton;
     ApiInterface apiInterface;
     Button fb_login;
-
+    Dialog mDialog;
     boolean is_firsttime = false;
     SharedPreferences sharedPreferences;
+    CommonMethods mCommonMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
         initializeIds();
+
+        mCommonMethod = new CommonMethods(LoginScreen.this);
         callbackManager = CallbackManager.Factory.create();
         sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -172,10 +166,8 @@ public class LoginScreen extends AppCompatActivity {
                     studentResponse.setImage_url(imageUrl);
 
                     /*login type for social 1*/
-                    loginCall("", "", "1", studentResponse.getFacebook_id(), "0", android_id, studentResponse);
 
-                    //facebookoginCall("social_email", "social_pass", "1", studentResponse.getFacebook_id(), "0", android_id);
-                    /*saveInPref(studentResponse);*/
+                    loginCall("", "", "1", studentResponse.getFacebook_id(), "0", android_id, studentResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -220,7 +212,7 @@ public class LoginScreen extends AppCompatActivity {
 
     private void navigateDashboard(LoginStudentResponse studentResponse) {
 
-        Intent intent = new Intent(LoginScreen.this,/* DashBoard.class*/YoutubeActivity.class);
+        Intent intent = new Intent(LoginScreen.this, DashBoard.class/*YoutubeActivity.class*/);
         intent.putExtra("student_info", studentResponse);
         startActivity(intent);
         //  finish();
@@ -254,7 +246,7 @@ public class LoginScreen extends AppCompatActivity {
 
                 boolean CameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean SendSMSPermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-             //   boolean GetAccountsPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                //   boolean GetAccountsPermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                 boolean readExternal = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                 boolean writeExtrenl = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
@@ -277,19 +269,25 @@ public class LoginScreen extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDialog != null)
+            if (mDialog.isShowing()) {
+                mDialog.cancel();
+            }
+    }
 
     public boolean CheckingPermissionIsEnabledOrNot() {
 
         int FirstPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
         int SecondPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), SEND_SMS);
-        /*int ThirdPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), GET_ACCOUNTS);*/
         int ForthPermissionResult = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
         int fifth = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
 
 
         return FirstPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 SecondPermissionResult == PackageManager.PERMISSION_GRANTED &&
-                //ThirdPermissionResult == PackageManager.PERMISSION_GRANTED &&
                 ForthPermissionResult == PackageManager.PERMISSION_GRANTED
                 && fifth == PackageManager.PERMISSION_GRANTED;
     }
@@ -300,8 +298,7 @@ public class LoginScreen extends AppCompatActivity {
         ActivityCompat.requestPermissions(LoginScreen.this, new String[]
                 {
                         CAMERA,
-                        SEND_SMS/*,
-                        GET_ACCOUNTS*/
+                        SEND_SMS
                         , READ_EXTERNAL_STORAGE,
                         WRITE_EXTERNAL_STORAGE
                 }, PermissionCode);
@@ -310,7 +307,11 @@ public class LoginScreen extends AppCompatActivity {
 
 
     private void loginCall(String email, String pass, String logintype, String social_id, String device_type, String device_id, final StudentResponse studentResponse) {
+
+
         if (social_id.equalsIgnoreCase("") && logintype.equalsIgnoreCase("0")) {
+
+            mCommonMethod.showCommonDialog(LoginScreen.this, "Please wait...");
             try {
                 Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
                         getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
@@ -332,8 +333,10 @@ public class LoginScreen extends AppCompatActivity {
                                 loginStudentResponse.setStatus(response.body().getStatus());
                                 loginStudentResponse.setStudentResponse(response.body().getStudentResponse());
                             }
-                            emptyVariables();
+                            //emptyVariables();
+                            mCommonMethod.cancelDialog();
                             navigateDashboard(loginStudentResponse);
+
                             LoginManager.getInstance().logOut();
                             saveInPref(loginStudentResponse);
                         } else {
@@ -344,7 +347,7 @@ public class LoginScreen extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
-
+                        mCommonMethod.cancelDialog();
                         System.out.println(t.getMessage());
                     }
                 });
@@ -353,6 +356,7 @@ public class LoginScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
+            mCommonMethod.showCommonDialog(LoginScreen.this, "Please wait...");
             try {
                 Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
                         getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
@@ -378,7 +382,7 @@ public class LoginScreen extends AppCompatActivity {
                                 loginStudentResponse.setStatus(response.body().getStatus());
                                 loginStudentResponse.setStudentResponse(response.body().getStudentResponse());
                             }
-
+                            mCommonMethod.cancelDialog();
                             navigateDashboard(loginStudentResponse);
                             saveInPref(loginStudentResponse);
 
@@ -390,13 +394,11 @@ public class LoginScreen extends AppCompatActivity {
                             startActivity(intent);
 
                         }
-
-
                     }
 
                     @Override
                     public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
-
+                        mCommonMethod.cancelDialog();
                         System.out.println(t.getMessage());
                     }
                 });
@@ -408,4 +410,5 @@ public class LoginScreen extends AppCompatActivity {
 
 
     }
+
 }

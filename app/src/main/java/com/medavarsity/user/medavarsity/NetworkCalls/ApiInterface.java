@@ -5,6 +5,7 @@ import com.medavarsity.user.medavarsity.Model.FacebookResponse;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
+import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -36,6 +37,7 @@ public interface ApiInterface {
     @POST("Home")
     Call<HomeModel> getHomeData(@Field("authtoken") String authtoken);
 
-   /* @FormUrlEncoded
-    @POST("Topicdetails")*/
+    @FormUrlEncoded
+    @POST("Topicdetails")
+    Call<TopicDetailModel>getTopicDetails(@Field("authtoken") String authtoken, @Field("topic_id") int topic_id);
 }

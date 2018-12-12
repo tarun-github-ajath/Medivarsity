@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/login_bg">
 
 
     <LinearLayout
@@ -22,23 +22,32 @@
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/size_10dp"
+                android:text="Email Address"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/email_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="#fff"
-                android:text="android@ajath.com"
-                android:hint="@string/email_address"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:padding="@dimen/size_10dp"
+                android:singleLine="true"
+                android:text="" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+            <!--   <View
+                   android:layout_width="match_parent"
+                   android:layout_height="1dp"
 
-                android:layout_marginTop="5dp"
-                android:background="#000" />
+                   android:layout_marginTop="5dp"
+                   android:background="#000" />-->
 
         </LinearLayout>
 
@@ -47,8 +56,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="#fff"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/size_10dp"
+                android:text="Password"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/password"
@@ -56,17 +73,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="#fff"
-                android:hint="@string/password"
-                android:text="ajath123"
                 android:inputType="textWebPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:padding="@dimen/size_10dp"
+                android:singleLine="true"
+                android:text="" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="#000" />
+            <!--      <View
+                      android:layout_width="match_parent"
+                      android:layout_height="1dp"
+                      android:layout_marginTop="5dp"
+                      android:background="#000" />-->
 
         </LinearLayout>
 
@@ -88,6 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/sign_social"
+            android:textColor="@color/white"
             android:textSize="16dp" />
 
 
@@ -147,6 +165,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_margin="20dp"
                 android:text="Don't have account?"
+                android:textColor="@color/white"
                 android:textSize="16dp" />
 
             <TextView
@@ -156,6 +175,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_margin="20dp"
                 android:text="Sign Up"
+                android:textColor="@color/white"
                 android:textSize="17dp"
                 android:textStyle="bold" />
 

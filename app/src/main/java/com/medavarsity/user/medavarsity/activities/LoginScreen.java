@@ -341,6 +341,7 @@ public class LoginScreen extends AppCompatActivity {
                             saveInPref(loginStudentResponse);
                         } else {
                             Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
+                            mCommonMethod.cancelDialog();
                         }
 
                     }

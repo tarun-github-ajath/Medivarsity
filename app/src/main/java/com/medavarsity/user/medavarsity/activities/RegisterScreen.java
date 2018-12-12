@@ -68,7 +68,7 @@ public class RegisterScreen extends AppCompatActivity {
     String[] years = new String[]{"Select Year", "1990", "2001", "2003", "2004", "2005", "2006", "2009"};
     LoginButton facebook_register;
     CallbackManager callbackManager;
-    ProgressDialog progressBar;
+
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     Button btn_custom_fb_login;
     LoginManager loginManager;
@@ -76,8 +76,11 @@ public class RegisterScreen extends AppCompatActivity {
             /*"user_birthday",*/ "public_profile");
 
     Button fb_custom;
-
+    String social_id = "";
+    String reg_type = "0";
+    String image_url = "";
     Intent intent;
+    CommonMethods mCommonMethods;
 
     @Override
 
@@ -89,6 +92,7 @@ public class RegisterScreen extends AppCompatActivity {
         loginManager = LoginManager.getInstance();
 
         intent = getIntent();
+        mCommonMethods = new CommonMethods(RegisterScreen.this);
         spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -101,7 +105,7 @@ public class RegisterScreen extends AppCompatActivity {
 
             }
         });
-        progressBar = new ProgressDialog(RegisterScreen.this);
+
 
         getExtras();
        /* user_image.setOnClickListener(new View.OnClickListener() {
@@ -262,15 +266,17 @@ public class RegisterScreen extends AppCompatActivity {
         } else if (number.length() < 10) {
             Toast.makeText(this, "Please enter valid contact number!", Toast.LENGTH_SHORT).show();
         } else {
-            progressBar.setMessage("Please wait...");
-            progressBar.show();
-            String social_id = "";
-            String reg_type = "0";
-            String image_url = "";
-            if (!studentResponse.getFacebook_id().equalsIgnoreCase("")) {
-                social_id = studentResponse.getFacebook_id();
-                reg_type = "1";
-                image_url = studentResponse.getImage_url();
+          /*  progressBar.setMessage("Please wait...");
+            progressBar.show();*/
+            mCommonMethods.showCommonDialog(RegisterScreen.this, "Please wait...");
+
+            if (studentResponse != null) {
+                if (!studentResponse.getFacebook_id().equalsIgnoreCase("")) {
+                    social_id = studentResponse.getFacebook_id();
+                    reg_type = "1";
+                    image_url = studentResponse.getImage_url();
+                }
+
             }
 
             Call<RegisterStudentResponse> createStudentCall = apiInterface.registerStudent(username, email, number,
@@ -289,13 +295,15 @@ public class RegisterScreen extends AppCompatActivity {
                     } else {
                         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_SHORT).show();
                     }
-                    progressBar.hide();
+
+                    mCommonMethods.cancelDialog();
 
                 }
 
                 @Override
                 public void onFailure(Call<RegisterStudentResponse> call, Throwable t) {
                     System.out.println(t.getMessage());
+                    mCommonMethods.cancelDialog();
                 }
             });
         }

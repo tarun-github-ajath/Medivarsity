@@ -158,7 +158,6 @@ public class DashBoard extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = YouTubeStandalonePlayer.createVideoIntent(DashBoard.this, Config.DEVELOPER_KEY, Config.YOUTUBE_VIDEO_CODE);
-                // startActivity(intent);
                 startActivityForResult(intent, PlayerResult);
             }
         });
@@ -302,6 +301,16 @@ public class DashBoard extends AppCompatActivity {
                 this.startActivity(intent);
                 break;
 
+            case 5:
+                intent = new Intent(DashBoard.this, LoginScreen.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+
+                break;
+
             default:
 
                 break;
@@ -334,13 +343,14 @@ public class DashBoard extends AppCompatActivity {
         rlDrawer = (RelativeLayout) findViewById(R.id.rldrawer);
         tvUserName = (TextView) findViewById(R.id.user_name);
         tvUserName.setText(name);
-        DataModel[] drawerItem = new DataModel[5];
+        DataModel[] drawerItem = new DataModel[6];
 
         drawerItem[0] = new DataModel(R.drawable.home_icon, "Home");
         drawerItem[1] = new DataModel(R.drawable.home_icon, "My Topics");
         drawerItem[2] = new DataModel(R.drawable.home_icon, "My Profile");
         drawerItem[3] = new DataModel(R.drawable.home_icon, "FAQ");
         drawerItem[4] = new DataModel(R.drawable.home_icon, "About Us");
+        drawerItem[5] = new DataModel(R.drawable.home_icon, "LogOut");
 
        /* getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

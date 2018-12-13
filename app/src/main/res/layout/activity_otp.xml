@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/size_5dp"
             android:orientation="vertical">
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
@@ -31,7 +31,7 @@
                 android:layout_gravity="center"
                 android:text="@string/code_type"/>
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
@@ -45,14 +45,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal">
-                <TextView
+                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp"
                     android:text="+91-"/>
-                <TextView
+                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                     android:id="@+id/tv_mobile_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

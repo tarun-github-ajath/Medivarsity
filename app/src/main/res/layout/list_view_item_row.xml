@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:paddingRight="10dp" />
 
-    <TextView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,13 +25,13 @@
         android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"/>
 
-    <ImageView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/imageViewIcon1"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/forword"
+        android:src="@drawable/forward"
         android:paddingRight="10dp" />
 
 </RelativeLayout>

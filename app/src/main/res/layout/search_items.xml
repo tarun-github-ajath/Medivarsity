@@ -34,7 +34,7 @@
     </RelativeLayout>
 
 
-    <TextView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/title_searched_video"
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"

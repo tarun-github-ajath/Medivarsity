@@ -15,6 +15,8 @@ public class TopicDetailModel implements Serializable {
         return error;
     }
 
+
+
     public void setError(boolean error) {
         this.error = error;
     }

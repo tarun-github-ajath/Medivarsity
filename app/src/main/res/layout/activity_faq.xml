@@ -18,14 +18,14 @@
             android:layout_marginTop="@dimen/size_45dp"
             android:orientation="horizontal">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="01"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -35,11 +35,12 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10dp"
             android:layout_marginRight="@dimen/size_10dp"
+            android:lineSpacingExtra="2dp"
             android:text="@string/lorem_faq"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_20dp"
@@ -57,7 +58,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_10dp"
@@ -68,11 +69,12 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10dp"
             android:layout_marginRight="@dimen/size_10dp"
+            android:lineSpacingExtra="2dp"
             android:text="@string/lorem_faq"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -82,7 +84,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_20dp"
@@ -90,7 +92,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size_10dp"
@@ -101,11 +103,12 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_10dp"
             android:layout_marginRight="@dimen/size_10dp"
+            android:lineSpacingExtra="2dp"
             android:text="@string/lorem_faq"
             android:textColor="@color/black"
             android:textSize="16sp" />

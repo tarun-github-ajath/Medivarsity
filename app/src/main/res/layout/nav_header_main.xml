@@ -21,7 +21,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@mipmap/ic_launcher_round" />
 
-    <TextView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:text="Name"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/college_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

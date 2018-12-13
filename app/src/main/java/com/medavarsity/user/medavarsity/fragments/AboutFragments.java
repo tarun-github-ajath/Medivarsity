@@ -15,6 +15,8 @@ import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
+import com.medavarsity.user.medavarsity.Model.PayloadTopics;
+import com.medavarsity.user.medavarsity.Model.SubjectDetails;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
@@ -28,14 +30,13 @@ import retrofit2.Response;
 
 public class AboutFragments extends Fragment {
 
-    TextView textView_subname;
+    TextView textView_subname, textView_sub_Desc, textView_buyBook;
 
     int subject_id;
     SharedPreferences sharedPreferences;
     View root;
 
     CommonMethods mCommonMethods;
-    ApiInterface apiInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,56 +44,40 @@ public class AboutFragments extends Fragment {
         root = inflater.inflate(R.layout.frag_about, container, false);
 
         initialize();
-        LoginStudentResponse loginStudentResponse = CommonMethods.readLoginUser(sharedPreferences);
 
 
-        if (mCommonMethods.isNetworkAvailable(getActivity())) {
-            try {
-                mCommonMethods.showCommonDialog(getActivity(), "Fetching data...");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                getSubjectDeatils(loginStudentResponse.getAuth_token(), subject_id);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         return root;
 
     }
 
-    private void getSubjectDeatils(String auth_token, int subject_id) {
-        if (auth_token != null && !auth_token.equalsIgnoreCase("")) {
-            retrofit2.Call<TopicDetailModel> homeModelCall = apiInterface.getTopicDetails(auth_token, subject_id);
-            homeModelCall.enqueue(new Callback<TopicDetailModel>() {
-                @Override
-                public void onResponse(retrofit2.Call<TopicDetailModel> call, Response<TopicDetailModel> response) {
-
-                    System.out.println(response);
-
-                    mCommonMethods.cancelDialog();
-                }
-
-                @Override
-                public void onFailure(retrofit2.Call<TopicDetailModel> call, Throwable t) {
-
-                    mCommonMethods.cancelDialog();
-                }
-            });
-        }
-    }
 
     private void initialize() {
-        mCommonMethods = new CommonMethods(getActivity());
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+
         textView_subname = (TextView) root.findViewById(R.id.subject_title);
-        if (getArguments() != null) {
+        textView_buyBook = (TextView) root.findViewById(R.id.buy_book);
+        /*if (getArguments() != null) {
             subject_id = getArguments().getInt("Key");
+            textView_subname.setText(getArguments().getString(ConstantVariabls.SELECTED_SUB_NAME));
+            textView_buyBook.setText(getArguments().getString(ConstantVariabls.SELECTED_SUB_NAME));
+        }
+*/
+        textView_sub_Desc = (TextView) root.findViewById(R.id.subject_desc);
+
+        if (getArguments() != null) {
+            SubjectDetails subjectDetails = (SubjectDetails) getArguments().getSerializable(ConstantVariabls.SELECTED_SUB_DETAIL);
+            String subject = getArguments().getString("Sub");
+            textView_sub_Desc.setText(subjectDetails.getSubject_desc());
+            textView_subname.setText(subject);
+            textView_buyBook.setText("Buy Book on Concept of" + " " + subject);
+            System.out.println(subjectDetails);
         }
 
-        sharedPreferences = getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, Context.MODE_PRIVATE);
     }
 
+
+    private void setSelectedSubDisc(SubjectDetails subjectDetails) {
+        textView_sub_Desc.setText(subjectDetails.getSubject_desc());
+    }
 
 }

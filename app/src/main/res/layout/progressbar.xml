@@ -6,7 +6,7 @@
     android:background="@drawable/progressbar_shap"
     android:orientation="vertical" >
 
-    <TextView
+    <com.medavarsity.user.medavarsity.Utilities.CustomTextView
         android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -28,7 +28,7 @@
                 android:src="@drawable/back_icon" />
 
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:id="@+id/toolbar_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

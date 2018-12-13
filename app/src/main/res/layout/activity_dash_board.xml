@@ -143,8 +143,8 @@
         android:id="@+id/rldrawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:layout_gravity="start">
+        android:layout_gravity="start"
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:id="@+id/rl_profile"
@@ -169,7 +169,7 @@
                 android:layout_margin="5dp"
                 android:orientation="vertical">
 
-                <TextView
+                <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                     android:id="@+id/user_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
             android:divider="@color/EEE"
             android:dividerHeight="1dp" />
 
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:id="@+id/version_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

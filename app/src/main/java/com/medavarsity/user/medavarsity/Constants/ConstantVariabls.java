@@ -13,4 +13,7 @@ public class ConstantVariabls {
     public static final String Home_Model = "HomeModel";
     public static final String SELECTED_SUBJECT_NAME = "Selected_subject";
     public static final String SELECTED_SUB_ID = "Selected_sub_id";
+    public static final String SELECTED_SUB_NAME = "Selected_sub_name";
+    public static final String SELCTED_TOPIC_DETAIL="Selected_topic_Detail";
+    public static final String SELECTED_SUB_DETAIL = "Selected_sub_Details";
 }

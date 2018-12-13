@@ -60,7 +60,7 @@
                 android:layout_height="match_parent">
 
 
-                <TextView
+                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                     android:id="@+id/no_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

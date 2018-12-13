@@ -1,4 +1,4 @@
-package com.medavarsity.user.medavarsity.Adapters;
+package com.medavarsity.user.medavarsity.Model;
 
 public class SearchedModel {
 

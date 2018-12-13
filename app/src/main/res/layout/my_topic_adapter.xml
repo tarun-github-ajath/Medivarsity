@@ -24,7 +24,7 @@
             android:layout_gravity="left"
             android:padding="@dimen/size_10dp"
             android:background="@drawable/ic_user"/>
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

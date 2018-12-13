@@ -53,4 +53,8 @@
 
     <string name="daily_update">Daily Update</string>
     <string name="subscribe">Subscribe</string>
+    <string name="complete_list">Complete List of features</string>
+    <string name="live_lect">Live Lectures</string>
+    <string name="give_test">Give test</string>
+    <string name="start_test">Start Test</string>
 </resources>

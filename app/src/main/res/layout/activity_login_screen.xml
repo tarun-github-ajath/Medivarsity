@@ -22,14 +22,14 @@
             android:layout_marginBottom="10dp"
             android:orientation="vertical">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_10dp"
                 android:text="Email Address"
-                android:textColor="@color/white"
+                android:textColor="@color/light_blue"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <EditText
                 android:id="@+id/email_address"
@@ -58,14 +58,14 @@
             android:layout_marginRight="20dp"
             android:orientation="vertical">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/size_10dp"
                 android:text="Password"
-                android:textColor="@color/white"
+                android:textColor="@color/light_blue"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
 
             <EditText
                 android:id="@+id/password"
@@ -99,13 +99,13 @@
             android:text="@string/sign_in"
             android:textColor="@color/white" />
 
-        <TextView
+        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
             android:id="@+id/sign_social"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="@string/sign_social"
-            android:textColor="@color/white"
+            android:textColor="@color/light_blue"
             android:textSize="16dp" />
 
 
@@ -157,26 +157,25 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/size_10dp">
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_margin="20dp"
                 android:text="Don't have account?"
-                android:textColor="@color/white"
+                android:textColor="@color/light_blue"
                 android:textSize="16dp" />
 
-            <TextView
+            <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
                 android:id="@+id/sign_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_margin="20dp"
                 android:text="Sign Up"
-                android:textColor="@color/white"
-                android:textSize="17dp"
+                android:textColor="@color/light_blue"
+                android:textSize="18dp"
                 android:textStyle="bold" />
 
 

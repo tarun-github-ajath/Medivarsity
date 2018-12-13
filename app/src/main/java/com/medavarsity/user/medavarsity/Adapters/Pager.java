@@ -8,24 +8,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.fragments.AboutFragments;
 import com.medavarsity.user.medavarsity.fragments.ReviewFragments;
 import com.medavarsity.user.medavarsity.fragments.VideosFragments;
+
+import java.io.Serializable;
 
 public class Pager extends FragmentStatePagerAdapter {
 
     Context context;
     int tabCount;
-    Intent intent;
+    String subject_name;
+    TopicDetailModel topicDetailModel;
 
-    String seseleccted;
-    int selected_subId;
-
-    public Pager(FragmentManager fm, int tabCount, int selected_subId) {
+    public Pager(FragmentManager fm, int tabCount, TopicDetailModel topicDetailModel, String subject_name) {
         super(fm);
         this.tabCount = tabCount;
-        //  this.context = context;
-        this.selected_subId = selected_subId;
+        this.subject_name = subject_name;
+        this.topicDetailModel = topicDetailModel;
     }
 
     @Override
@@ -35,14 +36,21 @@ public class Pager extends FragmentStatePagerAdapter {
                 AboutFragments tab1 = new AboutFragments();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("Key", selected_subId);
+                bundle.putSerializable(ConstantVariabls.SELECTED_SUB_DETAIL, topicDetailModel.getPayloadTopics().getSubjectDetails());
+                bundle.putString("Sub", subject_name);
                 tab1.setArguments(bundle);
                 return tab1;
             case 1:
                 VideosFragments tab2 = new VideosFragments();
+                Bundle bundle1 = new Bundle();
+                bundle1.putSerializable("Topic_detail", topicDetailModel);
+                tab2.setArguments(bundle1);
                 return tab2;
             case 2:
                 ReviewFragments tab3 = new ReviewFragments();
+                Bundle bundle2 = new Bundle();
+                bundle2.putSerializable(ConstantVariabls.SELCTED_TOPIC_DETAIL, topicDetailModel);
+                tab3.setArguments(bundle2);
                 return tab3;
             default:
                 return null;

@@ -31,7 +31,7 @@ public class SplashScreen extends AppCompatActivity {
        generateKeyHash();
         splash_text = (TextView) findViewById(R.id.splash_text);
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Nunito-Regular.ttf");
-        splash_text.setTypeface(custom_font);
+//        splash_text.setTypeface(custom_font);
     }
 
     private void splashTimer() {

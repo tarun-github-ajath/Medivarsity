@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.medavarsity.user.medavarsity.Adapters.SearchedModel;
+import com.medavarsity.user.medavarsity.Model.SearchedModel;
 import com.medavarsity.user.medavarsity.Adapters.SubjectsAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;

@@ -9,4 +9,6 @@
     <color name="search_color">#757ec2</color>
     <color name="EEE">#eeeeee</color>
     <color name="FFC90E">#ffc90e</color>
+    <color name="grey">#dcd9d9</color>
+    <color name="light_blue">#1717ba</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.medavarsity.user.medavarsity.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,9 @@ public class MyTopicsScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(MyTopicsScreen.this, DashBoard.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

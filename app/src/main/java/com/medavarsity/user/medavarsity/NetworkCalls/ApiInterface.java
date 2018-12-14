@@ -5,6 +5,7 @@ import com.medavarsity.user.medavarsity.Model.FacebookResponse;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
+import com.medavarsity.user.medavarsity.Model.ReviewResponse;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 
 import retrofit2.Call;
@@ -39,5 +40,13 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Topicdetails")
-    Call<TopicDetailModel>getTopicDetails(@Field("authtoken") String authtoken, @Field("topic_id") int topic_id);
+    Call<TopicDetailModel> getTopicDetails(@Field("authtoken") String authtoken, @Field("topic_id") int topic_id);
+
+
+    @FormUrlEncoded
+    @POST("AddReview")
+    Call<ReviewResponse> SubmitFeedback(@Field("authtoken") String authtoken, @Field("video_id") int video_id, @Field("topic_id")
+            int topic_id, @Field("review") String review, @Field("rating") int rating);
+
+
 }

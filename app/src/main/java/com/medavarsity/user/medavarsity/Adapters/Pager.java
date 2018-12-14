@@ -36,7 +36,7 @@ public class Pager extends FragmentStatePagerAdapter {
                 AboutFragments tab1 = new AboutFragments();
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(ConstantVariabls.SELECTED_SUB_DETAIL, topicDetailModel.getPayloadTopics().getSubjectDetails());
+                bundle.putSerializable(ConstantVariabls.SELECTED_SUB_DETAIL, topicDetailModel.getPayloadTopics().get(0).getSubjectDetails());
                 bundle.putString("Sub", subject_name);
                 tab1.setArguments(bundle);
                 return tab1;

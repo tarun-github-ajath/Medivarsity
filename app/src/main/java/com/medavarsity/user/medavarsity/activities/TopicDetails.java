@@ -107,7 +107,7 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
                 @Override
                 public void onResponse(retrofit2.Call<TopicDetailModel> call, Response<TopicDetailModel> response) {
 
-                    System.out.println(response);
+                    System.out.println("Topic re"+response);
                     topicDetailModel = response.body();
 
                     mCommonMethods.cancelDialog();

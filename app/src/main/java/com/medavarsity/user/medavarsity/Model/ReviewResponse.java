@@ -3,18 +3,12 @@ package com.medavarsity.user.medavarsity.Model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class TopicDetailModel implements Serializable {
-
-    @SerializedName("Error")
-    boolean error;
+public class ReviewResponse implements Serializable {
 
     public boolean isError() {
         return error;
     }
-
 
     public void setError(boolean error) {
         this.error = error;
@@ -36,24 +30,12 @@ public class TopicDetailModel implements Serializable {
         this.message = message;
     }
 
-
-
+    @SerializedName("Error")
+    boolean error;
 
     @SerializedName("Status")
     int status;
     @SerializedName("Message")
     String message;
 
-    public ArrayList<PayloadTopics> getPayloadTopics() {
-        return payloadTopics;
-    }
-
-    public void setPayloadTopics(ArrayList<PayloadTopics> payloadTopics) {
-        this.payloadTopics = payloadTopics;
-    }
-
-    @SerializedName("Payload")
-    ArrayList<PayloadTopics>payloadTopics;
-
 }
-

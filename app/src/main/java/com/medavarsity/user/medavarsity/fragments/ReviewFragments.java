@@ -38,13 +38,13 @@ public class ReviewFragments extends Fragment {
         if (getArguments() != null) {
             TopicDetailModel topicDetailModel = (TopicDetailModel) getArguments().getSerializable(ConstantVariabls.SELCTED_TOPIC_DETAIL);
 
-            if (topicDetailModel.getReviewModels() == null || topicDetailModel.getReviewModels().size() == 0) {
+            if (topicDetailModel.getPayloadTopics().get(2).getReviewModels() == null || topicDetailModel.getPayloadTopics().get(2).getReviewModels().size() == 0) {
                 no_review.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
             } else {
                 no_review.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), topicDetailModel.getReviewModels());
+                ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), topicDetailModel.getPayloadTopics().get(2).getReviewModels());
                 recyclerView.setAdapter(reviewsAdapter);
             }
 

@@ -38,7 +38,7 @@ public class VideosFragments extends Fragment {
         if (getArguments() != null) {
             TopicDetailModel topicDetailModel = (TopicDetailModel) getArguments().getSerializable("Topic_detail");
             System.out.println(topicDetailModel);
-            if (topicDetailModel.getVideos() == null || topicDetailModel.getVideos().size() == 0) {
+            if (topicDetailModel.getPayloadTopics().get(1).getVideos() == null || topicDetailModel.getPayloadTopics().get(1).getVideos().size() == 0) {
                 no_video.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
             }
@@ -46,7 +46,7 @@ public class VideosFragments extends Fragment {
             else {
                 no_video.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                aboutVideoAdapter = new AboutVideoAdapter(getActivity(), topicDetailModel.getVideos());
+                aboutVideoAdapter = new AboutVideoAdapter(getActivity(), topicDetailModel.getPayloadTopics().get(1).getVideos());
                 recyclerView.setAdapter(aboutVideoAdapter);
             }
 

@@ -225,7 +225,6 @@ public class RegisterScreen extends AppCompatActivity {
                     JSONObject pictureObject = jsonObject.getJSONObject("picture");
                     JSONObject dataObj = pictureObject.getJSONObject("data");
                     String imageUrl = dataObj.has("url") ? dataObj.getString("url") : "";
-
                     studentResponse.setImage_url(imageUrl);
                     fillData(studentResponse);
                     LoginManager.getInstance().logOut(); // logout facebook user

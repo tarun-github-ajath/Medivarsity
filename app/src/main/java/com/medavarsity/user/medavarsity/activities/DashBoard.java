@@ -46,6 +46,7 @@ import com.medavarsity.user.medavarsity.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +77,7 @@ public class DashBoard extends AppCompatActivity {
 
     CommonMethods mCommonMethods;
     TextView toolbar_text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

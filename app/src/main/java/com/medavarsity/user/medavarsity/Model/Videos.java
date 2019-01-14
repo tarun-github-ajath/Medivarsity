@@ -9,13 +9,14 @@ public class Videos implements Serializable {
     @SerializedName("id")
     @Expose
     int id;
+
     @SerializedName("subject_id")
-    @Expose
     int subject_id;
 
     public String getVideo_title() {
         return video_title;
     }
+
 
     public void setVideo_title(String video_title) {
         this.video_title = video_title;

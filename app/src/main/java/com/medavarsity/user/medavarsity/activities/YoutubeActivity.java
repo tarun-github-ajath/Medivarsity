@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
 import com.medavarsity.user.medavarsity.Adapters.HomeAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
@@ -69,7 +69,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         subject_recycle = (RecyclerView) findViewById(R.id._recycl);
         updateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycleView);
 
-        sharedPreferences = this.getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         subject_recycle.setLayoutManager(layoutManager);
@@ -148,7 +148,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
 
     private void readFromPref() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
 
     }
@@ -239,7 +239,7 @@ public class YoutubeActivity extends YouTubeBaseActivity /*implements YouTubePla
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(homeModels);
-        prefsEditor.putString(ConstantVariabls.Home_Model, json);
+        prefsEditor.putString(ConstantVariables.Home_Model, json);
         prefsEditor.commit();
     }
 }

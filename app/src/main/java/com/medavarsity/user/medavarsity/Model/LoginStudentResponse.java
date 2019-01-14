@@ -47,16 +47,25 @@ public class LoginStudentResponse implements Serializable {
         this.auth_token = auth_token;
     }
 
-    public StudentResponse getStudentResponse() {
-        return studentResponse;
+//    public StudentResponse getStudentResponse() {
+//        return studentResponse;
+//    }
+//
+//    public void setStudentResponse(StudentResponse studentResponse) {
+//        this.studentResponse = studentResponse;
+//    }
+
+
+    public Object getPayload() {
+        return Payload;
     }
 
-    public void setStudentResponse(StudentResponse studentResponse) {
-        this.studentResponse = studentResponse;
+    public void setPayload(Object payload) {
+        Payload = payload;
     }
 
     @SerializedName("Payload")
-    StudentResponse studentResponse;
+    Object Payload;
 
     @SerializedName("Authtoken")
     String auth_token;

@@ -32,7 +32,7 @@ import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
 import com.medavarsity.user.medavarsity.Adapters.DrawerItemCustomAdapter;
 import com.medavarsity.user.medavarsity.Adapters.HomeAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.DataModel;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
@@ -42,9 +42,6 @@ import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.R;
-import com.medavarsity.user.medavarsity.fragments.AboutUsFragment;
-import com.medavarsity.user.medavarsity.fragments.FaqFragments;
-import com.medavarsity.user.medavarsity.fragments.MyProfileFragments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,9 +83,9 @@ public class DashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_dash_board);
 
         mCommonMethods = new CommonMethods(DashBoard.this);
-        sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(ConstantVariabls.IS_FIRST_TIME, true);
+        editor.putBoolean(ConstantVariables.IS_FIRST_TIME, true);
         editor.commit();
 
 
@@ -110,7 +107,7 @@ public class DashBoard extends AppCompatActivity {
         // youtubeScreen = (LinearLayout) findViewById(R.id.youtube_screen);
         //youtubeScreen.setVisibility(View.VISIBLE);
 
-        sharedPreferences = this.getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         subject_recycle.setLayoutManager(layoutManager);
@@ -172,11 +169,13 @@ public class DashBoard extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-                getDashboardData(studentResponse.getAuth_token());
+//                getDashboardData(studentResponse.getAuth_token());
+                getDashboardData("s");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
 
     }
 
@@ -195,7 +194,7 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private void getDashboardData(String authToken) {
-
+        authToken = "5be9630c64d76";
         if (authToken != null && !authToken.equalsIgnoreCase("")) {
             Call<HomeModel> homeModelCall = apiInterface.getHomeData(authToken);
             homeModelCall.enqueue(new Callback<HomeModel>() {
@@ -232,7 +231,7 @@ public class DashBoard extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(homeModels);
-        prefsEditor.putString(ConstantVariabls.Home_Model, json);
+        prefsEditor.putString(ConstantVariables.Home_Model, json);
         prefsEditor.commit();
     }
 
@@ -249,9 +248,9 @@ public class DashBoard extends AppCompatActivity {
     /*read student info from shared pref*/
     private void readFromPref() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
-        name = studentResponse.getStudentResponse().getName();
+//        name = studentResponse.getStudentResponse().getName();
 
     }
 

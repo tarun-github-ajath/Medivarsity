@@ -8,18 +8,15 @@ import java.util.List;
 
 public class Subjects implements Serializable {
     @SerializedName("subjectname")
-    @Expose
     String subjectname;
 
     public int getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
 
-    @SerializedName("subjectid")
+
+    @SerializedName("subject_id")
     int subjectId;
 
     public String getSubjectname() {

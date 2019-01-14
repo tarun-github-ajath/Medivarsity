@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
 import com.medavarsity.user.medavarsity.R;
 import com.medavarsity.user.medavarsity.activities.TopicDetails;
@@ -52,11 +52,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context, TopicDetails.class);
-                        intent.putExtra(ConstantVariabls.SELECTED_SUBJECT_NAME, payloadHome.getSubjects().get(position).getSubjectname());
-                        intent.putExtra(ConstantVariabls.SELECTED_SUB_ID, payloadHome.getSubjects().get(position).getSubjectId());
+                        intent.putExtra(ConstantVariables.SELECTED_SUBJECT_NAME, payloadHome.getSubjects().get(position).getSubjectname());
+                        intent.putExtra(ConstantVariables.SELECTED_SUB_ID, payloadHome.getSubjects().get(position).getSubjectId());
                         context.startActivity(intent);
                     }
                 });
+
                 homeViewHolder.parent_layout.setVisibility(View.VISIBLE);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
                 homeViewHolder.recyclerView.setLayoutManager(layoutManager);
@@ -68,6 +69,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
                 SubjectsAdapter subjectsAdapter = new SubjectsAdapter(context, payloadHome.getSubjects().get(position).getVideos(), Config.DEVELOPER_KEY);
                 homeViewHolder.recyclerView.setAdapter(subjectsAdapter);
             } else {
+
                 homeViewHolder.parent_layout.setVisibility(View.INVISIBLE);
             }
 

@@ -3,7 +3,6 @@ package com.medavarsity.user.medavarsity.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,11 +22,9 @@ import android.widget.TextView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.gson.Gson;
-import com.medavarsity.user.medavarsity.Adapters.DailyUpdateAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
@@ -132,7 +129,7 @@ public class HomeScreen extends Fragment {
     private void initialize() {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         dailyUpdateRecycle = (RecyclerView) root.findViewById(R.id.daily_update_recycl);
-        sharedPreferences = this.getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = this.getActivity().getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         dailyUpdateRecycle.setLayoutManager(layoutManager);
 
@@ -150,7 +147,7 @@ public class HomeScreen extends Fragment {
 
     private void readFromPref() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
 
     }

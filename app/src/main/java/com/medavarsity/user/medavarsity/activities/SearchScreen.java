@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Model.SearchedModel;
 import com.medavarsity.user.medavarsity.Adapters.SubjectsAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.Videos;
@@ -50,7 +50,7 @@ public class SearchScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_screen);
 
-        sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         navigation_icon = (ImageView) findViewById(R.id.navigation_icon);
         search_text = (EditText) findViewById(R.id.search_text);
         recyclerView = (RecyclerView) findViewById(R.id.search_recycl);
@@ -101,7 +101,7 @@ public class SearchScreen extends AppCompatActivity {
 
     private void readFromPref() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.Home_Model, "");
+        String json = sharedPreferences.getString(ConstantVariables.Home_Model, "");
         payloadHome = gson.fromJson(json, PayloadHome.class);
         if (searchedModelArrayList.size() > 0) {
             searchedModelArrayList.clear();

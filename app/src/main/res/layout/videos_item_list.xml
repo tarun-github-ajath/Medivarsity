@@ -1,61 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/size_5dp"
-    android:background="@drawable/rounded_corners"
-    android:orientation="vertical">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="3dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:cardUseCompatPadding="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:clickable="true"
-        card_view:cardBackgroundColor="@android:color/black"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="0dp"
-        card_view:cardPreventCornerOverlap="false"
-        card_view:cardUseCompatPadding="true">
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/size_5dp"
+        android:orientation="vertical">
 
+        <!--<com.google.android.youtube.player.YouTubeThumbnailView-->
+            <!--android:id="@+id/youtube_thumbnail"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:visibility="visible" />-->
 
-        <com.google.android.youtube.player.YouTubeThumbnailView
-            android:id="@+id/youtube_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:visibility="visible" />
-
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/relativeLayout_over_youtube_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:visibility="visible">
 
-            <ImageView
-                android:id="@+id/btnYoutube_player"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="center"
-                android:src="@drawable/youtube_play" />
 
-        </RelativeLayout>
+            <FrameLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/youtube_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:scaleType="fitXY"
+                     />
+
+                <View
+                    android:layout_height="180dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/black"
+                    android:alpha="0.5"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/youtube_play"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/topic_details_videos_videoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color_medium"
+                android:layout_gravity="center_horizontal"
+                android:text="asas"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
     </android.support.v7.widget.CardView>
 
-    <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
-        android:id="@+id/give_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_margin="@dimen/size_5dp"
-        android:text="@string/give_test"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/size_18dp"
-        android:textStyle="bold" />
-
-</LinearLayout>
+    <!--<com.medavarsity.user.medavarsity.Utilities.BoldCustomView-->
+        <!--android:id="@+id/give_test"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:layout_margin="@dimen/size_5dp"-->
+        <!--android:text="@string/give_test"-->
+        <!--android:textColor="@color/colorPrimary"-->
+        <!--android:textSize="@dimen/size_18dp"-->
+        <!--android:textStyle="bold" />-->

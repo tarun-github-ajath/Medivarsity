@@ -44,16 +44,16 @@ public class TopicDetailModel implements Serializable {
     @SerializedName("Message")
     String message;
 
-    public ArrayList<PayloadTopics> getPayloadTopics() {
+    public PayloadTopics getPayloadTopics() {
         return payloadTopics;
     }
 
-    public void setPayloadTopics(ArrayList<PayloadTopics> payloadTopics) {
+    public void setPayloadTopics(PayloadTopics payloadTopics) {
         this.payloadTopics = payloadTopics;
     }
 
     @SerializedName("Payload")
-    ArrayList<PayloadTopics>payloadTopics;
+    PayloadTopics payloadTopics;
 
 }
 

@@ -13,7 +13,7 @@ public class ReviewModel implements Serializable {
         this.review = review;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
@@ -56,7 +56,7 @@ public class ReviewModel implements Serializable {
     @SerializedName("review")
     String review;
     @SerializedName("rating")
-    int rating;
+    float rating;
     @SerializedName("video_title")
     String video_title;
     @SerializedName("reviwername")

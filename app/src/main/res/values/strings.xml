@@ -19,8 +19,10 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="facebook_app_id"><!--269964603702474-->1063348920503285</string>
-    <string name="fb_login_protocol_scheme">fb1920805507975170</string>
+    <!--<string name="facebook_app_id">&lt;!&ndash;269964603702474&ndash;&gt;1063348920503285</string>-->
+    <string name="facebook_app_id"><!--269964603702474-->2301620240071864</string>
+    <!--<string name="fb_login_protocol_scheme">fb1920805507975170</string>-->
+    <string name="fb_login_protocol_scheme">fb2301620240071864</string>
     <string name="gender">Gender</string>
     <string name="client_token"><!--26a458217d401a905689ceb8c846ffa1-->
         d60aeb5afb86db38436626988d118939</string>

@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class SplashScreen extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 0;
     TextView splash_text;
 
 

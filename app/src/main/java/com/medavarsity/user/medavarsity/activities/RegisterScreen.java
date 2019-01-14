@@ -1,18 +1,17 @@
 package com.medavarsity.user.medavarsity.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
@@ -93,15 +92,15 @@ public class RegisterScreen extends AppCompatActivity {
 
         intent = getIntent();
         mCommonMethods = new CommonMethods(RegisterScreen.this);
-        spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selected_year = parent.getItemAtPosition(position).toString();
 
+        spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+                selected_college = parent.getItemAtPosition(position).toString();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
@@ -251,9 +250,10 @@ public class RegisterScreen extends AppCompatActivity {
         String password = editText_userpassword.getText().toString().trim();
         String username = editText_username.getText().toString().trim();
         String number = editText_contactnum.getText().toString().trim();
+        String college = "Jipmer"; //college hardcoded because colleges api not working ..
 
         if (email.equalsIgnoreCase("") || password.equalsIgnoreCase("") || username.equalsIgnoreCase("")
-                || number.equalsIgnoreCase("") || selected_college.equalsIgnoreCase("") || selected_year.equalsIgnoreCase("")
+                || number.equalsIgnoreCase("") || selected_year.equalsIgnoreCase("")
             /* || selected_gender.equalsIgnoreCase("")*/) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
         } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("Select college")) {
@@ -279,13 +279,14 @@ public class RegisterScreen extends AppCompatActivity {
             }
 
             Call<RegisterStudentResponse> createStudentCall = apiInterface.registerStudent(username, email, number,
-                    password, selected_college, selected_year, social_id, reg_type, image_url);
+                    password, college, selected_year, social_id, reg_type, image_url);
             createStudentCall.enqueue(new Callback<RegisterStudentResponse>() {
                 @Override
                 public void onResponse(Call<RegisterStudentResponse> call, Response<RegisterStudentResponse> response) {
 
+
                     RegisterStudentResponse registerStudentResponse = response.body();
-                    System.out.println("register response: " + registerStudentResponse.getStatus());
+                    Log.i("register response: " , String.valueOf(registerStudentResponse));
                     String message = registerStudentResponse.getMessage();
                     if (registerStudentResponse.getStatus() == 1) {
                         emptyFields();
@@ -327,6 +328,13 @@ public class RegisterScreen extends AppCompatActivity {
         camera_icon = (CircleImageView) findViewById(R.id.iv_camera);
         fb_custom = (Button) findViewById(R.id.fb);
 
+
+        editText_useremail.setText("tarsoni69@gmail.com");
+        editText_contactnum.setText("1234567890");
+        editText_username.setText("tarun");
+        editText_userpassword.setText("123456");
+
+        male_radio.setChecked(true);
         //  btn_custom_fb_login = (Button) findViewById(R.id.fb_login_custom);
 
         signIn.setOnClickListener(new View.OnClickListener() {
@@ -337,11 +345,13 @@ public class RegisterScreen extends AppCompatActivity {
                 //finish();
             }
         });
+
         Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList();
         collge_name.enqueue(new Callback<CollegeResponse>() {
             @Override
             public void onResponse(Call<CollegeResponse> call, Response<CollegeResponse> response) {
                 CollegeResponse collegeRespons = response.body();
+                Log.i("colleges", String.valueOf(collegeRespons));
                 collegeModelArrayList = new ArrayList<>();
 
                 CollegeModel zeroth_index = new CollegeModel();
@@ -349,7 +359,7 @@ public class RegisterScreen extends AppCompatActivity {
                 zeroth_index.setId(0);
                 collegeModelArrayList.add(0, zeroth_index);
 
-                collegeModelArrayList.addAll(collegeRespons.getCollegeModels());
+//                collegeModelArrayList.addAll(collegeRespons.getCollegeModels());
 
                 collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeModelArrayList);
                 spinner_collegeSelection.setAdapter(collegeAdapter);
@@ -359,6 +369,7 @@ public class RegisterScreen extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<CollegeResponse> call, Throwable t) {
+                t.printStackTrace();
                 call.cancel();
             }
         });
@@ -374,8 +385,23 @@ public class RegisterScreen extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
         yearsadapter = new ArrayAdapter<String>(RegisterScreen.this, R.layout.college_list_item, R.id.collegesName, years);
         spinner_yearSelection.setAdapter(yearsadapter);
+
+        spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selected_year = adapterView.getItemAtPosition(i).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinner_yearSelection.setSelection(1);
     }
 
     private void emptyFields() {
@@ -442,7 +468,7 @@ public class RegisterScreen extends AppCompatActivity {
 
     private void getExtras() {
 
-        studentResponse = (StudentResponse) intent.getSerializableExtra(ConstantVariabls.NON_VALID_FB_STUDENT);
+        studentResponse = (StudentResponse) intent.getSerializableExtra(ConstantVariables.NON_VALID_FB_STUDENT);
         fillData(studentResponse);
     }
 

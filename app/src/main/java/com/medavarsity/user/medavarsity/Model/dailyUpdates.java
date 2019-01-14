@@ -23,11 +23,9 @@ public class dailyUpdates implements Serializable {
     }
 
     @SerializedName("title")
-    @Expose
     String title;
 
     @SerializedName("url")
-    @Expose
     String url;
 
 

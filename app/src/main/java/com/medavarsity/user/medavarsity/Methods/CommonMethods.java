@@ -1,8 +1,10 @@
 package com.medavarsity.user.medavarsity.Methods;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,9 +12,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.facebook.share.Share;
 import com.google.gson.Gson;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.R;
 
@@ -21,6 +22,7 @@ public class CommonMethods {
 
     public Context mContext;
     private Dialog mDialog;
+    private AlertDialog alertDialog;
 
     public CommonMethods(Context cntx/*, String from*/) {
         this.mContext = cntx;
@@ -34,7 +36,7 @@ public class CommonMethods {
     public static LoginStudentResponse readLoginUser(SharedPreferences sharedPreferences) {
         Gson gson = new Gson();
         LoginStudentResponse studentResponse;
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
         return studentResponse;
 
@@ -47,6 +49,19 @@ public class CommonMethods {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public static void showAlertDialog(Context context,String alertText){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setPositiveButton(alertText,
+                 new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
 
    /* public static boolean isWIfiNetwork(Context context) {

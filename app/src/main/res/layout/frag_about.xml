@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +23,7 @@
                 android:textStyle="bold" />
 
 
-            <com.medavarsity.user.medavarsity.Utilities.CustomTextView
+            <TextView
                 android:id="@+id/subject_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:background="@color/grey" />
 
             <RelativeLayout
-                android:id="@+id/f1"
+                android:id="@+id/topicDetails_features_list_button"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@+id/view01">
@@ -67,8 +67,8 @@
                 <com.medavarsity.user.medavarsity.Utilities.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:layout_alignParentLeft="true"
+                    android:textColor="@color/text_color_medium"
                     android:layout_margin="@dimen/size_10dp"
                     android:text="@string/complete_list"
                     android:textSize="@dimen/size_16dp" />
@@ -76,7 +76,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="@dimen/size_30dp"
-
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/forward_black" />
@@ -86,7 +85,7 @@
                 android:id="@+id/view02"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/f1"
+                android:layout_below="@+id/topicDetails_features_list_button"
                 android:background="@color/grey" />
 
             <RelativeLayout
@@ -96,13 +95,14 @@
                 android:layout_below="@+id/view02">
 
 
-                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
+                <TextView
                     android:id="@+id/buy_book"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_margin="@dimen/size_10dp"
                     android:text=""
+                    android:textColor="@color/text_color_medium"
                     android:textSize="@dimen/size_16dp" />
 
                 <Button
@@ -133,13 +133,14 @@
                 android:layout_below="@+id/view03">
 
 
-                <com.medavarsity.user.medavarsity.Utilities.CustomTextView
+                <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_margin="@dimen/size_10dp"
                     android:text="@string/live_lect"
+                    android:textColor="@color/text_color_medium"
                     android:textSize="@dimen/size_16dp" />
 
                 <Button
@@ -157,4 +158,4 @@
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>

@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,21 +23,18 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.R;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,12 +42,17 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.CAMERA;
 
 public class LoginScreen extends AppCompatActivity {
+
     CallbackManager callbackManager;
     public static int PermissionCode = 3;
     EditText editText_useremail, editText_userpassword;
@@ -72,7 +74,7 @@ public class LoginScreen extends AppCompatActivity {
 
         mCommonMethod = new CommonMethods(LoginScreen.this);
         callbackManager = CallbackManager.Factory.create();
-        sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         if (!CheckingPermissionIsEnabledOrNot()) {
@@ -84,7 +86,6 @@ public class LoginScreen extends AppCompatActivity {
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        //checkAlreadyLogin();
 
         textView_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +95,8 @@ public class LoginScreen extends AppCompatActivity {
 
             }
         });
+
+        checkAlreadyLogin();
 
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,8 +168,6 @@ public class LoginScreen extends AppCompatActivity {
 
                     studentResponse.setImage_url(imageUrl);
 
-                    /*login type for social 1*/
-
                     loginCall("", "", "1", studentResponse.getFacebook_id(), "0", android_id, studentResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -180,7 +181,6 @@ public class LoginScreen extends AppCompatActivity {
         permission_param.putString("fields", "id,name,email,picture.width(100).height(100)");
         graphRequest.setParameters(permission_param);
         graphRequest.executeAsync();
-
     }
 
     private void doLogin() {
@@ -207,6 +207,8 @@ public class LoginScreen extends AppCompatActivity {
         loginButton = (LoginButton) findViewById(R.id.fb_login);
         fb_login = (Button) findViewById(R.id.fb_customlogin);
 
+        editText_useremail.setText("tarsoni69@gmail.com");
+        editText_userpassword.setText("123456");
 
     }
 
@@ -233,7 +235,7 @@ public class LoginScreen extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(studentResponse);
-        prefsEditor.putString(ConstantVariabls.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
         prefsEditor.commit();
     }
 
@@ -261,11 +263,17 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     private void checkAlreadyLogin() {
-        is_firsttime = sharedPreferences.getBoolean(ConstantVariabls.IS_FIRST_TIME, false);
+        is_firsttime = sharedPreferences.getBoolean(ConstantVariables.IS_FIRST_TIME, false);
+        Gson gson = new Gson();
+
+        String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
+        StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+
+        setGlobalProps(studentResponseObj);
+
         if (is_firsttime) {
             Intent intent = new Intent(LoginScreen.this, DashBoard.class);
             startActivity(intent);
-            //  this.finish();
         }
     }
 
@@ -305,111 +313,77 @@ public class LoginScreen extends AppCompatActivity {
 
     }
 
-
     private void loginCall(String email, String pass, String logintype, String social_id, String device_type, String device_id, final StudentResponse studentResponse) {
 
-
         if (social_id.equalsIgnoreCase("") && logintype.equalsIgnoreCase("0")) {
-
             mCommonMethod.showCommonDialog(LoginScreen.this, "Please wait...");
             try {
-                Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
+                final Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
                         getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
 
                 loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
                     @Override
                     public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
+                        mCommonMethod.cancelDialog();
 
-                        System.out.println(response.body());
-
-                        String message = response.body().getMessage();
-                        if (response.body().getStatus() == 1) {
-                            LoginStudentResponse loginStudentResponse = new LoginStudentResponse();
-                            if (response.body().getAuth_token() == null || response.body().getAuth_token().equalsIgnoreCase("")) {
-                            } else {
-                                loginStudentResponse.setAuth_token(response.body().getAuth_token());
-                                loginStudentResponse.setError(response.body().isError());
-                                loginStudentResponse.setMessage(response.body().getMessage());
-                                loginStudentResponse.setStatus(response.body().getStatus());
-                                loginStudentResponse.setStudentResponse(response.body().getStudentResponse());
-                            }
-                            //emptyVariables();
-                            mCommonMethod.cancelDialog();
-                            navigateDashboard(loginStudentResponse);
-
-                            LoginManager.getInstance().logOut();
-                            saveInPref(loginStudentResponse);
-                        } else {
-                            Toast.makeText(LoginScreen.this, "Oops!" + " " + message, Toast.LENGTH_SHORT).show();
-                            mCommonMethod.cancelDialog();
+                        if(!response.isSuccessful()){
+                            return;
+                        }
+                        assert response.body() != null;
+                        Log.i("payload", String.valueOf(response.body()));
+                        if(response.body().getPayload() instanceof JsonObject){
+                            Log.i("type","string");
+                        } else if(response.body().getPayload() instanceof String){
+                            Log.i("error","true");
                         }
 
+                        saveInPref(response.body());
                     }
 
                     @Override
                     public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
+                        t.printStackTrace();
                         mCommonMethod.cancelDialog();
-                        System.out.println(t.getMessage());
                     }
                 });
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            mCommonMethod.showCommonDialog(LoginScreen.this, "Please wait...");
-            try {
-                Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
-                        getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
+        } else if(logintype.equals("1")){
 
-                loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
-                    @Override
-                    public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
+            setGlobalProps(studentResponse);
+            saveStudentResponseInPref(studentResponse);
 
-                        System.out.println(response.body());
+            Intent intent  = new Intent(getApplicationContext(),DashBoard.class);
+            startActivity(intent);
 
-                        String message = response.body().getMessage();
 
-                        if (response.body().getStatus() == 1) {
-                            emptyVariables();
-                           /* navigateDashboard(response.body().getStudentResponse());
-                            saveInPref(response.body().getStudentResponse());*/
-                            LoginStudentResponse loginStudentResponse = new LoginStudentResponse();
-                            if (response.body().getAuth_token() == null || response.body().getAuth_token().equalsIgnoreCase("")) {
-                            } else {
-                                loginStudentResponse.setAuth_token(response.body().getAuth_token());
-                                loginStudentResponse.setError(response.body().isError());
-                                loginStudentResponse.setMessage(response.body().getMessage());
-                                loginStudentResponse.setStatus(response.body().getStatus());
-                                loginStudentResponse.setStudentResponse(response.body().getStudentResponse());
-                            }
-                            mCommonMethod.cancelDialog();
-                            navigateDashboard(loginStudentResponse);
-                            saveInPref(loginStudentResponse);
-
-                        } else {
-                            Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
-                            intent.putExtra("from", ConstantVariabls.LoginFB);
-                            intent.putExtra(ConstantVariabls.NON_VALID_FB_STUDENT, studentResponse);
-                            LoginManager.getInstance().logOut();
-                            startActivity(intent);
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
-                        mCommonMethod.cancelDialog();
-                        System.out.println(t.getMessage());
-                    }
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
+
+
+
+
+
 
 
     }
 
+    private void setGlobalProps(StudentResponse studentResponse){
+        GlobalProps.getInstance().userProfile = studentResponse.getImage_url();
+        GlobalProps.getInstance().userName = studentResponse.getName();
+        GlobalProps.getInstance().userEmail = studentResponse.getEmail();
+        GlobalProps.getInstance().userContact = studentResponse.getContact_no();
+        GlobalProps.getInstance().fbId = studentResponse.getFacebook_id();
+
+    }
+
+
+    private void saveStudentResponseInPref(StudentResponse studentResponse){
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(studentResponse);
+        prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.commit();
+    }
 }

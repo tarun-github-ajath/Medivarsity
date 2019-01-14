@@ -1,14 +1,12 @@
 package com.medavarsity.user.medavarsity.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +16,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.MySubjectCheckViewAdapter;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
-import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.R;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class MyProfileFragments extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        sharedPreferences = getActivity().getSharedPreferences(ConstantVariabls.SHARED_FILE, Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(ConstantVariables.SHARED_FILE, Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.activity_my_profile, container, false);
       //  toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
       //  tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
@@ -91,12 +88,12 @@ public class MyProfileFragments extends Fragment {
 
     public void getExtras() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
 
         // MyPreferences.getActiveInstance(getActivity()).getUserId();
-        etName.setText(studentResponse.getStudentResponse().getName());
-        etEmail.setText(studentResponse.getStudentResponse().getEmail());
-        etContact.setText(studentResponse.getStudentResponse().getContact_no());
+//        etName.setText(studentResponse.getStudentResponse().getName());
+//        etEmail.setText(studentResponse.getStudentResponse().getEmail());
+//        etContact.setText(studentResponse.getStudentResponse().getContact_no());
     }
 }

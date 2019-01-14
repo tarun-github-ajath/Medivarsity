@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.MySubjectCheckViewAdapter;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.R;
 
@@ -79,7 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void initializeIds() {
         toolbar_textView = (TextView) findViewById(R.id.toolbar_textView);
         toolbar_textView.setText("My Profile");
-        sharedPreferences = getSharedPreferences(ConstantVariabls.SHARED_FILE, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, Context.MODE_PRIVATE);
         etName = (EditText) findViewById(R.id.f_name);
         etEmail = (EditText) findViewById(R.id.et_email);
         etContact = (EditText) findViewById(R.id.et_phone);
@@ -94,12 +94,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void getExtras() {
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(ConstantVariabls.LOGIN_STUDENT_OBJECT, "");
+        String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
 
         // MyPreferences.getActiveInstance(getActivity()).getUserId();
-        etName.setText(studentResponse.getStudentResponse().getName());
-        etEmail.setText(studentResponse.getStudentResponse().getEmail());
-        etContact.setText(studentResponse.getStudentResponse().getContact_no());
+//        etName.setText(studentResponse.getStudentResponse().getName());
+//        etEmail.setText(studentResponse.getStudentResponse().getEmail());
+//        etContact.setText(studentResponse.getStudentResponse().getContact_no());
     }
 }

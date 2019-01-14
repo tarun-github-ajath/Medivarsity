@@ -1,55 +1,77 @@
 package com.medavarsity.user.medavarsity.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.medavarsity.user.medavarsity.Adapters.ReviewsAdapter;
-import com.medavarsity.user.medavarsity.Constants.ConstantVariabls;
 import com.medavarsity.user.medavarsity.Model.ReviewModel;
-import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.R;
+import com.medavarsity.user.medavarsity.activities.AddReview;
 
 import java.util.List;
+import java.util.Objects;
 
+@SuppressLint("ValidFragment")
 public class ReviewFragments extends Fragment {
     View root;
     RecyclerView recyclerView;
     TextView no_review;
+    List<ReviewModel> reviewModels;
+    Button giveReviewBtn;
 
+    @SuppressLint("ValidFragment")
+    public ReviewFragments(List<ReviewModel> reviewModels) {
+        this.reviewModels = reviewModels;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
         root = inflater.inflate(R.layout.frag_reviews, container, false);
-        recyclerView = (RecyclerView) root.findViewById(R.id.review_recycler);
-        no_review = (TextView) root.findViewById(R.id.no_review);
+        recyclerView = root.findViewById(R.id.review_recycler);
+        no_review = root.findViewById(R.id.no_review);
+        giveReviewBtn = root.findViewById(R.id.fragReviews_giveReviewBtn);
+
+        giveReviewBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(),AddReview.class));
+            }
+        });
+
+        if (reviewModels.size() == 0) showNoReviewModalUI(); else {showReviewsUI(); return root;}
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        recyclerView.getLayoutManager().setMeasurementCacheEnabled(false);
+        Objects.requireNonNull(recyclerView.getLayoutManager()).setMeasurementCacheEnabled(false);
         recyclerView.setNestedScrollingEnabled(false);
 
-        if (getArguments() != null) {
-            TopicDetailModel topicDetailModel = (TopicDetailModel) getArguments().getSerializable(ConstantVariabls.SELCTED_TOPIC_DETAIL);
-
-            if (topicDetailModel.getPayloadTopics().get(2).getReviewModels() == null || topicDetailModel.getPayloadTopics().get(2).getReviewModels().size() == 0) {
-                no_review.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-            } else {
-                no_review.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), topicDetailModel.getPayloadTopics().get(2).getReviewModels());
-                recyclerView.setAdapter(reviewsAdapter);
-            }
-
-        }
+        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), reviewModels);
+        recyclerView.setAdapter(reviewsAdapter);
         return root;
 
+    }
+
+    private void showNoReviewModalUI(){
+        no_review.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    private void showReviewsUI(){
+        no_review.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }

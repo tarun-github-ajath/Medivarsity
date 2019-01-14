@@ -39,8 +39,8 @@ public interface ApiInterface {
     Call<HomeModel> getHomeData(@Field("authtoken") String authtoken);
 
     @FormUrlEncoded
-    @POST("Topicdetails")
-    Call<TopicDetailModel> getTopicDetails(@Field("authtoken") String authtoken, @Field("topic_id") int topic_id);
+    @POST("Subjectdetails")
+    Call<TopicDetailModel> getTopicDetails(@Field("authtoken") String authtoken, @Field("subject_id") int topic_id);
 
 
     @FormUrlEncoded

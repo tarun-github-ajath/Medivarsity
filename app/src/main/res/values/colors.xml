@@ -6,6 +6,9 @@
     <color name="white">#fff</color>
     <color name="toolbar_color">#2938ab</color>
     <color name="black">#000</color>
+    <color name="text_color_light">#5c5c5c</color>
+    <color name="text_color_medium">#232323</color>
+    <color name="text_color_dark">#0d0d0d</color>
     <color name="search_color">#757ec2</color>
     <color name="EEE">#eeeeee</color>
     <color name="FFC90E">#ffc90e</color>

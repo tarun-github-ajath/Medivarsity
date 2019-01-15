@@ -25,7 +25,6 @@ import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.Videos;
 import com.medavarsity.user.medavarsity.R;
-import com.medavarsity.user.medavarsity.activities.GiveTest;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

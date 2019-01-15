@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.medavarsity.user.medavarsity.Adapters.ReviewsAdapter;
 import com.medavarsity.user.medavarsity.Model.ReviewModel;
+import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.R;
 import com.medavarsity.user.medavarsity.activities.AddReview;
 
@@ -27,12 +28,12 @@ public class ReviewFragments extends Fragment {
     View root;
     RecyclerView recyclerView;
     TextView no_review;
-    List<ReviewModel> reviewModels;
+    TopicDetailModel topicDetailModel;
     Button giveReviewBtn;
 
     @SuppressLint("ValidFragment")
-    public ReviewFragments(List<ReviewModel> reviewModels) {
-        this.reviewModels = reviewModels;
+    public ReviewFragments(TopicDetailModel topicDetailModel) {
+        this.topicDetailModel = topicDetailModel;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -47,11 +48,14 @@ public class ReviewFragments extends Fragment {
         giveReviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(),AddReview.class));
+                Intent intent = new Intent(getContext(),AddReview.class);
+                intent.putExtra("topicVideos",topicDetailModel.getPayloadTopics().getVideos());
+
+                startActivity(intent);
             }
         });
 
-        if (reviewModels.size() == 0) showNoReviewModalUI(); else {showReviewsUI(); return root;}
+        if (topicDetailModel.getPayloadTopics().getReviewModels().isEmpty()) showNoReviewModalUI(); else {showReviewsUI();}
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -59,7 +63,7 @@ public class ReviewFragments extends Fragment {
         Objects.requireNonNull(recyclerView.getLayoutManager()).setMeasurementCacheEnabled(false);
         recyclerView.setNestedScrollingEnabled(false);
 
-        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), reviewModels);
+        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getActivity(), topicDetailModel.getPayloadTopics().getReviewModels());
         recyclerView.setAdapter(reviewsAdapter);
         return root;
 

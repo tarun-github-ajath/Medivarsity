@@ -3,10 +3,13 @@ package com.medavarsity.user.medavarsity.NetworkCalls;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
 import com.medavarsity.user.medavarsity.Model.FacebookResponse;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
+import com.medavarsity.user.medavarsity.Model.LectureModal;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
+import com.medavarsity.user.medavarsity.Model.ResendOtpResponse;
 import com.medavarsity.user.medavarsity.Model.ReviewResponse;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
+import com.medavarsity.user.medavarsity.Model.VerifyOtpResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -45,8 +48,19 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("AddReview")
-    Call<ReviewResponse> SubmitFeedback(@Field("authtoken") String authtoken, @Field("video_id") int video_id, @Field("topic_id")
-            int topic_id, @Field("review") String review, @Field("rating") int rating);
+    Call<ReviewResponse> SubmitFeedback(@Field("authtoken") String authtoken, @Field("video_id") int video_id, @Field("subject_id")
+            int topic_id, @Field("review") String review, @Field("rating") float rating);
 
+    @FormUrlEncoded
+    @POST("Lectures")
+    Call<LectureModal> getLectures_AddReview(@Field("authtoken") String authtoken, @Field("subject_id") int topic_id);
+
+    @FormUrlEncoded
+    @POST("Verifyotp")
+    Call<VerifyOtpResponse> verifyOtp(@Field("student_id") String student_id, @Field("otp") int otp);
+
+    @FormUrlEncoded
+    @POST("Resendotp")
+    Call<ResendOtpResponse> resendOtp(@Field("student_id") String student_id);
 
 }

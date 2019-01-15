@@ -5,24 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.GiveTest">
-
-
-    <include layout="@layout/common_toolbar" />
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.medavarsity.user.medavarsity.Utilities.BoldCustomView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_10dp"
-            android:singleLine="true"
-            android:text="Test On Lecture A"
-            android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold" />
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="30sp"
+           android:textColor="@color/text_color_medium"
+           android:text="Give Test"/>
 
 
         <Button

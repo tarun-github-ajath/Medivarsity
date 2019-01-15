@@ -101,9 +101,6 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
             viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
                 @Override
                 public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                //    String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
-
-                  //  youTubeThumbnailLoader.setVideo(video_id);
                     youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
                         @Override
                         public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {

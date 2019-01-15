@@ -1,7 +1,6 @@
 package com.medavarsity.user.medavarsity.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.JsonObject;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
@@ -43,6 +43,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -80,6 +81,7 @@ public class RegisterScreen extends AppCompatActivity {
     String image_url = "";
     Intent intent;
     CommonMethods mCommonMethods;
+
 
     @Override
 
@@ -249,24 +251,22 @@ public class RegisterScreen extends AppCompatActivity {
         String email = editText_useremail.getText().toString().trim();
         String password = editText_userpassword.getText().toString().trim();
         String username = editText_username.getText().toString().trim();
-        String number = editText_contactnum.getText().toString().trim();
-        String college = "Jipmer"; //college hardcoded because colleges api not working ..
-
+//        String number = editText_contactnum.getText().toString().trim();
+        Random r = new Random();
+        String number  = String.valueOf(r.nextInt(45 - 28) + 28);
         if (email.equalsIgnoreCase("") || password.equalsIgnoreCase("") || username.equalsIgnoreCase("")
                 || number.equalsIgnoreCase("") || selected_year.equalsIgnoreCase("")
             /* || selected_gender.equalsIgnoreCase("")*/) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-        } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("Select college")) {
+        } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("")) {
             Toast.makeText(this, "Please select valid values", Toast.LENGTH_SHORT).show();
         } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Please enter valid email address!", Toast.LENGTH_SHORT).show();
         } else if (password.length() < 6) {
             Toast.makeText(this, "Password should not be less than six digit!", Toast.LENGTH_SHORT).show();
-        } else if (number.length() < 10) {
+        } else if (number.length() < 1) {
             Toast.makeText(this, "Please enter valid contact number!", Toast.LENGTH_SHORT).show();
         } else {
-          /*  progressBar.setMessage("Please wait...");
-            progressBar.show();*/
             mCommonMethods.showCommonDialog(RegisterScreen.this, "Please wait...");
 
             if (studentResponse != null) {
@@ -275,29 +275,28 @@ public class RegisterScreen extends AppCompatActivity {
                     reg_type = "1";
                     image_url = studentResponse.getImage_url();
                 }
-
             }
 
             Call<RegisterStudentResponse> createStudentCall = apiInterface.registerStudent(username, email, number,
-                    password, college, selected_year, social_id, reg_type, image_url);
+                    password, selected_college, selected_year, social_id, reg_type, image_url);
             createStudentCall.enqueue(new Callback<RegisterStudentResponse>() {
                 @Override
                 public void onResponse(Call<RegisterStudentResponse> call, Response<RegisterStudentResponse> response) {
 
-
                     RegisterStudentResponse registerStudentResponse = response.body();
                     Log.i("register response: " , String.valueOf(registerStudentResponse));
+                    String studentId = String.valueOf(registerStudentResponse.getPayload().getStudentId());
+                    String contactNumber = registerStudentResponse.getPayload().getContactNo();
                     String message = registerStudentResponse.getMessage();
+                    int otp = registerStudentResponse.getPayload().getOtp();
+
                     if (registerStudentResponse.getStatus() == 1) {
                         emptyFields();
-                        Toast.makeText(RegisterScreen.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
-                        navigateLogin();
+                        navigateOtpScreen(otp,studentId,contactNumber);
                     } else {
                         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_SHORT).show();
                     }
-
                     mCommonMethods.cancelDialog();
-
                 }
 
                 @Override
@@ -329,8 +328,7 @@ public class RegisterScreen extends AppCompatActivity {
         fb_custom = (Button) findViewById(R.id.fb);
 
 
-        editText_useremail.setText("tarsoni69@gmail.com");
-        editText_contactnum.setText("1234567890");
+        editText_useremail.setText("tarun.sni@gmail.com");
         editText_username.setText("tarun");
         editText_userpassword.setText("123456");
 
@@ -350,20 +348,28 @@ public class RegisterScreen extends AppCompatActivity {
         collge_name.enqueue(new Callback<CollegeResponse>() {
             @Override
             public void onResponse(Call<CollegeResponse> call, Response<CollegeResponse> response) {
-                CollegeResponse collegeRespons = response.body();
-                Log.i("colleges", String.valueOf(collegeRespons));
-                collegeModelArrayList = new ArrayList<>();
+                final ArrayList<CollegeModel> collegeResponse = response.body().getCollegeModels();
+                Log.i("colleges", String.valueOf(collegeResponse.get(0).getCollege_name()));
 
-                CollegeModel zeroth_index = new CollegeModel();
-                zeroth_index.setCollege_name("Select college");
-                zeroth_index.setId(0);
-                collegeModelArrayList.add(0, zeroth_index);
+                CollegeModel collegeModel_hint = new CollegeModel();
+                collegeModel_hint.setCollege_name("Select College");
+                collegeResponse.add(0,collegeModel_hint);
 
-//                collegeModelArrayList.addAll(collegeRespons.getCollegeModels());
-
-                collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeModelArrayList);
+                collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeResponse);
                 spinner_collegeSelection.setAdapter(collegeAdapter);
-                System.out.println(collegeRespons);
+
+                spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        selected_college = collegeResponse.get(position).getCollege_name();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+//                System.out.println(collegeRespons);
 
             }
 
@@ -414,16 +420,18 @@ public class RegisterScreen extends AppCompatActivity {
         spinner_collegeSelection.setSelection(0);
         male_radio.setChecked(false);
         female_radio.setChecked(false);
-        navigateLogin();
+
 
     }
 
-    private void navigateLogin() {
-        Intent intent = new Intent(RegisterScreen.this, LoginScreen.class);
+    private void navigateOtpScreen(int otp,String studentId,String contactNo) {
+        Intent intent = new Intent(RegisterScreen.this, EnterOtp.class);
+        intent.putExtra("otp",otp);
+        intent.putExtra("studentId",studentId);
+        intent.putExtra("contactNo",contactNo);
         startActivity(intent);
     }
 
-    Bitmap bitmap;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

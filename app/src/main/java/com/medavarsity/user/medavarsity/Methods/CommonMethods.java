@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.R;
+import com.medavarsity.user.medavarsity.activities.AddReview;
 
 public class CommonMethods {
 
@@ -49,18 +51,30 @@ public class CommonMethods {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static void showAlertDialog(Context context,String alertText){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setPositiveButton(alertText,
-                 new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+    public static void showAlert(Activity activity, String message) {
 
-                    }
-                });
+        TextView title = new TextView(activity);
+        title.setPadding(10, 10, 10, 10);
+        title.setTextSize(20);
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        // builder.setTitle("Title");
+        builder.setCustomTitle(title);
+        // builder.setIcon(R.drawable.alert_36);
+
+        builder.setMessage(message);
+
+        builder.setCancelable(false);
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+
+            }
+
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 

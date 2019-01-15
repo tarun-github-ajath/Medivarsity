@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EnterOtp">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar_main"/>
+
+       <LinearLayout
+           android:id="@+id/otpField"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_below="@+id/app_bar"
+           android:layout_marginTop="20dp"
+           >
+
+           <EditText
+               android:id="@+id/editText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:ems="10"
+               android:inputType="number"
+               android:layout_marginRight="90dp"
+               android:hint="Enter otp" />
+
+           <FrameLayout
+               android:layout_width="wrap_content"
+               android:layout_gravity="right"
+               android:layout_marginLeft="-92dp"
+               android:layout_height="wrap_content">
+
+               <Button
+                   android:id="@+id/button_resendOtp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="visible"
+                   android:backgroundTint="@color/colorPrimary"
+                   android:textColor="@color/white"
+                   android:text="Resend" />
+
+               <ProgressBar
+                   android:id="@+id/progressBar_resendOtp"
+                   style="?android:attr/progressBarStyle"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:visibility="gone"
+                   />
+
+           </FrameLayout>
+
+
+       </LinearLayout>
+
+    <Button
+        android:id="@+id/button_submitOtp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:layout_gravity="right"
+        android:backgroundTint="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:layout_below="@+id/otpField"
+        android:text="Verify Otp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_verifyOtp"
+        android:layout_below="@+id/button_submitOtp"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
+
+</RelativeLayout>

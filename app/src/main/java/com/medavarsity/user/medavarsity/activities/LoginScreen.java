@@ -264,14 +264,15 @@ public class LoginScreen extends AppCompatActivity {
 
     private void checkAlreadyLogin() {
         is_firsttime = sharedPreferences.getBoolean(ConstantVariables.IS_FIRST_TIME, false);
-        Gson gson = new Gson();
 
-        String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
-        StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
-
-        setGlobalProps(studentResponseObj);
 
         if (is_firsttime) {
+            Gson gson = new Gson();
+            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
+            StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+
+            setGlobalProps(studentResponseObj);
+
             Intent intent = new Intent(LoginScreen.this, DashBoard.class);
             startActivity(intent);
         }

@@ -22,6 +22,7 @@ import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.R;
 import com.medavarsity.user.medavarsity.fragments.AboutFragments;
+import com.medavarsity.user.medavarsity.fragments.GiveTestFragment;
 import com.medavarsity.user.medavarsity.fragments.ReviewFragments;
 import com.medavarsity.user.medavarsity.fragments.VideosFragments;
 
@@ -83,8 +84,8 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
                 e.printStackTrace();
             }
             try {
-                getSubjectDeatils("", sub_id);
-//                getSubjectDeatils(loginStudentResponse.getAuth_token(), sub_id);
+                getSubjectDetails("", sub_id);
+//                getSubjectDetails(loginStudentResponse.getAuth_token(), sub_id);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -94,7 +95,7 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
     }
 
-    private void getSubjectDeatils(String auth_token, final int subject_id) {
+    private void getSubjectDetails(String auth_token, final int subject_id) {
         auth_token = "5be9630c64d76";
         Log.i("subjId", String.valueOf(subject_id));
         if (auth_token != null && !auth_token.equalsIgnoreCase("")) {
@@ -128,11 +129,12 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
         bundle.putString("subject_desc",topicDetailModel.getPayloadTopics().getSubjectDetails().getSubject_desc());
         aboutFragments.setArguments(bundle);
 
-        adapter.addFragment(new ReviewFragments(topicDetailModel.getPayloadTopics().getReviewModels()),"Reviews");
 
         adapter.addFragment(aboutFragments,"About");
 
         adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
+        adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
+        adapter.addFragment(new GiveTestFragment(topicDetailModel),"Tests");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

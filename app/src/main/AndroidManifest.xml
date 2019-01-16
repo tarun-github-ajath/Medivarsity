@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.medavarsity.user.medavarsity">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -94,6 +93,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MyTopicsScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.WebViewActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AboutUsView"

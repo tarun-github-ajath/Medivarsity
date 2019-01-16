@@ -69,22 +69,24 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
 
         intent = getIntent();
-        selectedSub = intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME).equalsIgnoreCase("") ? "" :
-                intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME);
-        int sub_id = intent.getIntExtra(ConstantVariables.SELECTED_SUB_ID, 0);
-        Log.i("subId", String.valueOf(sub_id));
-        textView.setText("Concept of " + " " + selectedSub);
+        if(intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME) != null)
+        selectedSub = intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME).equalsIgnoreCase("") ? "" : intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME);
+        if(intent.getStringExtra(ConstantVariables.SELECTED_SUB_ID) != null){
+            int sub_id = intent.getIntExtra(ConstantVariables.SELECTED_SUB_ID, 0);
+            textView.setText("Concept of " + " " + selectedSub);
+        }
 
 
 
+        renderTabs();
         if (mCommonMethods.isNetworkAvailable(this)) {
             try {
-                mCommonMethods.showCommonDialog(this, "Fetching data...");
+//                mCommonMethods.showCommonDialog(this, "Fetching data...");
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                getSubjectDetails("", sub_id);
+//                getSubjectDetails("", sub_id);
 //                getSubjectDetails(loginStudentResponse.getAuth_token(), sub_id);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -123,18 +125,18 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
     private void renderTabs(){
         Pager adapter = new Pager(getSupportFragmentManager());
-        AboutFragments aboutFragments = new AboutFragments();
-        Bundle bundle = new Bundle();
-        bundle.putString("subject",selectedSub);
-        bundle.putString("subject_desc",topicDetailModel.getPayloadTopics().getSubjectDetails().getSubject_desc());
-        aboutFragments.setArguments(bundle);
+//        AboutFragments aboutFragments = new AboutFragments();
+//        Bundle bundle = new Bundle();
+//        bundle.putString("subject",selectedSub);
+//        bundle.putString("subject_desc",topicDetailModel.getPayloadTopics().getSubjectDetails().getSubject_desc());
+//        aboutFragments.setArguments(bundle);
 
-
-        adapter.addFragment(aboutFragments,"About");
-
-        adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
-        adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
         adapter.addFragment(new GiveTestFragment(topicDetailModel),"Tests");
+
+//        adapter.addFragment(aboutFragments,"About");
+//
+//        adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
+//        adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

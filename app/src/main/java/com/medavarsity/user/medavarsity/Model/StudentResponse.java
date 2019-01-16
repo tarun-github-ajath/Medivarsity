@@ -77,4 +77,13 @@ public class StudentResponse implements Serializable {
 
     String image_url="";
 
+    String authToken;
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
 }

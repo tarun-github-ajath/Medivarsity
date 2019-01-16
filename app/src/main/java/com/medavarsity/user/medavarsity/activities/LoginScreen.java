@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.se.omapi.Session;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -63,7 +66,7 @@ public class LoginScreen extends AppCompatActivity {
     Button fb_login;
     Dialog mDialog;
     boolean is_firsttime = false;
-    SharedPreferences sharedPreferences;
+    static SharedPreferences sharedPreferences;
     CommonMethods mCommonMethod;
 
     @Override
@@ -92,12 +95,10 @@ public class LoginScreen extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginScreen.this, RegisterScreen.class);
                 startActivity(intent);
-
             }
         });
 
         checkAlreadyLogin();
-
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +107,6 @@ public class LoginScreen extends AppCompatActivity {
                 } else {
                     Toast.makeText(LoginScreen.this, "Please check Internet connection", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -123,28 +123,22 @@ public class LoginScreen extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                System.out.println(loginResult);
+                System.out.println(loginResult.getAccessToken());
                 getUserDetails(loginResult);
             }
 
             @Override
             public void onCancel() {
-
             }
 
             @Override
             public void onError(FacebookException error) {
-
-
                 if (error.getMessage().contains("CONNECTION_FAILURE:")) {
                     Toast.makeText(LoginScreen.this, "Please check your internet connections", Toast.LENGTH_SHORT).show();
                 }
-
                 System.out.println(error.toString());
             }
         });
-
-
     }
 
     private void getUserDetails(LoginResult loginResult) {
@@ -172,7 +166,6 @@ public class LoginScreen extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 System.out.println(loginresultResponse);
             }
         });
@@ -193,36 +186,21 @@ public class LoginScreen extends AppCompatActivity {
         if (email.equalsIgnoreCase("") || pass.equalsIgnoreCase("")) {
             Toast.makeText(this, "Please fill all details", Toast.LENGTH_SHORT).show();
         } else {
-            // device_type:== android :0 and for ios: 1;
-            //andoid _id is device id
             loginCall(email, pass, "0", "", "0", android_id, null);
         }
     }
 
     private void initializeIds() {
-        editText_useremail = (EditText) findViewById(R.id.email_address);
-        editText_userpassword = (EditText) findViewById(R.id.password);
-        btn_sign = (Button) findViewById(R.id.sign_in);
-        textView_signup = (TextView) findViewById(R.id.sign_up);
-        loginButton = (LoginButton) findViewById(R.id.fb_login);
-        fb_login = (Button) findViewById(R.id.fb_customlogin);
+        editText_useremail = findViewById(R.id.email_address);
+        editText_userpassword = findViewById(R.id.password);
+        btn_sign = findViewById(R.id.sign_in);
+        textView_signup = findViewById(R.id.sign_up);
+        loginButton = findViewById(R.id.fb_login);
+        fb_login = findViewById(R.id.fb_customlogin);
 
-        editText_useremail.setText("tarsoni69@gmail.com");
+        editText_useremail.setText("tarun.sni123@yahoo.com");
         editText_userpassword.setText("123456");
 
-    }
-
-    private void navigateDashboard(LoginStudentResponse studentResponse) {
-
-        Intent intent = new Intent(LoginScreen.this, DashBoard.class/*YoutubeActivity.class*/);
-        intent.putExtra("student_info", studentResponse);
-        startActivity(intent);
-        //  finish();
-    }
-
-    private void emptyVariables() {
-        editText_useremail.setText("");
-        editText_userpassword.setText("");
     }
 
     @Override
@@ -257,14 +235,12 @@ public class LoginScreen extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "Permissions denied!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
     }
 
     private void checkAlreadyLogin() {
         is_firsttime = sharedPreferences.getBoolean(ConstantVariables.IS_FIRST_TIME, false);
-
 
         if (is_firsttime) {
             Gson gson = new Gson();
@@ -324,25 +300,32 @@ public class LoginScreen extends AppCompatActivity {
 
                 loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
                     @Override
-                    public void onResponse(Call<LoginStudentResponse> call, Response<LoginStudentResponse> response) {
+                    public void onResponse(@NonNull Call<LoginStudentResponse> call, @NonNull Response<LoginStudentResponse> response) {
                         mCommonMethod.cancelDialog();
 
                         if(!response.isSuccessful()){
                             return;
                         }
+
                         assert response.body() != null;
                         Log.i("payload", String.valueOf(response.body()));
-                        if(response.body().getPayload() instanceof JsonObject){
-                            Log.i("type","string");
-                        } else if(response.body().getPayload() instanceof String){
-                            Log.i("error","true");
-                        }
 
-                        saveInPref(response.body());
+
+                        if(response.body().getStatus() == 1){
+                            StudentResponse studentResponse1 = response.body().getPayload();
+                            studentResponse1.setAuthToken(response.body().getAuth_token());
+
+                            setGlobalProps(studentResponse1);
+                            GlobalProps.getInstance().saveStudentResponseInPref(studentResponse1,sharedPreferences);
+
+                            Intent intent = new Intent(LoginScreen.this,DashBoard.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<LoginStudentResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<LoginStudentResponse> call, @NonNull Throwable t) {
                         t.printStackTrace();
                         mCommonMethod.cancelDialog();
                     }
@@ -352,25 +335,17 @@ public class LoginScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if(logintype.equals("1")){
-
+            studentResponse.setAuthToken("");
             setGlobalProps(studentResponse);
-            saveStudentResponseInPref(studentResponse);
+            GlobalProps.getInstance().saveStudentResponseInPref(studentResponse,sharedPreferences);
 
             Intent intent  = new Intent(getApplicationContext(),DashBoard.class);
             startActivity(intent);
-
-
         }
-
-
-
-
-
-
-
     }
 
-    private void setGlobalProps(StudentResponse studentResponse){
+    public static void setGlobalProps(StudentResponse studentResponse){
+        GlobalProps.getInstance().authToken = studentResponse.getAuthToken();
         GlobalProps.getInstance().userProfile = studentResponse.getImage_url();
         GlobalProps.getInstance().userName = studentResponse.getName();
         GlobalProps.getInstance().userEmail = studentResponse.getEmail();
@@ -379,12 +354,9 @@ public class LoginScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
 
-    private void saveStudentResponseInPref(StudentResponse studentResponse){
-        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(studentResponse);
-        prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
-        prefsEditor.commit();
     }
 }

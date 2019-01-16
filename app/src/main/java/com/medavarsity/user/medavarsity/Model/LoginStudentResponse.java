@@ -56,16 +56,16 @@ public class LoginStudentResponse implements Serializable {
 //    }
 
 
-    public Object getPayload() {
-        return Payload;
+    public StudentResponse getPayload() {
+        return this.Payload;
     }
 
-    public void setPayload(Object payload) {
+    public void setPayload(StudentResponse payload) {
         Payload = payload;
     }
 
     @SerializedName("Payload")
-    Object Payload;
+    StudentResponse Payload;
 
     @SerializedName("Authtoken")
     String auth_token;

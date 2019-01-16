@@ -77,7 +77,14 @@ public class AddReview extends AppCompatActivity   {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         userProfile = findViewById(R.id.userProfileImage_addReview);
-        Picasso.with(this).load(GlobalProps.getInstance().userProfile).into(userProfile);
+        Log.i("userPro",GlobalProps.getInstance().userProfile);
+        if(!GlobalProps.getInstance().userProfile.isEmpty()){
+
+            Picasso.with(this).load(GlobalProps.getInstance().userProfile).into(userProfile);
+        } else {
+            Picasso.with(this).load(R.drawable.ic_user).into(userProfile);
+        }
+
         assert getIntent().getSerializableExtra("topicVideos") != null;
         arrayList = (ArrayList<Videos>) getIntent().getSerializableExtra("topicVideos");
         Videos videos = new Videos();

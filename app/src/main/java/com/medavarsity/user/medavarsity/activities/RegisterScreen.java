@@ -1,7 +1,9 @@
 package com.medavarsity.user.medavarsity.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +23,19 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
+import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
@@ -81,7 +87,7 @@ public class RegisterScreen extends AppCompatActivity {
     String image_url = "";
     Intent intent;
     CommonMethods mCommonMethods;
-
+    SharedPreferences sharedPreferences;
 
     @Override
 
@@ -91,7 +97,7 @@ public class RegisterScreen extends AppCompatActivity {
         initializeIds();
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
-
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         intent = getIntent();
         mCommonMethods = new CommonMethods(RegisterScreen.this);
 
@@ -107,7 +113,7 @@ public class RegisterScreen extends AppCompatActivity {
             }
         });
 
-
+        checkAlreadyLogin();
         getExtras();
        /* user_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,8 +233,15 @@ public class RegisterScreen extends AppCompatActivity {
                     JSONObject dataObj = pictureObject.getJSONObject("data");
                     String imageUrl = dataObj.has("url") ? dataObj.getString("url") : "";
                     studentResponse.setImage_url(imageUrl);
-                    fillData(studentResponse);
-                    LoginManager.getInstance().logOut(); // logout facebook user
+
+                    LoginScreen.setGlobalProps(studentResponse);
+                    GlobalProps.getInstance().saveStudentResponseInPref(studentResponse,sharedPreferences);
+
+                    Intent intent = new Intent(RegisterScreen.this,DashBoard.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -251,20 +264,21 @@ public class RegisterScreen extends AppCompatActivity {
         String email = editText_useremail.getText().toString().trim();
         String password = editText_userpassword.getText().toString().trim();
         String username = editText_username.getText().toString().trim();
-//        String number = editText_contactnum.getText().toString().trim();
-        Random r = new Random();
-        String number  = String.valueOf(r.nextInt(45 - 28) + 28);
+        String number = editText_contactnum.getText().toString();
+//        Random r = new Random();
+//        String number  = String.valueOf(r.nextInt(45 - 28) + 28);
+
         if (email.equalsIgnoreCase("") || password.equalsIgnoreCase("") || username.equalsIgnoreCase("")
                 || number.equalsIgnoreCase("") || selected_year.equalsIgnoreCase("")
             /* || selected_gender.equalsIgnoreCase("")*/) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-        } else if (selected_year.equalsIgnoreCase("Select Year") || selected_college.equalsIgnoreCase("")) {
+        } else if (selected_year.equalsIgnoreCase("Select Year")) {
             Toast.makeText(this, "Please select valid values", Toast.LENGTH_SHORT).show();
         } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Please enter valid email address!", Toast.LENGTH_SHORT).show();
         } else if (password.length() < 6) {
             Toast.makeText(this, "Password should not be less than six digit!", Toast.LENGTH_SHORT).show();
-        } else if (number.length() < 1) {
+        } else if (number.length() < 10) {
             Toast.makeText(this, "Please enter valid contact number!", Toast.LENGTH_SHORT).show();
         } else {
             mCommonMethods.showCommonDialog(RegisterScreen.this, "Please wait...");
@@ -278,7 +292,7 @@ public class RegisterScreen extends AppCompatActivity {
             }
 
             Call<RegisterStudentResponse> createStudentCall = apiInterface.registerStudent(username, email, number,
-                    password, selected_college, selected_year, social_id, reg_type, image_url);
+                    password, "college", selected_year, social_id, reg_type, image_url);
             createStudentCall.enqueue(new Callback<RegisterStudentResponse>() {
                 @Override
                 public void onResponse(Call<RegisterStudentResponse> call, Response<RegisterStudentResponse> response) {
@@ -289,9 +303,7 @@ public class RegisterScreen extends AppCompatActivity {
                     String contactNumber = registerStudentResponse.getPayload().getContactNo();
                     String message = registerStudentResponse.getMessage();
                     int otp = registerStudentResponse.getPayload().getOtp();
-
                     if (registerStudentResponse.getStatus() == 1) {
-                        emptyFields();
                         navigateOtpScreen(otp,studentId,contactNumber);
                     } else {
                         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_SHORT).show();
@@ -308,29 +320,23 @@ public class RegisterScreen extends AppCompatActivity {
         }
     }
 
-
     private void initializeIds() {
-        editText_useremail = (EditText) findViewById(R.id.register_email);
-        editText_username = (EditText) findViewById(R.id.register_name);
-        editText_userpassword = (EditText) findViewById(R.id.register_password);
-        editText_contactnum = (EditText) findViewById(R.id.register_contact);
-        btn_SignUp = (Button) findViewById(R.id.btn_Signup);
-        spinner_collegeSelection = (Spinner) findViewById(R.id.college_selection);
-        spinner_yearSelection = (Spinner) findViewById(R.id.year_selection);
-        male_radio = (RadioButton) findViewById(R.id.male);
-        female_radio = (RadioButton) findViewById(R.id.female);
+        editText_useremail = findViewById(R.id.register_email);
+        editText_username = findViewById(R.id.register_name);
+        editText_userpassword = findViewById(R.id.register_password);
+        editText_contactnum = findViewById(R.id.register_contact);
+        btn_SignUp = findViewById(R.id.btn_Signup);
+        spinner_collegeSelection = findViewById(R.id.college_selection);
+        spinner_yearSelection = findViewById(R.id.year_selection);
+        male_radio = findViewById(R.id.male);
+        female_radio = findViewById(R.id.female);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        signIn = (TextView) findViewById(R.id.already_signin);
-        facebook_register = (LoginButton) findViewById(R.id.fb_reg_login);
+        signIn = findViewById(R.id.already_signin);
+        facebook_register = findViewById(R.id.fb_reg_login);
         // user_image = (ImageView) findViewById(R.id.user_image);
-        user_image = (CircleImageView) findViewById(R.id.profile_image);
-        camera_icon = (CircleImageView) findViewById(R.id.iv_camera);
-        fb_custom = (Button) findViewById(R.id.fb);
-
-
-        editText_useremail.setText("tarun.sni@gmail.com");
-        editText_username.setText("tarun");
-        editText_userpassword.setText("123456");
+        user_image = findViewById(R.id.profile_image);
+        camera_icon = findViewById(R.id.iv_camera);
+        fb_custom = findViewById(R.id.fb);
 
         male_radio.setChecked(true);
         //  btn_custom_fb_login = (Button) findViewById(R.id.fb_login_custom);
@@ -347,30 +353,34 @@ public class RegisterScreen extends AppCompatActivity {
         Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList();
         collge_name.enqueue(new Callback<CollegeResponse>() {
             @Override
-            public void onResponse(Call<CollegeResponse> call, Response<CollegeResponse> response) {
-                final ArrayList<CollegeModel> collegeResponse = response.body().getCollegeModels();
-                Log.i("colleges", String.valueOf(collegeResponse.get(0).getCollege_name()));
+            public void onResponse(@NonNull Call<CollegeResponse> call, @NonNull Response<CollegeResponse> response) {
 
-                CollegeModel collegeModel_hint = new CollegeModel();
-                collegeModel_hint.setCollege_name("Select College");
-                collegeResponse.add(0,collegeModel_hint);
+                if(response.raw().code() != 404 || response.body() != null) {
 
-                collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeResponse);
-                spinner_collegeSelection.setAdapter(collegeAdapter);
 
-                spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        selected_college = collegeResponse.get(position).getCollege_name();
-                    }
+                    final ArrayList<CollegeModel> collegeResponse = response.body().getCollegeModels();
+                    Log.i("colleges", String.valueOf(collegeResponse.get(0).getCollege_name()));
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+                    CollegeModel collegeModel_hint = new CollegeModel();
+                    collegeModel_hint.setCollege_name("Select College");
+                    collegeResponse.add(0, collegeModel_hint);
 
-                    }
-                });
+                    collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeResponse);
+                    spinner_collegeSelection.setAdapter(collegeAdapter);
+
+                    spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            selected_college = collegeResponse.get(position).getCollege_name();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
 //                System.out.println(collegeRespons);
-
+                }
             }
 
             @Override
@@ -410,18 +420,19 @@ public class RegisterScreen extends AppCompatActivity {
         spinner_yearSelection.setSelection(1);
     }
 
-    private void emptyFields() {
+    private void checkAlreadyLogin() {
+        boolean is_firsttime = sharedPreferences.getBoolean(ConstantVariables.IS_FIRST_TIME, false);
 
-        editText_username.setText("");
-        editText_contactnum.setText("");
-        editText_userpassword.setText("");
-        editText_useremail.setText("");
-        spinner_yearSelection.setSelection(0);
-        spinner_collegeSelection.setSelection(0);
-        male_radio.setChecked(false);
-        female_radio.setChecked(false);
+        if (is_firsttime) {
+            Gson gson = new Gson();
+            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
+            StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
 
+            LoginScreen.setGlobalProps(studentResponseObj);
 
+            Intent intent = new Intent(RegisterScreen.this, DashBoard.class);
+            startActivity(intent);
+        }
     }
 
     private void navigateOtpScreen(int otp,String studentId,String contactNo) {

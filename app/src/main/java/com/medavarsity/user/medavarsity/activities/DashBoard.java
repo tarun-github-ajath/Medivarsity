@@ -22,7 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
@@ -33,6 +36,7 @@ import com.medavarsity.user.medavarsity.Adapters.DrawerItemCustomAdapter;
 import com.medavarsity.user.medavarsity.Adapters.HomeAdapter;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.DataModel;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
@@ -90,14 +94,12 @@ public class DashBoard extends AppCompatActivity {
         editor.putBoolean(ConstantVariables.IS_FIRST_TIME, true);
         editor.commit();
 
-
-        //  getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeScreen()).commit();
         setupToolbar();
         setupDrawerToggle();
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        youTubeThumbnailView = (YouTubeThumbnailView) findViewById(R.id.youtube_player);
-        playBtn = (ImageView) findViewById(R.id.btnYoutube_player);
+        youTubeThumbnailView = findViewById(R.id.youtube_player);
+        playBtn = findViewById(R.id.btnYoutube_player);
         relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) findViewById(R.id.relative_yotube);
 
         searchBar = (LinearLayout) findViewById(R.id.search_bar);
@@ -106,8 +108,6 @@ public class DashBoard extends AppCompatActivity {
         toolbar_text.setVisibility(View.GONE);
         subject_recycle = (RecyclerView) findViewById(R.id._recycl);
         updateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycleView);
-        // youtubeScreen = (LinearLayout) findViewById(R.id.youtube_screen);
-        //youtubeScreen.setVisibility(View.VISIBLE);
 
         sharedPreferences = this.getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
 
@@ -163,7 +163,6 @@ public class DashBoard extends AppCompatActivity {
         createDynamicList();
         getExtras();
 
-
         if (mCommonMethods.isNetworkAvailable(DashBoard.this)) {
             try {
                 mCommonMethods.showCommonDialog(DashBoard.this, "Fetching data...");
@@ -171,14 +170,13 @@ public class DashBoard extends AppCompatActivity {
                 e.printStackTrace();
             }
             try {
-//                getDashboardData(studentResponse.getAuth_token());
-                getDashboardData("s");
+                getDashboardData(GlobalProps.getInstance().authToken);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-
+        startActivity(new Intent(this,TopicDetails.class));
     }
 
 
@@ -196,7 +194,7 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private void getDashboardData(String authToken) {
-        authToken = "5be9630c64d76";
+
         if (authToken != null && !authToken.equalsIgnoreCase("")) {
             Call<HomeModel> homeModelCall = apiInterface.getHomeData(authToken);
             homeModelCall.enqueue(new Callback<HomeModel>() {
@@ -303,13 +301,13 @@ public class DashBoard extends AppCompatActivity {
                 break;
 
             case 5:
+                LoginManager.getInstance().logOut();
                 intent = new Intent(DashBoard.this, LoginScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.commit();
-
                 break;
 
             default:

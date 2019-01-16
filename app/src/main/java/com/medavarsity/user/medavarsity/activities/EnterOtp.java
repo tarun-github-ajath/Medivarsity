@@ -116,7 +116,9 @@ public class EnterOtp extends AppCompatActivity {
                int status =  response.body().getStatus();
                if(status == 1){
                    showToast("Registered Successfully");
-                   startActivity(new Intent(EnterOtp.this,DashBoard.class));
+                   Intent intent = new Intent(EnterOtp.this,DashBoard.class);
+                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                   startActivity(intent);
                } else {
                    showToast("Verification Failed");
                }
@@ -140,7 +142,6 @@ public class EnterOtp extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         showAlert(EnterOtp.this,"Registration process will be canceled");
 
     }
@@ -153,9 +154,7 @@ public class EnterOtp extends AppCompatActivity {
         title.setTextSize(20);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        // builder.setTitle("Title");
         builder.setCustomTitle(title);
-        // builder.setIcon(R.drawable.alert_36);
 
         builder.setMessage(message);
 
@@ -175,6 +174,7 @@ public class EnterOtp extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+
                 finish();
                 return true;
             default:

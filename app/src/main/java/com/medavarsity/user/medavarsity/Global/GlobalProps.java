@@ -15,6 +15,7 @@ public class GlobalProps {
     public String userContact;
     public String fbId;
     public String authToken;
+    public String collegeName;
 
     protected GlobalProps(){}
 

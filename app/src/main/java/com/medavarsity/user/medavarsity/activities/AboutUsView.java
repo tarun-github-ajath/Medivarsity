@@ -14,6 +14,7 @@ public class AboutUsView extends AppCompatActivity {
     ImageView navigate_back;
     TextView toolbar_text;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

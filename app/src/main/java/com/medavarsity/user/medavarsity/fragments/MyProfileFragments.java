@@ -3,6 +3,7 @@ package com.medavarsity.user.medavarsity.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.medavarsity.user.medavarsity.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MyProfileFragments extends Fragment {
@@ -41,22 +43,16 @@ public class MyProfileFragments extends Fragment {
     SharedPreferences sharedPreferences;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        sharedPreferences = getActivity().getSharedPreferences(ConstantVariables.SHARED_FILE, Context.MODE_PRIVATE);
+        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences(ConstantVariables.SHARED_FILE, Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.activity_my_profile, container, false);
-      //  toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-      //  tvTitle = (TextView) toolbar.findViewById(R.id.textview_toolbar);
-        //tvTitle.setText("My Profile");
-        //tvTitle.setVisibility(View.VISIBLE);
-        //searchOption = (EditText) toolbar.findViewById(R.id.search_option);
-        //searchOption.setVisibility(View.INVISIBLE);
-        etName = (EditText) root.findViewById(R.id.f_name);
-        etEmail = (EditText) root.findViewById(R.id.et_email);
-        etContact = (EditText) root.findViewById(R.id.et_phone);
-        rg = (RadioGroup) root.findViewById(R.id.radio);
-        etCollege = (EditText) root.findViewById(R.id.et_college);
-        etYear = (EditText) root.findViewById(R.id.et_year);
+        etName = root.findViewById(R.id.f_name);
+        etEmail = root.findViewById(R.id.et_email);
+        etContact = root.findViewById(R.id.et_phone);
+        rg = root.findViewById(R.id.radio);
+        etCollege = root.findViewById(R.id.et_college);
+        etYear = root.findViewById(R.id.et_year);
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
@@ -71,7 +67,7 @@ public class MyProfileFragments extends Fragment {
         });
         getExtras();
 
-        recyclerView = (RecyclerView) root.findViewById(R.id.subject_check_recycler);
+        recyclerView = root.findViewById(R.id.subject_check_recycler);
         list.add("Pathology");
         list.add("Orthopadic");
         list.add("Skin");
@@ -90,10 +86,5 @@ public class MyProfileFragments extends Fragment {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
-
-        // MyPreferences.getActiveInstance(getActivity()).getUserId();
-//        etName.setText(studentResponse.getStudentResponse().getName());
-//        etEmail.setText(studentResponse.getStudentResponse().getEmail());
-//        etContact.setText(studentResponse.getStudentResponse().getContact_no());
     }
 }

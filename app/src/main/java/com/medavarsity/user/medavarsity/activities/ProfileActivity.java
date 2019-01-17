@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.medavarsity.user.medavarsity.Adapters.MySubjectCheckViewAdapter;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.R;
 
@@ -25,9 +26,7 @@ import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private TextView tvTitle;
-    EditText searchOption, etName, etContact, etEmail, etCollege, etYear;
+    EditText  etName, etContact, etEmail, etCollege, etYear;
     RadioGroup rg;
     String st = "male";
     RecyclerView recyclerView;
@@ -65,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
         getExtras();
 
-        recyclerView = (RecyclerView) findViewById(R.id.subject_check_recycler);
+        recyclerView = findViewById(R.id.subject_check_recycler);
         list.add("Pathology");
         list.add("Orthopadic");
         list.add("Skin");
@@ -77,17 +76,21 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void initializeIds() {
-        toolbar_textView = (TextView) findViewById(R.id.toolbar_textView);
+        toolbar_textView = findViewById(R.id.toolbar_textView);
         toolbar_textView.setText("My Profile");
         sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, Context.MODE_PRIVATE);
-        etName = (EditText) findViewById(R.id.f_name);
-        etEmail = (EditText) findViewById(R.id.et_email);
-        etContact = (EditText) findViewById(R.id.et_phone);
-        rg = (RadioGroup) findViewById(R.id.radio);
-        etCollege = (EditText) findViewById(R.id.et_college);
-        etYear = (EditText) findViewById(R.id.et_year);
-        navigate_back = (ImageView) findViewById(R.id.navigate_back);
+        etName = findViewById(R.id.f_name);
+        etEmail = findViewById(R.id.et_email);
+        etContact = findViewById(R.id.et_phone);
+        rg = findViewById(R.id.radio);
+        etCollege = findViewById(R.id.et_college);
+        etYear = findViewById(R.id.et_year);
+        navigate_back = findViewById(R.id.navigate_back);
 
+        etName.setText(GlobalProps.getInstance().userName);
+        etEmail.setText(GlobalProps.getInstance().userEmail);
+        etContact.setText(GlobalProps.getInstance().userContact);
+        etYear.setText(GlobalProps.getInstance().collegeName);
     }
 
     LoginStudentResponse studentResponse;
@@ -96,10 +99,5 @@ public class ProfileActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
-
-        // MyPreferences.getActiveInstance(getActivity()).getUserId();
-//        etName.setText(studentResponse.getStudentResponse().getName());
-//        etEmail.setText(studentResponse.getStudentResponse().getEmail());
-//        etContact.setText(studentResponse.getStudentResponse().getContact_no());
     }
 }

@@ -7,34 +7,10 @@
     android:orientation="vertical"
     >
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylerView_giveTest"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <include layout="@layout/tests_list_item" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_give_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/size_5dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/start_test"
-            android:textColor="@color/white" />
-
-
-    </RelativeLayout>
-
-    </ScrollView>
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

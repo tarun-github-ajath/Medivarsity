@@ -2,6 +2,7 @@ package com.medavarsity.user.medavarsity.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -102,12 +103,12 @@ public class DashBoard extends AppCompatActivity {
         playBtn = findViewById(R.id.btnYoutube_player);
         relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) findViewById(R.id.relative_yotube);
 
-        searchBar = (LinearLayout) findViewById(R.id.search_bar);
+        searchBar = findViewById(R.id.search_bar);
         searchBar.setVisibility(View.VISIBLE);
-        toolbar_text = (TextView) findViewById(R.id.textview_toolbar);
+        toolbar_text = findViewById(R.id.textview_toolbar);
         toolbar_text.setVisibility(View.GONE);
-        subject_recycle = (RecyclerView) findViewById(R.id._recycl);
-        updateRecycle = (RecyclerView) findViewById(R.id.daily_update_recycleView);
+        subject_recycle = findViewById(R.id._recycl);
+        updateRecycle = findViewById(R.id.daily_update_recycleView);
 
         sharedPreferences = this.getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
 
@@ -122,7 +123,9 @@ public class DashBoard extends AppCompatActivity {
         updateRecycle.setHasFixedSize(true);
 
         updateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
-
+//        Intent intent = new Intent(DashBoard.this, ProfileActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        this.startActivity(intent);
 
         final YouTubeThumbnailLoader.OnThumbnailLoadedListener onThumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
             @Override
@@ -176,7 +179,6 @@ public class DashBoard extends AppCompatActivity {
             }
         }
 
-        startActivity(new Intent(this,TopicDetails.class));
     }
 
 
@@ -199,7 +201,7 @@ public class DashBoard extends AppCompatActivity {
             Call<HomeModel> homeModelCall = apiInterface.getHomeData(authToken);
             homeModelCall.enqueue(new Callback<HomeModel>() {
                 @Override
-                public void onResponse(Call<HomeModel> call, Response<HomeModel> response) {
+                public void onResponse(@NonNull Call<HomeModel> call, @NonNull Response<HomeModel> response) {
 
                     System.out.println(response);
                     PayloadHome payloadHome = response.body().getPayloadHome();
@@ -212,7 +214,7 @@ public class DashBoard extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<HomeModel> call, Throwable t) {
+                public void onFailure(@NonNull Call<HomeModel> call, @NonNull Throwable t) {
                     mCommonMethods.cancelDialog();
                 }
             });
@@ -223,7 +225,6 @@ public class DashBoard extends AppCompatActivity {
     private void getExtras() {
         intent = getIntent();
         studentResponse = (LoginStudentResponse) intent.getSerializableExtra("student_info");
-        Log.e("studentResponse", ">>>>" + studentResponse);
         readFromPref();
     }
 
@@ -238,20 +239,15 @@ public class DashBoard extends AppCompatActivity {
     private void setDailyUpdate(/*List<dailyUpdates> dailyUpdate*/ PayloadHome payloadHomes) {
         DailyUpdateAdapter updateAdapter = new DailyUpdateAdapter(this, payloadHomes.getDailyUpdates(), payloadHomes.getSubjects(), Config.DEVELOPER_KEY, "daily");
         updateRecycle.setAdapter(updateAdapter);
-
         HomeAdapter homeAdapter = new HomeAdapter(DashBoard.this, payloadHomes, "subject");
         subject_recycle.setAdapter(homeAdapter);
 
     }
 
-
-    /*read student info from shared pref*/
     private void readFromPref() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT, "");
         studentResponse = gson.fromJson(json, LoginStudentResponse.class);
-//        name = studentResponse.getStudentResponse().getName();
-
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -269,32 +265,26 @@ public class DashBoard extends AppCompatActivity {
 
         switch (position) {
             case 0:
-                //fragment = new HomeScreen();
                 intent = new Intent(DashBoard.this, DashBoard.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 1:
-//                fragment = new MyTopicsFragments();
                 intent = new Intent(DashBoard.this, MyTopicsScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 2:
-                /*  fragment = new MyProfileFragments();*/
                 intent = new Intent(DashBoard.this, ProfileActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 3:
-                //fragment = new FaqFragments();
-
                 intent = new Intent(DashBoard.this, FaQView.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 4:
-                //  fragment = new AboutUsFragment();
                 intent = new Intent(DashBoard.this, AboutUsView.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
@@ -310,9 +300,8 @@ public class DashBoard extends AppCompatActivity {
                 editor.commit();
                 break;
 
-            default:
-
-                break;
+                    default:
+                    break;
         }
         mDrawerLayout.closeDrawer(rlDrawer);
         if (fragment != null) {

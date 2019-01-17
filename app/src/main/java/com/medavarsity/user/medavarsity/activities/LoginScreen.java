@@ -351,7 +351,7 @@ public class LoginScreen extends AppCompatActivity {
         GlobalProps.getInstance().userEmail = studentResponse.getEmail();
         GlobalProps.getInstance().userContact = studentResponse.getContact_no();
         GlobalProps.getInstance().fbId = studentResponse.getFacebook_id();
-
+        GlobalProps.getInstance().collegeName = studentResponse.getCollegeName();
     }
 
     @Override

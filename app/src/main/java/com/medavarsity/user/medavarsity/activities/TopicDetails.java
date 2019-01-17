@@ -3,6 +3,7 @@ package com.medavarsity.user.medavarsity.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.medavarsity.user.medavarsity.Adapters.Pager;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
@@ -41,6 +43,7 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
     ApiInterface apiInterface;
     TopicDetailModel topicDetailModel;
     String selectedSub;
+    private int sub_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,6 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
         tabLayout = findViewById(R.id.tabLayout);
 
-        //Adding adapter to pager
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar_topic_details);
         setSupportActionBar(toolbar);
 
@@ -69,52 +71,42 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
 
         intent = getIntent();
-        if(intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME) != null)
         selectedSub = intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME).equalsIgnoreCase("") ? "" : intent.getStringExtra(ConstantVariables.SELECTED_SUBJECT_NAME);
-        if(intent.getStringExtra(ConstantVariables.SELECTED_SUB_ID) != null){
-            int sub_id = intent.getIntExtra(ConstantVariables.SELECTED_SUB_ID, 0);
+        if(intent.getIntExtra(ConstantVariables.SELECTED_SUB_ID,0) != 0){
+            sub_id = intent.getIntExtra(ConstantVariables.SELECTED_SUB_ID, 0);
             textView.setText("Concept of " + " " + selectedSub);
         }
 
 
 
-        renderTabs();
         if (mCommonMethods.isNetworkAvailable(this)) {
             try {
-//                mCommonMethods.showCommonDialog(this, "Fetching data...");
+                mCommonMethods.showCommonDialog(this, "Fetching data...");
+                getSubjectDetails(GlobalProps.getInstance().authToken, sub_id);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            try {
-//                getSubjectDetails("", sub_id);
-//                getSubjectDetails(loginStudentResponse.getAuth_token(), sub_id);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //Adding onTabSelectedListener to swipe views
-        tabLayout.setOnTabSelectedListener(this);
 
+        }
+        tabLayout.setOnTabSelectedListener(this);
     }
 
     private void getSubjectDetails(String auth_token, final int subject_id) {
-        auth_token = "5be9630c64d76";
         Log.i("subjId", String.valueOf(subject_id));
         if (auth_token != null && !auth_token.equalsIgnoreCase("")) {
             retrofit2.Call<TopicDetailModel> homeModelCall = apiInterface.getTopicDetails(auth_token, subject_id);
             homeModelCall.enqueue(new Callback<TopicDetailModel>() {
                 @Override
-                public void onResponse(retrofit2.Call<TopicDetailModel> call, Response<TopicDetailModel> response) {
+                public void onResponse(@NonNull retrofit2.Call<TopicDetailModel> call, @NonNull Response<TopicDetailModel> response) {
 
                     System.out.println("Topic re"+response);
                     topicDetailModel = response.body();
                     mCommonMethods.cancelDialog();
                     renderTabs();
-
                 }
 
                 @Override
-                public void onFailure(retrofit2.Call<TopicDetailModel> call, Throwable t) {
+                public void onFailure(@NonNull retrofit2.Call<TopicDetailModel> call, @NonNull Throwable t) {
                     t.printStackTrace();
                     mCommonMethods.cancelDialog();
                 }
@@ -125,18 +117,18 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
 
     private void renderTabs(){
         Pager adapter = new Pager(getSupportFragmentManager());
-//        AboutFragments aboutFragments = new AboutFragments();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("subject",selectedSub);
-//        bundle.putString("subject_desc",topicDetailModel.getPayloadTopics().getSubjectDetails().getSubject_desc());
-//        aboutFragments.setArguments(bundle);
+        AboutFragments aboutFragments = new AboutFragments();
+        Bundle bundle = new Bundle();
+        bundle.putString("subject",selectedSub);
+        bundle.putString("subject_desc",topicDetailModel.getPayloadTopics().getSubjectDetails().getSubject_desc());
+        aboutFragments.setArguments(bundle);
 
+
+        adapter.addFragment(aboutFragments,"About");
+
+        adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
+        adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
         adapter.addFragment(new GiveTestFragment(topicDetailModel),"Tests");
-
-//        adapter.addFragment(aboutFragments,"About");
-//
-//        adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
-//        adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

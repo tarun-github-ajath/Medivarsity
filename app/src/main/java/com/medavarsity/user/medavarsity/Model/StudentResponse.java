@@ -67,6 +67,9 @@ public class StudentResponse implements Serializable {
     @SerializedName("status")
     int status;
 
+    @SerializedName("college_name")
+    String collegeName;
+
     public String getImage_url() {
         return image_url;
     }
@@ -86,4 +89,13 @@ public class StudentResponse implements Serializable {
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
     }
+
+    public String getCollegeName() {
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+
 }

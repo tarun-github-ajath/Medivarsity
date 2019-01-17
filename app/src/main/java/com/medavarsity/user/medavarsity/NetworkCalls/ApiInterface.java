@@ -4,9 +4,14 @@ import com.medavarsity.user.medavarsity.Model.CollegeResponse;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LectureModal;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
+import com.medavarsity.user.medavarsity.Model.MyTopicResponse;
+import com.medavarsity.user.medavarsity.Model.MyTopicsModel;
+import com.medavarsity.user.medavarsity.Model.QuestionsModel;
+import com.medavarsity.user.medavarsity.Model.QuestionsResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.ResendOtpResponse;
 import com.medavarsity.user.medavarsity.Model.ReviewResponse;
+import com.medavarsity.user.medavarsity.Model.StateResponse;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.Model.VerifyOtpResponse;
 
@@ -18,8 +23,12 @@ import retrofit2.http.POST;
 
 public interface ApiInterface {
 
-    @GET("CollegeList")
-    Call<CollegeResponse> doGetCollegeList();
+    @GET("StateList")
+    Call<StateResponse> getStates();
+
+    @FormUrlEncoded
+    @POST("CollegeList")
+    Call<CollegeResponse> doGetCollegeList(@Field("state_id") int state_id);
 
     @FormUrlEncoded
     @POST("RegisterStudent")
@@ -58,4 +67,12 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Resendotp")
     Call<ResendOtpResponse> resendOtp(@Field("student_id") String student_id);
+
+    @FormUrlEncoded
+    @POST("Mytopics")
+    Call<MyTopicResponse> getMyTopics(@Field("authtoken") String token);
+
+    @FormUrlEncoded
+    @POST("Questionslist")
+    Call<QuestionsResponse> getQuestions(@Field("authtoken") String token, @Field("test_id") int testId);
 }

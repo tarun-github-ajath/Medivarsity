@@ -16,8 +16,10 @@ public class GlobalProps {
     public String fbId;
     public String authToken;
     public String collegeName;
+    public String year;
+    public String userState;
 
-    protected GlobalProps(){}
+    public GlobalProps(){}
 
     public static synchronized GlobalProps getInstance() {
         if(null == instance){

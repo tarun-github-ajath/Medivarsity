@@ -3,6 +3,7 @@ package com.medavarsity.user.medavarsity.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,9 +21,13 @@ import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -36,11 +41,14 @@ public class ProfileActivity extends AppCompatActivity {
     TextView toolbar_textView;
     ImageView navigate_back;
 
+    @BindView(R.id.profile_image)
+    de.hdodenhof.circleimageview.CircleImageView profileImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
-
+        ButterKnife.bind(this);
         initializeIds();
         navigate_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,28 +58,28 @@ public class ProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.male_check:
-                        st = "male";
-                        break;
-                    case R.id.female_check:
-                        st = "female";
-                        break;
-                }
-            }
-        });
+//        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId) {
+//                    case R.id.male_check:
+//                        st = "male";
+//                        break;
+//                    case R.id.female_check:
+//                        st = "female";
+//                        break;
+//                }
+//            }
+//        });
         getExtras();
 
         recyclerView = findViewById(R.id.subject_check_recycler);
-        list.add("Pathology");
-        list.add("Orthopadic");
-        list.add("Skin");
-
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        adapter = new MySubjectCheckViewAdapter(this, list);
-        recyclerView.setAdapter(adapter);
+//        list.add("Pathology");
+//        list.add("Orthopadic");
+//        list.add("Skin");
+//
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//        adapter = new MySubjectCheckViewAdapter(this, list);
+//        recyclerView.setAdapter(adapter);
 
     }
 
@@ -83,14 +91,19 @@ public class ProfileActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email);
         etContact = findViewById(R.id.et_phone);
         rg = findViewById(R.id.radio);
-        etCollege = findViewById(R.id.et_college);
         etYear = findViewById(R.id.et_year);
         navigate_back = findViewById(R.id.navigate_back);
 
         etName.setText(GlobalProps.getInstance().userName);
         etEmail.setText(GlobalProps.getInstance().userEmail);
         etContact.setText(GlobalProps.getInstance().userContact);
-        etYear.setText(GlobalProps.getInstance().collegeName);
+        if(GlobalProps.getInstance().year != null){
+            etYear.setText(GlobalProps.getInstance().year);
+        }
+
+        if(!GlobalProps.getInstance().userProfile.equals("")){
+            Picasso.with(getApplicationContext()).load(GlobalProps.getInstance().userProfile).into(profileImage);
+        }
     }
 
     LoginStudentResponse studentResponse;

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +18,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
+import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
+import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.ResendOtpResponse;
+import com.medavarsity.user.medavarsity.Model.StudentResponse;
+import com.medavarsity.user.medavarsity.Model.VerifyOtpModal;
 import com.medavarsity.user.medavarsity.Model.VerifyOtpResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
@@ -49,6 +57,8 @@ public class EnterOtp extends AppCompatActivity {
     String studentId;
     ApiInterface api;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +78,7 @@ public class EnterOtp extends AppCompatActivity {
         studentId = obj.getString("studentId");
         contactNumber = obj.getString("contactNo");
 
+        sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
 
 
     }
@@ -111,25 +122,28 @@ public class EnterOtp extends AppCompatActivity {
        Call<VerifyOtpResponse> call = api.verifyOtp(studentId,otp);
        call.enqueue(new Callback<VerifyOtpResponse>() {
            @Override
-           public void onResponse(Call<VerifyOtpResponse> call, Response<VerifyOtpResponse> response) {
+           public void onResponse(@NonNull Call<VerifyOtpResponse> call, @NonNull Response<VerifyOtpResponse> response) {
                assert response.body() != null;
                int status =  response.body().getStatus();
                if(status == 1){
                    showToast("Registered Successfully");
+                   Log.i("token",response.body().getToken());
+
+                   GlobalProps.getInstance().authToken = response.body().getToken();
+                   setGlobalProps(response.body().getVerifyOtpModal());
+                   saveInPref(response.body().getVerifyOtpModal());
                    Intent intent = new Intent(EnterOtp.this,DashBoard.class);
                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                    startActivity(intent);
                } else {
                    showToast("Verification Failed");
                }
-
                progressBar_verifyOtp.setVisibility(View.VISIBLE);
                button_verifyOtp.setVisibility(View.GONE);
            }
 
            @Override
-           public void onFailure(Call<VerifyOtpResponse> call, Throwable t) {
-
+           public void onFailure(@NonNull Call<VerifyOtpResponse> call, @NonNull Throwable t) {
            }
        });
     }
@@ -144,6 +158,23 @@ public class EnterOtp extends AppCompatActivity {
     public void onBackPressed() {
         showAlert(EnterOtp.this,"Registration process will be canceled");
 
+    }
+
+    private void setGlobalProps(VerifyOtpModal verifyOtpModal){
+        GlobalProps.getInstance().userProfile = verifyOtpModal.getImageUrl();
+        GlobalProps.getInstance().userName = verifyOtpModal.getName();
+        GlobalProps.getInstance().userEmail = verifyOtpModal.getEmail();
+        GlobalProps.getInstance().userContact = verifyOtpModal.getContactNumber();
+        GlobalProps.getInstance().year = verifyOtpModal.getYear();
+        Log.i("year",GlobalProps.getInstance().year);
+    }
+
+    private void saveInPref(VerifyOtpModal verifyOtpModal) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(verifyOtpModal);
+        prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.commit();
     }
 
 

@@ -123,8 +123,8 @@ public class DashBoard extends AppCompatActivity {
         updateRecycle.setHasFixedSize(true);
 
         updateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
-//        Intent intent = new Intent(DashBoard.this, ProfileActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(DashBoard.this, MyTopicsScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        this.startActivity(intent);
 
         final YouTubeThumbnailLoader.OnThumbnailLoadedListener onThumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
@@ -169,11 +169,12 @@ public class DashBoard extends AppCompatActivity {
         if (mCommonMethods.isNetworkAvailable(DashBoard.this)) {
             try {
                 mCommonMethods.showCommonDialog(DashBoard.this, "Fetching data...");
+                getDashboardData(GlobalProps.getInstance().authToken);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                getDashboardData(GlobalProps.getInstance().authToken);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -196,8 +197,9 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private void getDashboardData(String authToken) {
-
+        Log.i("called",authToken);
         if (authToken != null && !authToken.equalsIgnoreCase("")) {
+            Log.i("called","true");
             Call<HomeModel> homeModelCall = apiInterface.getHomeData(authToken);
             homeModelCall.enqueue(new Callback<HomeModel>() {
                 @Override

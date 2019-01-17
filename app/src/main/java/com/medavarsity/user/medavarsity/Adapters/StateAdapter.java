@@ -7,25 +7,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.medavarsity.user.medavarsity.Model.CollegeModel;
+import com.medavarsity.user.medavarsity.Model.StateModel;
 import com.medavarsity.user.medavarsity.R;
 
 import java.util.ArrayList;
 
-public class CollegeAdapter extends BaseAdapter {
+public class StateAdapter extends BaseAdapter {
 
     Context context;
-    ArrayList<CollegeModel> collegeModelArrayList;
-    LayoutInflater inflater;
+    private ArrayList<StateModel> stateModelArrayList;
+    private LayoutInflater inflater;
 
-    public CollegeAdapter(Context context, ArrayList<CollegeModel> collegeModelArrayList) {
+    public StateAdapter(Context context, ArrayList<StateModel> stateModelArrayList) {
         this.context = context;
-        this.collegeModelArrayList = collegeModelArrayList;
+        this.stateModelArrayList = stateModelArrayList;
     }
 
     @Override
     public int getCount() {
-        return collegeModelArrayList.size();
+        return stateModelArrayList.size();
     }
 
     @Override
@@ -47,12 +47,12 @@ public class CollegeAdapter extends BaseAdapter {
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.register_spinner_itemview, null);
 
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.textView);
+            viewHolder.textView = convertView.findViewById(R.id.textView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.textView.setText(collegeModelArrayList.get(position).getCollege_name());
+        viewHolder.textView.setText(stateModelArrayList.get(position).getStateName());
 
         return convertView;
     }

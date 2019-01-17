@@ -209,7 +209,7 @@ public class LoginScreen extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void saveInPref(LoginStudentResponse studentResponse) {
+    private void saveInPref(StudentResponse studentResponse) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(studentResponse);
@@ -316,7 +316,7 @@ public class LoginScreen extends AppCompatActivity {
                             studentResponse1.setAuthToken(response.body().getAuth_token());
 
                             setGlobalProps(studentResponse1);
-                            GlobalProps.getInstance().saveStudentResponseInPref(studentResponse1,sharedPreferences);
+                            saveInPref(studentResponse1);
 
                             Intent intent = new Intent(LoginScreen.this,DashBoard.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -337,7 +337,7 @@ public class LoginScreen extends AppCompatActivity {
         } else if(logintype.equals("1")){
             studentResponse.setAuthToken("");
             setGlobalProps(studentResponse);
-            GlobalProps.getInstance().saveStudentResponseInPref(studentResponse,sharedPreferences);
+            saveInPref(studentResponse);
 
             Intent intent  = new Intent(getApplicationContext(),DashBoard.class);
             startActivity(intent);
@@ -346,12 +346,11 @@ public class LoginScreen extends AppCompatActivity {
 
     public static void setGlobalProps(StudentResponse studentResponse){
         GlobalProps.getInstance().authToken = studentResponse.getAuthToken();
+        Log.i("token",GlobalProps.getInstance().authToken);
         GlobalProps.getInstance().userProfile = studentResponse.getImage_url();
         GlobalProps.getInstance().userName = studentResponse.getName();
         GlobalProps.getInstance().userEmail = studentResponse.getEmail();
         GlobalProps.getInstance().userContact = studentResponse.getContact_no();
-        GlobalProps.getInstance().fbId = studentResponse.getFacebook_id();
-        GlobalProps.getInstance().collegeName = studentResponse.getCollegeName();
     }
 
     @Override

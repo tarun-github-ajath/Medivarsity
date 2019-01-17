@@ -12,4 +12,12 @@ public class TestModel implements Serializable {
 
     @SerializedName("test_name")
     String test_name;
+
+    public int getTest_id() {
+        return test_id;
+    }
+
+    public String getTest_name() {
+        return test_name;
+    }
 }

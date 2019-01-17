@@ -23,20 +23,21 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.medavarsity.user.medavarsity.Adapters.CollegeAdapter;
+import com.medavarsity.user.medavarsity.Adapters.StateAdapter;
 import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.CollegeModel;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
-import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
 import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
+import com.medavarsity.user.medavarsity.Model.StateModel;
+import com.medavarsity.user.medavarsity.Model.StateResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
@@ -46,11 +47,13 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,7 +79,6 @@ public class RegisterScreen extends AppCompatActivity {
     CallbackManager callbackManager;
 
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-    Button btn_custom_fb_login;
     LoginManager loginManager;
     List<String> permissionNeeds = Arrays.asList(/*"user_photos",*/ "email",
             /*"user_birthday",*/ "public_profile");
@@ -89,12 +91,18 @@ public class RegisterScreen extends AppCompatActivity {
     CommonMethods mCommonMethods;
     SharedPreferences sharedPreferences;
 
+    @BindView(R.id.state_selection)
+    Spinner spinner_state;
+    private ArrayList<CollegeModel> collegeModelArrayListDummy;
+
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
         initializeIds();
+        ButterKnife.bind(this);
         callbackManager = CallbackManager.Factory.create();
         loginManager = LoginManager.getInstance();
         sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
@@ -113,7 +121,7 @@ public class RegisterScreen extends AppCompatActivity {
             }
         });
 
-        checkAlreadyLogin();
+//        checkAlreadyLogin();
         getExtras();
        /* user_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,8 +273,6 @@ public class RegisterScreen extends AppCompatActivity {
         String password = editText_userpassword.getText().toString().trim();
         String username = editText_username.getText().toString().trim();
         String number = editText_contactnum.getText().toString();
-//        Random r = new Random();
-//        String number  = String.valueOf(r.nextInt(45 - 28) + 28);
 
         if (email.equalsIgnoreCase("") || password.equalsIgnoreCase("") || username.equalsIgnoreCase("")
                 || number.equalsIgnoreCase("") || selected_year.equalsIgnoreCase("")
@@ -295,10 +301,11 @@ public class RegisterScreen extends AppCompatActivity {
                     password, "college", selected_year, social_id, reg_type, image_url);
             createStudentCall.enqueue(new Callback<RegisterStudentResponse>() {
                 @Override
-                public void onResponse(Call<RegisterStudentResponse> call, Response<RegisterStudentResponse> response) {
+                public void onResponse(@NonNull Call<RegisterStudentResponse> call, @NonNull Response<RegisterStudentResponse> response) {
 
                     RegisterStudentResponse registerStudentResponse = response.body();
-                    Log.i("register response: " , String.valueOf(registerStudentResponse));
+                    Log.i("register response: " , String.valueOf(registerStudentResponse.getPayload().getOtp()));
+                    assert registerStudentResponse != null;
                     String studentId = String.valueOf(registerStudentResponse.getPayload().getStudentId());
                     String contactNumber = registerStudentResponse.getPayload().getContactNo();
                     String message = registerStudentResponse.getMessage();
@@ -308,6 +315,7 @@ public class RegisterScreen extends AppCompatActivity {
                     } else {
                         Toast.makeText(RegisterScreen.this, message, Toast.LENGTH_SHORT).show();
                     }
+
                     mCommonMethods.cancelDialog();
                 }
 
@@ -349,60 +357,15 @@ public class RegisterScreen extends AppCompatActivity {
                 //finish();
             }
         });
+        getStates();
 
-        Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList();
-        collge_name.enqueue(new Callback<CollegeResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<CollegeResponse> call, @NonNull Response<CollegeResponse> response) {
+        collegeModelArrayListDummy = new ArrayList<>();
+        resetCollegeSpinnerHint();
 
-                if(response.raw().code() != 404 || response.body() != null) {
+        collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeModelArrayListDummy);
+        spinner_collegeSelection.setAdapter(collegeAdapter);
 
-
-                    final ArrayList<CollegeModel> collegeResponse = response.body().getCollegeModels();
-                    Log.i("colleges", String.valueOf(collegeResponse.get(0).getCollege_name()));
-
-                    CollegeModel collegeModel_hint = new CollegeModel();
-                    collegeModel_hint.setCollege_name("Select College");
-                    collegeResponse.add(0, collegeModel_hint);
-
-                    collegeAdapter = new CollegeAdapter(RegisterScreen.this, collegeResponse);
-                    spinner_collegeSelection.setAdapter(collegeAdapter);
-
-                    spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            selected_college = collegeResponse.get(position).getCollege_name();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-//                System.out.println(collegeRespons);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CollegeResponse> call, Throwable t) {
-                t.printStackTrace();
-                call.cancel();
-            }
-        });
-
-
-        spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selected_college = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        yearsadapter = new ArrayAdapter<String>(RegisterScreen.this, R.layout.college_list_item, R.id.collegesName, years);
+        yearsadapter = new ArrayAdapter<String>(RegisterScreen.this, R.layout.register_spinner_itemview, R.id.textView, years);
         spinner_yearSelection.setAdapter(yearsadapter);
 
         spinner_yearSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -416,8 +379,101 @@ public class RegisterScreen extends AppCompatActivity {
 
             }
         });
-
         spinner_yearSelection.setSelection(1);
+    }
+
+    private void resetCollegeSpinnerHint() {
+        CollegeModel collegeModel = new CollegeModel();
+        collegeModel.setCollege_name("Select College");
+        collegeModelArrayListDummy.clear();
+        collegeModelArrayListDummy.add(0,collegeModel);
+    }
+
+    private void getStates(){
+        Call<StateResponse> call = apiInterface.getStates();
+        call.enqueue(new Callback<StateResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StateResponse> call, @NonNull Response<StateResponse> response) {
+                Log.i("response", String.valueOf(response.body()));
+
+                assert response.body() != null;
+                final ArrayList<StateModel> stateModelsResponse = response.body().getStateModels();
+                StateModel stateModel = new StateModel();
+                stateModel.setStateName("Select State");
+                stateModelsResponse.add(0, stateModel);
+
+                StateAdapter StateAdapter = new StateAdapter(RegisterScreen.this,stateModelsResponse);
+                spinner_state.setAdapter(StateAdapter);
+
+                spinner_state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        resetCollegeSpinnerHint();
+                        spinner_collegeSelection.setSelection(0);
+                        int selected_stateId = stateModelsResponse.get(position).getStateId();
+                        getColleges(selected_stateId);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<StateResponse> call, Throwable t) {
+            }
+        });
+    }
+
+    private void getColleges(int stateId){
+        Call<CollegeResponse> collge_name = apiInterface.doGetCollegeList(stateId);
+        collge_name.enqueue(new Callback<CollegeResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CollegeResponse> call, @NonNull Response<CollegeResponse> response) {
+
+                if(response.raw().code() != 404 || response.body() != null) {
+
+                    assert response.body() != null;
+//                    collegeModelArrayListDummy = response.body().getCollegeModels();
+
+                    Log.i("colleges", String.valueOf(collegeModelArrayListDummy.get(0).getCollege_name()));
+
+                    collegeModelArrayListDummy.addAll(response.body().getCollegeModels());
+                    collegeAdapter.notifyDataSetChanged();
+
+                    spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            selected_college = collegeModelArrayListDummy.get(position).getCollege_name();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CollegeResponse> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                call.cancel();
+            }
+        });
+
+        spinner_collegeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selected_college = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private void checkAlreadyLogin() {
@@ -425,13 +481,17 @@ public class RegisterScreen extends AppCompatActivity {
 
         if (is_firsttime) {
             Gson gson = new Gson();
-            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
-            StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"");
+            assert studentResponse != null;
+            if(!studentResponse.equals(""))
+            {
+                StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+                LoginScreen.setGlobalProps(studentResponseObj);
+                Intent intent = new Intent(RegisterScreen.this, DashBoard.class);
+                startActivity(intent);
+            }
 
-            LoginScreen.setGlobalProps(studentResponseObj);
 
-            Intent intent = new Intent(RegisterScreen.this, DashBoard.class);
-            startActivity(intent);
         }
     }
 

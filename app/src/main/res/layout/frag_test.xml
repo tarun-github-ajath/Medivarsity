@@ -7,10 +7,27 @@
     android:orientation="vertical"
     >
 
+    <TextView
+        android:id="@+id/testName_fragTest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textSize="20sp"
+        android:textColor="@color/text_color_medium"
+        android:text="Tests available"
+        />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recylerView_giveTest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+
+
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/viewPager_fragTest"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--/>-->
 
 </LinearLayout>

@@ -3,8 +3,9 @@ package com.medavarsity.user.medavarsity.Model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-public class VerifyOtpResponse implements Serializable {
+public class QuestionsResponse implements Serializable {
 
     @SerializedName("Error")
     boolean error;
@@ -19,7 +20,7 @@ public class VerifyOtpResponse implements Serializable {
     String token;
 
     @SerializedName("Payload")
-    VerifyOtpModal verifyOtpModal;
+    ArrayList<QuestionsModel> questionsModel;
 
     public String getToken() {
         return token;
@@ -37,7 +38,7 @@ public class VerifyOtpResponse implements Serializable {
         return message;
     }
 
-    public VerifyOtpModal getVerifyOtpModal() {
-        return verifyOtpModal;
+    public ArrayList<QuestionsModel> getQuestionsModel() {
+        return questionsModel;
     }
 }

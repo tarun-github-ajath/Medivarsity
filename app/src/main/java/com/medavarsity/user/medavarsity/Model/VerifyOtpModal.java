@@ -21,6 +21,9 @@ public class VerifyOtpModal implements Serializable {
     @SerializedName("college_id")
     int collegeId;
 
+    @SerializedName("college_name")
+    String collegeName;
+
     @SerializedName("mbbs_year")
     String year;
 
@@ -32,6 +35,9 @@ public class VerifyOtpModal implements Serializable {
 
     @SerializedName("created_date")
     String date;
+
+    @SerializedName("Authtoken")
+    String authtoken;
 
     public int getStudent_id() {
         return student_id;
@@ -67,5 +73,21 @@ public class VerifyOtpModal implements Serializable {
 
     public String getDate() {
         return date;
+    }
+
+    public String getAuthtoken() {
+        return authtoken;
+    }
+
+    public void setAuthtoken(String authtoken) {
+        this.authtoken = authtoken;
+    }
+
+    public String getCollegeName() {
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
     }
 }

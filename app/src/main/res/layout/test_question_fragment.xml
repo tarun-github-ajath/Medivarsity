@@ -10,6 +10,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
+            android:layout_margin="10dp"
             android:textColor="@color/text_color_medium"
             android:text="Q.1) Question goes here "/>
 
@@ -54,6 +55,27 @@
                 android:text="Option4" />
 
         </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/prev_questionFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous"/>
+
+            <Button
+                android:id="@+id/next_questionFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

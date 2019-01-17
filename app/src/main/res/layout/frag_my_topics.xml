@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <include layout="@layout/common_toolbar" />
+    <include android:id="@+id/toolbar" layout="@layout/common_toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_topic_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/notSubscribedTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Subjects subscribed yet"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        android:textSize="18sp"
+        android:layout_below="@+id/my_topic_recycler"
+        />
+</RelativeLayout>

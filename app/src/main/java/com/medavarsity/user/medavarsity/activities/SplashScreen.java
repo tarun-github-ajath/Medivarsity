@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.facebook.login.Login;
 import com.medavarsity.user.medavarsity.R;
 
 import java.security.MessageDigest;

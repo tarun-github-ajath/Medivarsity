@@ -2,8 +2,10 @@ package com.medavarsity.user.medavarsity.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +27,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import butterknife.BindView;
+
 
 public class MyProfileFragments extends Fragment {
-    private Toolbar toolbar;
-    private TextView tvTitle;
-    EditText searchOption, etName, etContact, etEmail, etCollege, etYear;
+
+    EditText etName, etContact, etEmail, etCollege, etYear;
     RadioGroup rg;
     String st = "male";
     RecyclerView recyclerView;
     MySubjectCheckViewAdapter adapter;
     List<String> list = new ArrayList();
+
+
+
 
     public static MyProfileFragments newInstance() {
         return new MyProfileFragments();
@@ -42,6 +48,7 @@ public class MyProfileFragments extends Fragment {
 
     SharedPreferences sharedPreferences;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,20 +58,19 @@ public class MyProfileFragments extends Fragment {
         etEmail = root.findViewById(R.id.et_email);
         etContact = root.findViewById(R.id.et_phone);
         rg = root.findViewById(R.id.radio);
-        etCollege = root.findViewById(R.id.et_college);
         etYear = root.findViewById(R.id.et_year);
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.male_check:
-                        st = "male";
-                        break;
-                    case R.id.female_check:
-                        st = "female";
-                        break;
-                }
-            }
-        });
+//        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId) {
+//                    case R.id.male_check:
+//                        st = "male";
+//                        break;
+//                    case R.id.female_check:
+//                        st = "female";
+//                        break;
+//                }
+//            }
+//        });
         getExtras();
 
         recyclerView = root.findViewById(R.id.subject_check_recycler);

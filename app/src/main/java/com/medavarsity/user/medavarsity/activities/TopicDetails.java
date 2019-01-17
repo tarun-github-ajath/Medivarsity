@@ -124,11 +124,11 @@ public class TopicDetails extends AppCompatActivity implements TabLayout.BaseOnT
         aboutFragments.setArguments(bundle);
 
 
+        adapter.addFragment(new GiveTestFragment(topicDetailModel),"Tests");
         adapter.addFragment(aboutFragments,"About");
 
         adapter.addFragment(new VideosFragments(topicDetailModel.getPayloadTopics().getVideos()),"Videos");
         adapter.addFragment(new ReviewFragments(topicDetailModel),"Reviews");
-        adapter.addFragment(new GiveTestFragment(topicDetailModel),"Tests");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

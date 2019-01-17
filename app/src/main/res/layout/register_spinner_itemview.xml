@@ -6,7 +6,7 @@
 
 
     <com.medavarsity.user.medavarsity.Utilities.CustomTextView
-        android:id="@+id/collegesName"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Model.PayloadHome;
 import com.medavarsity.user.medavarsity.R;
 import com.medavarsity.user.medavarsity.activities.TopicDetails;
+import com.medavarsity.user.medavarsity.activities.WebViewActivity;
+import com.medavarsity.user.medavarsity.ccavenueutility.AvenuesParams;
+import com.medavarsity.user.medavarsity.ccavenueutility.ServiceUtility;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
@@ -74,6 +78,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             }
 
         }
+
+        homeViewHolder.subscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String vAccessCode = "AVTW76FB06AN60WTNA";
+                String vMerchantId = "165562";
+                String vCurrency = "INR";
+                String vAmount = "200";
+                if (!vAccessCode.equals("") && !vMerchantId.equals("") && !vCurrency.equals("") && !vAmount.equals("")) {
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    intent.putExtra(AvenuesParams.ACCESS_CODE, vAccessCode);
+                    intent.putExtra(AvenuesParams.MERCHANT_ID, vMerchantId);
+                    intent.putExtra(AvenuesParams.ORDER_ID, "1");
+                    intent.putExtra(AvenuesParams.CURRENCY, vCurrency);
+                    intent.putExtra(AvenuesParams.AMOUNT, vAmount);
+
+                   /* intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(redirectUrl.getText()).toString().trim());
+                    intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(cancelUrl.getText()).toString().trim());
+                    intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl.getText()).toString().trim());*/
+
+
+                    context.startActivity(intent);
+                } else {
+                    Toast.makeText(context, "All parameters are mandatory.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 
 
     }

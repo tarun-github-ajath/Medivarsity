@@ -72,9 +72,9 @@ public class GiveTest extends AppCompatActivity {
 
                 FragmentManager fm = getSupportFragmentManager();
                 QuestionFragmentPagerAdapter pagerAdapter = new QuestionFragmentPagerAdapter(fm);
-                Log.i("size", String.valueOf(response.body().getQuestionsModel()));
+//                Log.i("question", String.valueOf(response.body().getQuestionsModel().get(0).getQuestion()));
                 for(int i=0;i<response.body().getQuestionsModel().size();i++){
-                    pagerAdapter.addFragment(new QuestionFrag(i), "Question "+i);
+                    pagerAdapter.addFragment(new QuestionFrag(getApplicationContext(),i,response.body().getQuestionsModel().get(i).getQuestion(),response.body().getQuestionsModel().get(i).getOptionsModel()), "Question "+i);
                 }
                 viewPager.setAdapter(pagerAdapter);
             }

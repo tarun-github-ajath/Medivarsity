@@ -13,5 +13,11 @@ public class OptionsModel implements Serializable {
     int correct;
 
 
+    public String getOptionName() {
+        return optionName;
+    }
 
+    public int getCorrect() {
+        return correct;
+    }
 }

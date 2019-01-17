@@ -3,6 +3,7 @@ package com.medavarsity.user.medavarsity.Model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class QuestionsModel implements Serializable {
 
@@ -16,7 +17,7 @@ public class QuestionsModel implements Serializable {
     String answerType;
 
     @SerializedName("options")
-    OptionsModel optionsModel;
+    ArrayList<OptionsModel> optionsModel;
 
 
     public int getQuestion_id() {
@@ -43,11 +44,7 @@ public class QuestionsModel implements Serializable {
         this.answerType = answerType;
     }
 
-    public OptionsModel getOptionsModel() {
+    public ArrayList<OptionsModel> getOptionsModel() {
         return optionsModel;
-    }
-
-    public void setOptionsModel(OptionsModel optionsModel) {
-        this.optionsModel = optionsModel;
     }
 }

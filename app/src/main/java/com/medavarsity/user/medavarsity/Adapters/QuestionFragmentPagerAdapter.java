@@ -29,7 +29,7 @@ public class QuestionFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabTitles.get(position);
+        return tabTitles.get(position+1);
     }
 
     public void addFragment(Fragment fragment, String tabTitle) {

@@ -22,60 +22,15 @@
 
 
         <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
 
-        <RadioButton
-            android:id="@+id/radioButton_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Option1" />
-
-        <RadioButton
-            android:id="@+id/radioButton_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Option2" />
-
-        <RadioButton
-            android:id="@+id/radioButton_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Option3" />
-
-            <RadioButton
-                android:id="@+id/radioButton_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Option4" />
 
         </RadioGroup>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="20dp">
 
-            <Button
-                android:id="@+id/prev_questionFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Previous"/>
-
-            <Button
-                android:id="@+id/next_questionFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Next"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

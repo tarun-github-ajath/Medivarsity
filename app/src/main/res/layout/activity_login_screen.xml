@@ -99,22 +99,6 @@
             android:text="@string/sign_in"
             android:textColor="@color/white" />
 
-        <com.medavarsity.user.medavarsity.Utilities.CustomTextView
-            android:id="@+id/sign_social"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="@string/sign_social"
-            android:textColor="@color/light_blue"
-            android:textSize="16dp" />
-
-
-        <!--  <com.facebook.login.widget.LoginButton
-              android:id="@+id/fb_login"
-              style="@style/FacebookLoginButton"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />-->
-
 
         <FrameLayout
             android:id="@+id/FrameLayout1"

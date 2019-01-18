@@ -135,8 +135,6 @@ public class DashBoard extends AppCompatActivity {
 
             @Override
             public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-
-
                 youTubeThumbnailView.setVisibility(View.VISIBLE);
                 relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
             }
@@ -267,28 +265,24 @@ public class DashBoard extends AppCompatActivity {
 
         switch (position) {
             case 0:
-                intent = new Intent(DashBoard.this, DashBoard.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                this.startActivity(intent);
+//                intent = new Intent(DashBoard.this, DashBoard.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                this.startActivity(intent);
                 break;
             case 1:
                 intent = new Intent(DashBoard.this, MyTopicsScreen.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 2:
                 intent = new Intent(DashBoard.this, ProfileActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 3:
                 intent = new Intent(DashBoard.this, FaQView.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
             case 4:
                 intent = new Intent(DashBoard.this, AboutUsView.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 this.startActivity(intent);
                 break;
 
@@ -297,6 +291,7 @@ public class DashBoard extends AppCompatActivity {
                 intent = new Intent(DashBoard.this, LoginScreen.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.commit();

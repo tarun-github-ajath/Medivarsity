@@ -22,6 +22,8 @@ import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.R;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.ViewHolder> {
@@ -59,34 +61,10 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
         if (from.equalsIgnoreCase("daily")) {
             viewHolder.subjectTextView.setText(dailyUpdateModelArrayList.get(position).getTitle());
 
-            viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-                @Override
-                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                    String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
+            String url = getYoutubeId(dailyUpdateModelArrayList.get(position).getUrl());
+            Picasso.with(context).load(url).into(viewHolder.youtube_thumbnail);
 
-                    youTubeThumbnailLoader.setVideo(video_id);
-                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                        @Override
-                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                            youTubeThumbnailLoader.release();
-                            youTubeThumbnailView.setVisibility(View.VISIBLE);
-                            viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-                }
-            });
-
-            viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.youtube_thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
@@ -98,31 +76,10 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
         } else {
             viewHolder.subjectTextView.setText(subjectsList.get(position).getSubjectname());
 
-            viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-                @Override
-                public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                    youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                        @Override
-                        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                            youTubeThumbnailLoader.release();
-                            youTubeThumbnailView.setVisibility(View.VISIBLE);
-                            viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                        }
+            String url = getYoutubeId(subjectsList.get(position).getVideos().get(position).getVideo_url());
+            Picasso.with(context).load(url).into(viewHolder.youtube_thumbnail);
 
-                        @Override
-                        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-                }
-            });
-
-            viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.relativeLayoutOverYouTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
@@ -133,64 +90,7 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
         }
 
 
-       /* viewHolder.youTubePlayerFragment.initialize(Config.DEVELOPER_KEY, new YouTubePlayer.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                if (!b) {
-                    YPlayer = youTubePlayer;
-                    YPlayer.setFullscreen(false);
-                    // YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    YPlayer.cueVideo(dailyUpdateModelArrayList.get(position).getUrl());
-                    YPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    YPlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CUSTOM_LAYOUT);
-                    YPlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
-                        @Override
-                        public void onFullscreen(boolean b) {
-
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + Config.YOUTUBE_VIDEO_CODE));
-                            intent.putExtra("VIDEO_ID", Config.YOUTUBE_VIDEO_CODE);
-                            intent.putExtra("force_fullscreen", true);
-                            *//*getstartActivity(intent);*//*
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        });
-*/
-        /*viewHolder.youTubePlayerView.initialize(developerKey, new YouTubePlayer.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                if (!b) {
-                    String videoCode = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
-                    youTubePlayer.loadVideo(videoCode);
-                }
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        });*/
-
-        /*final YouTubeThumbnailLoader.OnThumbnailLoadedListener onThumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-            @Override
-            public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-            }
-
-            @Override
-            public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                youTubeThumbnailView.setVisibility(View.VISIBLE);
-                viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-            }
-        };*/
-
-    }
+          }
 
     @Override
     public int getItemCount() {
@@ -198,29 +98,26 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        // RatingBar ratingBar;
-        TextView subjectTextView/*, hrtextView*/;
-//        YouTubePlayerSupportFragment youTubePlayerFragment;
-
-        //        YouTubePlayerView youTubePlayerView;
+        TextView subjectTextView;
         RelativeLayout relativeLayoutOverYouTubeThumbnailView;
         ImageView playButton;
-        YouTubeThumbnailView youtube_thumbnail;
+        ImageView youtube_thumbnail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            /*youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-            FragmentTransaction transaction = ((FragmentActivity) fragmentActivity).getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.daily_youtube_fragment, youTubePlayerFragment).commit();
-*/
-            //  youTubePlayerView = (YouTubePlayerView) itemView.findViewById(R.id.dailyyoutube_player);
-            // youTubePlayerView.initialize(Config.DEVELOPER_KEY, this);
             relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) itemView.findViewById(R.id.relative_yotube);
-            youtube_thumbnail = (YouTubeThumbnailView) itemView.findViewById(R.id.youtube_thumbnail);
-            playButton = (ImageView) itemView.findViewById(R.id.btnYoutube_player);
-            subjectTextView = (TextView) itemView.findViewById(R.id.subject_name);
+            youtube_thumbnail = itemView.findViewById(R.id.youtube_thumbnail);
+            playButton = itemView.findViewById(R.id.btnYoutube_player);
+            subjectTextView = itemView.findViewById(R.id.subject_name);
         }
     }
+
+    private String getYoutubeId(String youtubeVideoUrl){
+        String videoId = youtubeVideoUrl.substring(youtubeVideoUrl.lastIndexOf("?v="));
+        String filter = videoId.replace("?v=","");
+        return "https://img.youtube.com/vi/"+filter+"/0.jpg";
+    }
+
 }
 
 

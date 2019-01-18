@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".activities.GiveTest">
 
-    <include android:id="@+id/toolbar_include" layout="@layout/common_toolbar" />
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_giveTest"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_test"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@+id/toolbar_include"
-        android:layout_gravity="center">
+        android:layout_weight="1"
+       >
 
     <android.support.v4.view.PagerTitleStrip
         android:id="@+id/pager_title_strip"
@@ -28,25 +44,45 @@
 
     </android.support.v4.view.ViewPager>
 
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/layout_footer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/pager_test"
-        android:layout_marginTop="20dp">
+        android:padding="30dp">
 
-        <Button
-            android:id="@+id/prev_questionFrag"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Previous"/>
+            android:orientation="horizontal"
+            android:layout_below="@+id/pager_test"
+            android:gravity="center"
+            >
 
-        <Button
-            android:id="@+id/next_questionFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Next"/>
+            <Button
+                android:id="@+id/prev_questionFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Previous"/>
 
-    </LinearLayout>
-</RelativeLayout>
+            <Button
+                android:id="@+id/next_questionFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"/>
+
+            <Button
+                android:id="@+id/seeResult_questionFrag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:text="See Result"/>
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+</LinearLayout>

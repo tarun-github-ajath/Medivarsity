@@ -31,6 +31,8 @@ import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
 import com.medavarsity.user.medavarsity.R;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -129,9 +131,11 @@ public class EnterOtp extends AppCompatActivity {
                    showToast("Registered Successfully");
                    Log.i("token",response.body().getToken());
 
-                   GlobalProps.getInstance().authToken = response.body().getToken();
-                   setGlobalProps(response.body().getVerifyOtpModal());
-                   saveInPref(response.body().getVerifyOtpModal());
+                   VerifyOtpModal verifyOtpModal = response.body().getVerifyOtpModal();
+                   verifyOtpModal.setAuthtoken(response.body().getToken());
+                   setGlobalProps(verifyOtpModal);
+                   saveInPref(verifyOtpModal);
+
                    Intent intent = new Intent(EnterOtp.this,DashBoard.class);
                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                    startActivity(intent);
@@ -161,12 +165,13 @@ public class EnterOtp extends AppCompatActivity {
     }
 
     private void setGlobalProps(VerifyOtpModal verifyOtpModal){
+        GlobalProps.getInstance().authToken = verifyOtpModal.getAuthtoken();
         GlobalProps.getInstance().userProfile = verifyOtpModal.getImageUrl();
         GlobalProps.getInstance().userName = verifyOtpModal.getName();
         GlobalProps.getInstance().userEmail = verifyOtpModal.getEmail();
         GlobalProps.getInstance().userContact = verifyOtpModal.getContactNumber();
         GlobalProps.getInstance().year = verifyOtpModal.getYear();
-        Log.i("year",GlobalProps.getInstance().year);
+        Log.i("authtoken from enter otp",GlobalProps.getInstance().authToken);
     }
 
     private void saveInPref(VerifyOtpModal verifyOtpModal) {
@@ -174,6 +179,7 @@ public class EnterOtp extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(verifyOtpModal);
         prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.putString("authToken",verifyOtpModal.getAuthtoken());
         prefsEditor.commit();
     }
 

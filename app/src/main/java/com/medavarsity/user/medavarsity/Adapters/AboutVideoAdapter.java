@@ -40,7 +40,6 @@ public class AboutVideoAdapter extends RecyclerView.Adapter<AboutVideoAdapter.vi
         this.context = context;
         this.videosList = videosList;
         this.developerKey = developerKey;
-
     }
 
     @NonNull
@@ -53,12 +52,11 @@ public class AboutVideoAdapter extends RecyclerView.Adapter<AboutVideoAdapter.vi
 
     @Override
     public void onBindViewHolder(@NonNull final videoHolder videoHolder, final int i) {
-
         videoHolder.videoName.setText(videosList.get(i).getVideo_title());
         String urlThumb = getYoutubeId(i);
         Picasso.with(context).load(urlThumb).into(videoHolder.playButton);
 
-        videoHolder.playButton.setOnClickListener(new View.OnClickListener() {
+        videoHolder.relativeLayoutOverYouTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

@@ -30,8 +30,6 @@ public class AboutUsView extends AppCompatActivity {
         navigate_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AboutUsView.this, DashBoard.class);
-                startActivity(intent);
                 finish();
             }
         });

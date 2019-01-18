@@ -74,7 +74,7 @@ public class RegisterScreen extends AppCompatActivity {
     String selected_gender = "";
     ArrayList<CollegeModel> collegeModelArrayList;
     CollegeAdapter collegeAdapter;
-    String[] years = new String[]{"Select Year", "1990", "2001", "2003", "2004", "2005", "2006", "2009"};
+    String[] years = new String[]{"Select Year", "1st", "2nd", "3rd", "4th", "5th"};
     LoginButton facebook_register;
     CallbackManager callbackManager;
 
@@ -242,8 +242,9 @@ public class RegisterScreen extends AppCompatActivity {
                     String imageUrl = dataObj.has("url") ? dataObj.getString("url") : "";
                     studentResponse.setImage_url(imageUrl);
 
-                    LoginScreen.setGlobalProps(studentResponse);
-                    GlobalProps.getInstance().saveStudentResponseInPref(studentResponse,sharedPreferences);
+                    studentResponse.setAuthToken(jsonObject.getString("a"));
+                    setGlobalProps(studentResponse);
+                    saveInPref(studentResponse);
 
                     Intent intent = new Intent(RegisterScreen.this,DashBoard.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -265,6 +266,12 @@ public class RegisterScreen extends AppCompatActivity {
 
     }
 
+    private void setGlobalProps(StudentResponse studentResponse){
+        GlobalProps.getInstance().userProfile = studentResponse.getImage_url();
+        GlobalProps.getInstance().userName = studentResponse.getName();
+        GlobalProps.getInstance().userEmail = studentResponse.getEmail();
+        GlobalProps.getInstance().userContact = studentResponse.getContact_no();
+    }
     ArrayAdapter<String> yearsadapter;
 
     private void doRegisterStudent() {
@@ -376,10 +383,8 @@ public class RegisterScreen extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
-        spinner_yearSelection.setSelection(1);
     }
 
     private void resetCollegeSpinnerHint() {
@@ -389,13 +394,13 @@ public class RegisterScreen extends AppCompatActivity {
         collegeModelArrayListDummy.add(0,collegeModel);
     }
 
+
     private void getStates(){
         Call<StateResponse> call = apiInterface.getStates();
         call.enqueue(new Callback<StateResponse>() {
             @Override
             public void onResponse(@NonNull Call<StateResponse> call, @NonNull Response<StateResponse> response) {
                 Log.i("response", String.valueOf(response.body()));
-
                 assert response.body() != null;
                 final ArrayList<StateModel> stateModelsResponse = response.body().getStateModels();
                 StateModel stateModel = new StateModel();
@@ -416,7 +421,6 @@ public class RegisterScreen extends AppCompatActivity {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
                     }
                 });
             }
@@ -476,25 +480,6 @@ public class RegisterScreen extends AppCompatActivity {
         });
     }
 
-    private void checkAlreadyLogin() {
-        boolean is_firsttime = sharedPreferences.getBoolean(ConstantVariables.IS_FIRST_TIME, false);
-
-        if (is_firsttime) {
-            Gson gson = new Gson();
-            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"");
-            assert studentResponse != null;
-            if(!studentResponse.equals(""))
-            {
-                StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
-                LoginScreen.setGlobalProps(studentResponseObj);
-                Intent intent = new Intent(RegisterScreen.this, DashBoard.class);
-                startActivity(intent);
-            }
-
-
-        }
-    }
-
     private void navigateOtpScreen(int otp,String studentId,String contactNo) {
         Intent intent = new Intent(RegisterScreen.this, EnterOtp.class);
         intent.putExtra("otp",otp);
@@ -550,5 +535,15 @@ public class RegisterScreen extends AppCompatActivity {
         studentResponse = (StudentResponse) intent.getSerializableExtra(ConstantVariables.NON_VALID_FB_STUDENT);
         fillData(studentResponse);
     }
+
+
+    private void saveInPref(StudentResponse studentResponse) {
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(studentResponse);
+        prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.commit();
+    }
+
 
 }

@@ -53,33 +53,12 @@ public class ProfileActivity extends AppCompatActivity {
         navigate_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, DashBoard.class);
-                startActivity(intent);
                 finish();
             }
         });
-//        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                switch (checkedId) {
-//                    case R.id.male_check:
-//                        st = "male";
-//                        break;
-//                    case R.id.female_check:
-//                        st = "female";
-//                        break;
-//                }
-//            }
-//        });
         getExtras();
 
         recyclerView = findViewById(R.id.subject_check_recycler);
-//        list.add("Pathology");
-//        list.add("Orthopadic");
-//        list.add("Skin");
-//
-//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-//        adapter = new MySubjectCheckViewAdapter(this, list);
-//        recyclerView.setAdapter(adapter);
 
     }
 
@@ -97,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
         etName.setText(GlobalProps.getInstance().userName);
         etEmail.setText(GlobalProps.getInstance().userEmail);
         etContact.setText(GlobalProps.getInstance().userContact);
+
         if(GlobalProps.getInstance().year != null){
             etYear.setText(GlobalProps.getInstance().year);
         }

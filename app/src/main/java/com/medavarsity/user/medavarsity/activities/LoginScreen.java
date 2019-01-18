@@ -214,6 +214,7 @@ public class LoginScreen extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(studentResponse);
         prefsEditor.putString(ConstantVariables.LOGIN_STUDENT_OBJECT, json);
+        prefsEditor.putString("authToken", studentResponse.getAuthToken());
         prefsEditor.commit();
     }
 
@@ -244,13 +245,14 @@ public class LoginScreen extends AppCompatActivity {
 
         if (is_firsttime) {
             Gson gson = new Gson();
-            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"Object not found");
-            StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+            String studentResponse = sharedPreferences.getString(ConstantVariables.LOGIN_STUDENT_OBJECT,"");
+            if(studentResponse != null && !studentResponse.equals("")){
 
-            setGlobalProps(studentResponseObj);
+                StudentResponse studentResponseObj = gson.fromJson(studentResponse,StudentResponse.class);
+                setGlobalProps(studentResponseObj,sharedPreferences);
+                startDashBoard();
+            }
 
-            Intent intent = new Intent(LoginScreen.this, DashBoard.class);
-            startActivity(intent);
         }
     }
 
@@ -315,12 +317,10 @@ public class LoginScreen extends AppCompatActivity {
                             StudentResponse studentResponse1 = response.body().getPayload();
                             studentResponse1.setAuthToken(response.body().getAuth_token());
 
-                            setGlobalProps(studentResponse1);
                             saveInPref(studentResponse1);
+                            setGlobalProps(studentResponse1,sharedPreferences);
 
-                            Intent intent = new Intent(LoginScreen.this,DashBoard.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            startDashBoard();
                         }
                     }
 
@@ -336,26 +336,32 @@ public class LoginScreen extends AppCompatActivity {
             }
         } else if(logintype.equals("1")){
             studentResponse.setAuthToken("");
-            setGlobalProps(studentResponse);
             saveInPref(studentResponse);
+            setGlobalProps(studentResponse,sharedPreferences);
 
             Intent intent  = new Intent(getApplicationContext(),DashBoard.class);
             startActivity(intent);
         }
     }
 
-    public static void setGlobalProps(StudentResponse studentResponse){
-        GlobalProps.getInstance().authToken = studentResponse.getAuthToken();
-        Log.i("token",GlobalProps.getInstance().authToken);
+    public static void setGlobalProps(StudentResponse studentResponse,SharedPreferences sharedPreferences){
         GlobalProps.getInstance().userProfile = studentResponse.getImage_url();
         GlobalProps.getInstance().userName = studentResponse.getName();
         GlobalProps.getInstance().userEmail = studentResponse.getEmail();
         GlobalProps.getInstance().userContact = studentResponse.getContact_no();
+        GlobalProps.getInstance().authToken = sharedPreferences.getString("authToken","");
+        Log.i("tokenLogin",GlobalProps.getInstance().authToken);
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
 
+    }
+
+    private void startDashBoard(){
+        Intent intent = new Intent(LoginScreen.this,DashBoard.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

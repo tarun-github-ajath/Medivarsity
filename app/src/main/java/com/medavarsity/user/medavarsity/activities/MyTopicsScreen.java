@@ -89,8 +89,6 @@ public class MyTopicsScreen extends AppCompatActivity {
         navigate_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyTopicsScreen.this, DashBoard.class);
-                startActivity(intent);
                 finish();
             }
         });

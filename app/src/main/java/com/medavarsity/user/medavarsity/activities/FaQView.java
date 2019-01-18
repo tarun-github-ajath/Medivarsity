@@ -29,8 +29,6 @@ public class FaQView extends AppCompatActivity {
         navigate_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FaQView.this, DashBoard.class);
-                startActivity(intent);
                 finish();
             }
         });

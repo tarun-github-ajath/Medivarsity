@@ -21,6 +21,7 @@ import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.Videos;
 import com.medavarsity.user.medavarsity.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -53,43 +54,10 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
     public void onBindViewHolder(@NonNull final SubjectsAdapter.ViewHolder viewHolder, final int position) {
 
         viewHolder.subjectTextView.setText(subjectsVideos.get(position).getVideo_title());
+        String url = getYoutubeId(subjectsVideos.get(position).getVideo_url());
+        Picasso.with(context).load(url).into(viewHolder.youtube_thumbnail);
 
-
-       /* viewHolder.subjectTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, TopicDetails.class);
-                context.startActivity(intent);
-            }
-        });*/
-        viewHolder.youtube_thumbnail.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-            @Override
-            public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                String video_id = CommonMethods.extractVideoId(subjectsVideos.get(position).getVideo_url());
-
-                youTubeThumbnailLoader.setVideo(video_id);
-                youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                    @Override
-                    public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                        youTubeThumbnailLoader.release();
-                        youTubeThumbnailView.setVisibility(View.VISIBLE);
-                        viewHolder.relativeLayoutOverYouTubeThumbnailView.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-
-            }
-        });
-
-        viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.youtube_thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String video_id = CommonMethods.extractVideoId(subjectsVideos.get(position).getVideo_url());
@@ -97,8 +65,6 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
                 context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
@@ -111,15 +77,21 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
         TextView subjectTextView;
         RelativeLayout relativeLayoutOverYouTubeThumbnailView;
         ImageView playButton;
-        YouTubeThumbnailView youtube_thumbnail;
+        ImageView youtube_thumbnail;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) itemView.findViewById(R.id.relative_yotube);
-            youtube_thumbnail = (YouTubeThumbnailView) itemView.findViewById(R.id.youtube_thumbnail);
-            playButton = (ImageView) itemView.findViewById(R.id.btnYoutube_player);
+            relativeLayoutOverYouTubeThumbnailView = (RelativeLayout) itemView.findViewById(R.id.relativeLayout_over_youtube_thumbnail);
+            youtube_thumbnail = itemView.findViewById(R.id.youtube_thumbnail);
+            playButton = itemView.findViewById(R.id.btnYoutube_player);
             subjectTextView = (TextView) itemView.findViewById(R.id.subject_name);
         }
+    }
+
+    private String getYoutubeId(String youtubeVideoUrl){
+        String videoId = youtubeVideoUrl.substring(youtubeVideoUrl.lastIndexOf("?v="));
+        String filter = videoId.replace("?v=","");
+        return "https://img.youtube.com/vi/"+filter+"/0.jpg";
     }
 }

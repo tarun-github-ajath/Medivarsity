@@ -25,6 +25,7 @@ import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.Videos;
 import com.medavarsity.user.medavarsity.R;
+import com.medavarsity.user.medavarsity.activities.YoutubeActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -54,20 +55,23 @@ public class AboutVideoAdapter extends RecyclerView.Adapter<AboutVideoAdapter.vi
     public void onBindViewHolder(@NonNull final videoHolder videoHolder, final int i) {
         videoHolder.videoName.setText(videosList.get(i).getVideo_title());
         String urlThumb = getYoutubeId(i);
-        Picasso.with(context).load(urlThumb).into(videoHolder.playButton);
+
+        if(!urlThumb.equals("")){
+
+            Picasso.with(context).load(urlThumb).into(videoHolder.playButton);
+        }
 
         videoHolder.relativeLayoutOverYouTubeThumbnailView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String video_id = CommonMethods.extractVideoId(videosList.get(i).getVideo_url());
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                context.startActivity(intent);
+                Intent i = new Intent((Activity) context, YoutubeActivity.class);
+                i.putExtra("videoId",video_id);
+                context.startActivity(i);
             }
         });
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -93,8 +97,11 @@ public class AboutVideoAdapter extends RecyclerView.Adapter<AboutVideoAdapter.vi
 
     private String getYoutubeId(int pos){
         String youtubeVideoUrl = videosList.get(pos).getVideo_url();
-        String videoId = youtubeVideoUrl.substring(youtubeVideoUrl.lastIndexOf("?v="));
-        String filter = videoId.replace("?v=","");
-        return "https://img.youtube.com/vi/"+filter+"/0.jpg";
+        if(youtubeVideoUrl.length() > 0){
+
+            String videoId = youtubeVideoUrl.substring(youtubeVideoUrl.lastIndexOf("?v="));
+            String filter = videoId.replace("?v=","");
+            return "https://img.youtube.com/vi/"+filter+"/0.jpg";
+        } else return "";
     }
 }

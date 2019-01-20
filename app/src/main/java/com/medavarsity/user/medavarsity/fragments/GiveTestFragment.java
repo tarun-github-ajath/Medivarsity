@@ -38,12 +38,15 @@ public class GiveTestFragment extends Fragment {
         this.topicDetailModel = topicDetailModel;
     }
 
+    TextView textViewHeader;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.frag_test, container, false);
+        textViewHeader = root.findViewById(R.id.testName_fragTest);
         recyclerView = root.findViewById(R.id.recylerView_giveTest);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -51,9 +54,13 @@ public class GiveTestFragment extends Fragment {
         Objects.requireNonNull(recyclerView.getLayoutManager()).setMeasurementCacheEnabled(false);
         recyclerView.setNestedScrollingEnabled(false);
 
-        testId = topicDetailModel.getPayloadTopics().getTestModels().get(0).getTest_id();
+        if(topicDetailModel.getPayloadTopics().getTestModels().size() > 0){
+            testId = topicDetailModel.getPayloadTopics().getTestModels().get(0).getTest_id();
+            renderTests();
+        } else {
+            textViewHeader.setText("No tests available");
+        }
 
-        renderTests();
         return root;
     }
 

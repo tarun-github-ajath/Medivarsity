@@ -35,8 +35,6 @@ public class VideosFragments extends Fragment {
         root = inflater.inflate(R.layout.frag_vedios, container, false);
         no_video = root.findViewById(R.id.no_video);
         recyclerView = root.findViewById(R.id.recyle_topic_videos);
-        if (videosList.size() == 0) showNoVideosUI(); else showVideosUI();
-
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -45,8 +43,19 @@ public class VideosFragments extends Fragment {
         recyclerView.setNestedScrollingEnabled(false);
 
 
-        AboutVideoAdapter aboutVideoAdapter = new AboutVideoAdapter(getActivity(), videosList,Config.DEVELOPER_KEY);
-        recyclerView.setAdapter(aboutVideoAdapter);
+        if (videosList.size() > 0){
+            if(!videosList.get(0).getVideo_url().equals("")){
+                AboutVideoAdapter aboutVideoAdapter = new AboutVideoAdapter(getActivity(), videosList,Config.DEVELOPER_KEY);
+                recyclerView.setAdapter(aboutVideoAdapter);
+                showVideosUI();
+            } else {
+                showNoVideosUI();
+            }
+
+        } else {
+            showNoVideosUI();
+        }
+
 
         return root;
     }

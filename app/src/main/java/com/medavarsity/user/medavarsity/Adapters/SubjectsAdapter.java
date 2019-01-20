@@ -21,6 +21,7 @@ import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.Videos;
 import com.medavarsity.user.medavarsity.R;
+import com.medavarsity.user.medavarsity.activities.YoutubeActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -61,8 +62,11 @@ public class SubjectsAdapter extends RecyclerView.Adapter<SubjectsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 String video_id = CommonMethods.extractVideoId(subjectsVideos.get(position).getVideo_url());
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                context.startActivity(intent);
+                Intent i = new Intent((Activity) context,YoutubeActivity.class);
+                i.putExtra("videoId",video_id);
+                context.startActivity(i);
+
+
             }
         });
     }

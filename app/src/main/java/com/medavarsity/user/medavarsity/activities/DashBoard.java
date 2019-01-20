@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +90,7 @@ public class DashBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
+
         mCommonMethods = new CommonMethods(DashBoard.this);
         sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -156,11 +158,11 @@ public class DashBoard extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = YouTubeStandalonePlayer.createVideoIntent(DashBoard.this, Config.DEVELOPER_KEY, Config.YOUTUBE_VIDEO_CODE);
                 startActivityForResult(intent, PlayerResult);
             }
         });
+
         createDynamicList();
         getExtras();
 

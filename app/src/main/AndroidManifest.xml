@@ -77,7 +77,10 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.YoutubeActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize"
+            />
         <activity
             android:name=".activities.SearchScreen"
             android:screenOrientation="portrait"

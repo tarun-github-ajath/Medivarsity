@@ -22,6 +22,7 @@ import com.medavarsity.user.medavarsity.Constants.Config;
 import com.medavarsity.user.medavarsity.Model.Subjects;
 import com.medavarsity.user.medavarsity.Model.dailyUpdates;
 import com.medavarsity.user.medavarsity.R;
+import com.medavarsity.user.medavarsity.activities.YoutubeActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -68,8 +69,9 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
                 @Override
                 public void onClick(View v) {
                     String video_id = CommonMethods.extractVideoId(dailyUpdateModelArrayList.get(position).getUrl());
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                    context.startActivity(intent);
+                    Intent i = new Intent((Activity) context, YoutubeActivity.class);
+                    i.putExtra("videoId",video_id);
+                    context.startActivity(i);
                 }
             });
 
@@ -83,8 +85,9 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
                 @Override
                 public void onClick(View v) {
                     String video_id = CommonMethods.extractVideoId(subjectsList.get(position).getVideos().get(position).getVideo_url());
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent((Activity) context, Config.DEVELOPER_KEY, video_id);
-                    context.startActivity(intent);
+                    Intent i = new Intent((Activity) context, YoutubeActivity.class);
+                    i.putExtra("videoId",video_id);
+                    context.startActivity(i);
                 }
             });
         }

@@ -91,8 +91,6 @@ public class DailyUpdateAdapter extends RecyclerView.Adapter<DailyUpdateAdapter.
                 }
             });
         }
-
-
           }
 
     @Override

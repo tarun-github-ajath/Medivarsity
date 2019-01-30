@@ -47,9 +47,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
 
         if (payloadHome.getSubjects() != null && payloadHome.getSubjects().size() > 0) {
-            /*homeViewHolder.subject_name.setText(payloadHome.getSubjects().get(position).getSubjectname());*/
-
-
             if (payloadHome.getSubjects().get(position).getVideos() != null && payloadHome.getSubjects().get(position).getVideos().size() > 0) {
                 homeViewHolder.subject_name.setText(payloadHome.getSubjects().get(position).getSubjectname());
                 homeViewHolder.subject_name.setOnClickListener(new View.OnClickListener() {

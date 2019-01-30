@@ -74,7 +74,6 @@ public class DashBoard extends AppCompatActivity {
     ApiInterface apiInterface;
     LinearLayout searchBar;
     LinearLayout youtubeScreen;
-    /*For youtube */
 
     RecyclerView subject_recycle, updateRecycle;
     YouTubeThumbnailView youTubeThumbnailView;
@@ -83,13 +82,10 @@ public class DashBoard extends AppCompatActivity {
 
     CommonMethods mCommonMethods;
     TextView toolbar_text;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
-
 
         mCommonMethods = new CommonMethods(DashBoard.this);
         sharedPreferences = getSharedPreferences(ConstantVariables.SHARED_FILE, MODE_PRIVATE);
@@ -125,14 +121,13 @@ public class DashBoard extends AppCompatActivity {
         updateRecycle.setHasFixedSize(true);
 
         updateRecycle.getLayoutManager().setMeasurementCacheEnabled(false);
-        Intent intent = new Intent(DashBoard.this, MyTopicsScreen.class);
+        Intent intent = new Intent(DashBoard.this, GiveTest.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        this.startActivity(intent);
+        this.startActivity(intent);
 
         final YouTubeThumbnailLoader.OnThumbnailLoadedListener onThumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
             @Override
             public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-
             }
 
             @Override
@@ -179,9 +174,7 @@ public class DashBoard extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
     }
-
 
     RecyclerView dailyRecycle;
 
@@ -193,13 +186,10 @@ public class DashBoard extends AppCompatActivity {
         layoutParams.setMargins(10, 0, 10, 10);
         dailyRecycle.setLayoutParams(layoutParams);
         viewGroup.addView(dailyRecycle);
-
     }
 
     private void getDashboardData(String authToken) {
-        Log.i("called",authToken);
         if (authToken != null && !authToken.equalsIgnoreCase("")) {
-            Log.i("called","true");
             Call<HomeModel> homeModelCall = apiInterface.getHomeData(authToken);
             homeModelCall.enqueue(new Callback<HomeModel>() {
                 @Override
@@ -239,11 +229,13 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private void setDailyUpdate(/*List<dailyUpdates> dailyUpdate*/ PayloadHome payloadHomes) {
-        DailyUpdateAdapter updateAdapter = new DailyUpdateAdapter(this, payloadHomes.getDailyUpdates(), payloadHomes.getSubjects(), Config.DEVELOPER_KEY, "daily");
-        updateRecycle.setAdapter(updateAdapter);
-        HomeAdapter homeAdapter = new HomeAdapter(DashBoard.this, payloadHomes, "subject");
-        subject_recycle.setAdapter(homeAdapter);
+        if(payloadHomes.getDailyUpdates() != null) {
 
+            DailyUpdateAdapter updateAdapter = new DailyUpdateAdapter(this, payloadHomes.getDailyUpdates(), payloadHomes.getSubjects(), Config.DEVELOPER_KEY, "daily");
+            updateRecycle.setAdapter(updateAdapter);
+            HomeAdapter homeAdapter = new HomeAdapter(DashBoard.this, payloadHomes, "subject");
+            subject_recycle.setAdapter(homeAdapter);
+        }
     }
 
     private void readFromPref() {
@@ -253,12 +245,10 @@ public class DashBoard extends AppCompatActivity {
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
-
     }
 
     private void selectItem(int position) {
@@ -267,9 +257,6 @@ public class DashBoard extends AppCompatActivity {
 
         switch (position) {
             case 0:
-//                intent = new Intent(DashBoard.this, DashBoard.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                this.startActivity(intent);
                 break;
             case 1:
                 intent = new Intent(DashBoard.this, MyTopicsScreen.class);
@@ -339,16 +326,10 @@ public class DashBoard extends AppCompatActivity {
         drawerItem[4] = new DataModel(R.drawable.home_icon, "About Us");
         drawerItem[5] = new DataModel(R.drawable.home_icon, "LogOut");
 
-       /* getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.reveal_icon);
-*/
-
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 
         search_layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -357,7 +338,6 @@ public class DashBoard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     void setupDrawerToggle() {
@@ -374,15 +354,12 @@ public class DashBoard extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PlayerResult && resultCode == RESULT_OK
                 && null != data) {
-
-
             data.getDataString();
         }
     }

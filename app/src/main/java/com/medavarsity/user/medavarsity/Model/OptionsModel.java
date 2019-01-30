@@ -12,6 +12,12 @@ public class OptionsModel implements Serializable {
     @SerializedName("correct")
     int correct;
 
+    @SerializedName("option_id")
+    int option_id;
+
+    public int getOption_id() {
+        return option_id;
+    }
 
     public String getOptionName() {
         return optionName;

@@ -1,5 +1,7 @@
 package com.medavarsity.user.medavarsity.NetworkCalls;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.medavarsity.user.medavarsity.Model.CollegeResponse;
 import com.medavarsity.user.medavarsity.Model.HomeModel;
 import com.medavarsity.user.medavarsity.Model.LectureModal;
@@ -12,8 +14,13 @@ import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.ResendOtpResponse;
 import com.medavarsity.user.medavarsity.Model.ReviewResponse;
 import com.medavarsity.user.medavarsity.Model.StateResponse;
+import com.medavarsity.user.medavarsity.Model.TestResultResponse;
 import com.medavarsity.user.medavarsity.Model.TopicDetailModel;
 import com.medavarsity.user.medavarsity.Model.VerifyOtpResponse;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -75,4 +82,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Questionslist")
     Call<QuestionsResponse> getQuestions(@Field("authtoken") String token, @Field("test_id") int testId);
+
+    @FormUrlEncoded
+    @POST("Answerlist")
+    Call<TestResultResponse> getTestResults(@Field("authtoken") String token, @Field("test_id") int testId, @Field("somejson") ArrayList<JsonArray> questionsAnsArray);
+
 }

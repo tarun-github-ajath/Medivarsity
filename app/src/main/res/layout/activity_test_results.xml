@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_testResult"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/resultView"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar_include"
+        android:layout_height="match_parent">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="17dp"
+            android:background="@drawable/border_linear_layout_test_result"
+            >
+
+
+
+            <ProgressBar
+                android:id="@+id/progressBar_testResult"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_gravity="center"
+                />
+
+
+
+            <TextView
+                android:id="@+id/wrongAnsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_gravity="center"
+                android:text=""
+                android:textColor="@color/text_color_medium"
+                />
+
+            <TextView
+                android:id="@+id/correctAnsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textColor="@color/text_color_medium"
+                />
+
+            <TextView
+                android:id="@+id/scoreTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text=""
+                android:textColor="@color/text_color_medium"
+                />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#969696"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_testResults"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

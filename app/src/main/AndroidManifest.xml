@@ -103,6 +103,12 @@
         <activity
             android:name=".activities.AboutUsView"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activities.TestResult"
+            android:screenOrientation="portrait" />
+
+
         <activity android:name=".activities.GiveTest" />
         <activity android:name=".activities.TestScreen" />
         <activity android:name=".activities.TopicDetails_FeaturesList" />

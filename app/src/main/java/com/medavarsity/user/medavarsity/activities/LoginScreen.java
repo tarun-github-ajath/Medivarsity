@@ -34,6 +34,7 @@ import com.medavarsity.user.medavarsity.Constants.ConstantVariables;
 import com.medavarsity.user.medavarsity.Global.GlobalProps;
 import com.medavarsity.user.medavarsity.Methods.CommonMethods;
 import com.medavarsity.user.medavarsity.Model.LoginStudentResponse;
+import com.medavarsity.user.medavarsity.Model.RegisterStudentResponse;
 import com.medavarsity.user.medavarsity.Model.StudentResponse;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiClient;
 import com.medavarsity.user.medavarsity.NetworkCalls.ApiInterface;
@@ -123,7 +124,7 @@ public class LoginScreen extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                System.out.println(loginResult.getAccessToken());
+                System.out.println(loginResult.getAccessToken().getToken());
                 getUserDetails(loginResult);
             }
 
@@ -141,13 +142,13 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
-    private void getUserDetails(LoginResult loginResult) {
+    private void getUserDetails(final LoginResult loginResult) {
         GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
 
                 String loginresultResponse = object.toString();
-                System.out.println("facebook object" + " " + loginresultResponse);
+//                System.out.println("facebook object" + " " + loginresultResponse);
                 try {
                     String android_id = Settings.Secure.getString(LoginScreen.this.getContentResolver(),
                             Settings.Secure.ANDROID_ID);
@@ -161,7 +162,8 @@ public class LoginScreen extends AppCompatActivity {
                     String imageUrl = dataObj.has("url") ? dataObj.getString("url") : "";
 
                     studentResponse.setImage_url(imageUrl);
-
+                    studentResponse.setAuthToken(loginResult.getAccessToken().getToken());
+                    Log.i("fbToken",loginResult.getAccessToken().getToken());
                     loginCall("", "", "1", studentResponse.getFacebook_id(), "0", android_id, studentResponse);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -312,7 +314,6 @@ public class LoginScreen extends AppCompatActivity {
                         assert response.body() != null;
                         Log.i("payload", String.valueOf(response.body()));
 
-
                         if(response.body().getStatus() == 1){
                             StudentResponse studentResponse1 = response.body().getPayload();
                             studentResponse1.setAuthToken(response.body().getAuth_token());
@@ -335,11 +336,47 @@ public class LoginScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else if(logintype.equals("1")){
-            studentResponse.setAuthToken("");
-            saveInPref(studentResponse);
-            setGlobalProps(studentResponse,sharedPreferences);
 
-            Intent intent  = new Intent(getApplicationContext(),DashBoard.class);
+            try {
+                final Call<LoginStudentResponse> loginStudentResponseCall = apiInterface.
+                        getStudentInfo(email, pass, logintype, social_id, device_type, device_id);
+
+                loginStudentResponseCall.enqueue(new Callback<LoginStudentResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<LoginStudentResponse> call, @NonNull Response<LoginStudentResponse> response) {
+                        mCommonMethod.cancelDialog();
+
+                        if(!response.isSuccessful()){
+                            return;
+                        }
+
+                        assert response.body() != null;
+                        Log.i("payload", String.valueOf(response.body()));
+
+                        if(response.body().getStatus() == 1){
+                            StudentResponse studentResponse1 = response.body().getPayload();
+                            studentResponse1.setAuthToken(response.body().getAuth_token());
+
+                            saveInPref(studentResponse1);
+                            setGlobalProps(studentResponse1,sharedPreferences);
+                            startDashBoard();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<LoginStudentResponse> call, @NonNull Throwable t) {
+                        t.printStackTrace();
+                        mCommonMethod.cancelDialog();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            Intent intent = new Intent(getApplicationContext(),RegisterScreen.class);
+            intent.putExtra(ConstantVariables.NON_VALID_FB_STUDENT,studentResponse);
             startActivity(intent);
         }
     }
